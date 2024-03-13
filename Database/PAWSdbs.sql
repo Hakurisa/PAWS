@@ -118,7 +118,6 @@ CREATE TABLE `beznyUzivatelPlaylist`
 
 CREATE TABLE `Kapela`
 (
-	`Clenovekapely` INT NOT NULL,
 	`Jmeno` varchar(50) NOT NULL,
 	`Popis` TEXT NULL,
 	`KapelaID` INT ZEROFILL NOT NULL AUTO_INCREMENT,
@@ -200,6 +199,7 @@ CREATE TABLE `Umelec`
 (
 	`Jmeno` varchar(50) NOT NULL,
 	`Popis` TEXT NULL,
+	`Clenkapely` INT NULL,
 	`UmelecID` INT NOT NULL AUTO_INCREMENT,
 	CONSTRAINT `PK_Umelec` PRIMARY KEY (`UmelecID` ASC)
 )
