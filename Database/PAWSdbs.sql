@@ -128,7 +128,7 @@ CREATE TABLE `Kapela`
 
 CREATE TABLE `KapelaAu_a`
 (
-	`Au_aID` INT NOT NULL AUTO_INCREMENT,
+	`Au_aID` INT NOT NULL,
 	`KapelaID` INT NOT NULL
 )
 
