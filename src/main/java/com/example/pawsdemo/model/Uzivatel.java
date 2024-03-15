@@ -35,7 +35,7 @@ public class Uzivatel {
 
     @ManyToOne
     @JoinColumn(name = "BeznyuzivatelID")
-    private BeznyUzivatel beznyuzivatel;
+    private Beznyuzivatel beznyuzivatel;
 
     @ManyToOne
     @JoinColumn(name = "KapelaID")

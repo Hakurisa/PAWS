@@ -13,5 +13,5 @@ public class BeznyUzivatelPlaylist {
     @Id
     @ManyToOne
     @JoinColumn(name = "BeznyuzivatelID", nullable = false)
-    private BeznyUzivatel beznyuzivatel;
+    private Beznyuzivatel beznyuzivatel;
 }

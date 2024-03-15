@@ -3,8 +3,8 @@ package com.example.pawsdemo.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "BeznyUzivatel")
-public class BeznyUzivatel {
+@Table(name = "Beznyuzivatel")
+public class Beznyuzivatel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "BeznyuzivatelID")

@@ -25,7 +25,7 @@ public class Recenze {
 
     @ManyToOne
     @JoinColumn(name = "BeznyuzivatelID", nullable = false)
-    private BeznyUzivatel beznyuzivatel;
+    private Beznyuzivatel beznyuzivatel;
 
     @ManyToOne
     @JoinColumn(name = "KapelaID", nullable = false)
