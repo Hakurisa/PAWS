@@ -1,10 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">>
 <head>
     <meta charset="UTF-8">
-    <title>Welcome on PAWS</title>
+    <title>Welcome in PAWS</title>
 </head>
 <body>
-
+<h1 th:inline="text">Welcome <span th:remove="tag" sec:authentication="name">thymeleaf</span>!</h1>
+<form th:action="@{/logout}" method="post">
+    <input type="submit" value="Odhlásit se"/>
+</form>
+<a th:href="@{userProfile}">Zobrazit profil</a>
 </body>
 </html>

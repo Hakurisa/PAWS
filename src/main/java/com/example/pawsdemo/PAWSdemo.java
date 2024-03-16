@@ -4,7 +4,6 @@ import jakarta.validation.Validation;
 import jakarta.validation.Validator;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 public class PAWSdemo {
@@ -13,9 +12,7 @@ public class PAWSdemo {
         SpringApplication.run(PAWSdemo.class, args);
     }
 
-    @Bean
-    public Validator validator() {
+    public Validator validator(){
         return Validation.buildDefaultValidatorFactory().getValidator();
     }
-
 }

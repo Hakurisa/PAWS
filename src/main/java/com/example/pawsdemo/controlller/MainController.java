@@ -5,7 +5,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class MainController {
-
-    @GetMapping("")
-    public String showHomePage() { return "redirect:/overview"; }
+    @GetMapping("/artistProfile")
+    public String artistProfile() {
+        return "artistProfile";
+    }
+    @GetMapping("/userProfile")
+    public String userProfile() {
+        return "userProfile";
+    }
 }
