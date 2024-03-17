@@ -1,4 +1,4 @@
-package com.example.pawsdemo.model;
+package com.example.pawsdemo.models;
 
 import jakarta.persistence.*;
 
