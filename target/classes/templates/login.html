@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org">
+<head>
+    <title>Spring Security Example </title>
+</head>
+<body>
+<div th:if="${param.error}">
+    Neplatné uživatelské jméno nebo heslo
+</div>
+<div th:if="${param.logout}">
+    Byli jste úspěšně odhlášeni
+</div>
+<form th:action="@{login}" method="post">
+    <h1>Přihásit se</h1>
+    <div>
+    </div>
+    <div>
+    <label for="username">Uživatelské jméno</label>
+        <div>
+            <input type="text" id="username" name="username" placeholder="Uživateské jméno">
+        </div>
+    </div>
+    <div>
+        <label for="password">Heslo</label>
+        <div>
+            <input type="password" id="password" name="password" placeholder="Heslo">
+        </div>
+    </div>
+    <div>
+        <input type="submit" value="Log in">
+    </div>
+</form>
+</body>
+</html>
