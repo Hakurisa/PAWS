@@ -13,4 +13,8 @@ public class MainController {
     public String userProfile() {
         return "userProfile";
     }
+    @GetMapping("/index")
+    public String index() {
+        return "index";
+    }
 }

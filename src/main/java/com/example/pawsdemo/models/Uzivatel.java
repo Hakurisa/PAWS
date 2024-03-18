@@ -27,7 +27,10 @@ public class Uzivatel implements UserDetails {
     @Column(name = "Datumzalozeni", nullable = false)
     private java.sql.Date datumzalozeni;
 
+    @Column(name = "Uzivatelskejmeno", nullable = false)
     private String username;
+
+    @Column(name = "Heslo", nullable = false)
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER)
