@@ -1,3 +1,7 @@
+.idea
+src/main/resources/application.properties
+*.iml
+target
 # Default ignored files
 /shelf/
 /workspace.xml

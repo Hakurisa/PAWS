@@ -1,7 +1,7 @@
 spring.application.name=PAWSdemo
-spring.datasource.url=jdbc:mysql://nechapu.to:3306/PAWSdemo
-spring.datasource.username=root
-spring.datasource.password=bwj24C2iR7722kQ3LN
+spring.datasource.url=
+spring.datasource.username=
+spring.datasource.password=
 spring.jpa.hibernate.ddl-auto=update
 spring.jpa.show-sql=true
 spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.MySQL5InnoDBDialect
