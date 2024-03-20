@@ -129,7 +129,7 @@ CREATE TABLE `Kapela`
 CREATE TABLE `KapelaAu_a`
 (
 	`Au_aID` INT NOT NULL,
-	`KapelaID` INT NOT NULL
+	`KapelaID` INT ZEROFILL NOT NULL
 )
 
 ;
@@ -165,7 +165,7 @@ CREATE TABLE `Recenze`
 	`RecenzeID` INT NOT NULL AUTO_INCREMENT,
 	`AlbumID` INT NOT NULL,
 	`BeznyuzivatelID` INT NOT NULL,
-	`KapelaID` INT NOT NULL,
+	`KapelaID` INT ZEROFILL NOT NULL,
 	`UmelecID` INT NOT NULL,
 	`SkladbaID` INT NOT NULL,
 	CONSTRAINT `PK_Recenze` PRIMARY KEY (`RecenzeID` ASC)
@@ -232,7 +232,7 @@ CREATE TABLE `Uzivatel`
 	`UzivatelID` INT NOT NULL AUTO_INCREMENT,
 	`AdresaID` INT NOT NULL,
 	`BeznyuzivatelID` INT NULL,
-	`KapelaID` INT NULL,
+	`KapelaID` INT ZEROFILL NULL,
 	`UmelecID` INT NULL,
 	CONSTRAINT `PK_Uzivatel` PRIMARY KEY (`UzivatelID` ASC)
 )
