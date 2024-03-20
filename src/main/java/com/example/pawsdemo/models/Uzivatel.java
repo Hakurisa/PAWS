@@ -1,6 +1,7 @@
 package com.example.pawsdemo.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -27,9 +28,11 @@ public class Uzivatel implements UserDetails {
     @Column(name = "Datumzalozeni", nullable = false)
     private java.sql.Date datumzalozeni;
 
+    @Size(max = 40, message = "Maximální počet znaků 40")
     @Column(name = "Uzivatelskejmeno", nullable = false)
     private String username;
 
+    @Size(max = 40, message = "Maximální počet znaků 40")
     @Column(name = "Heslo", nullable = false)
     private String password;
 
@@ -88,7 +91,6 @@ public class Uzivatel implements UserDetails {
     public boolean isAccountNonLocked() {
         return true;
     }
-
     @Override
     public boolean isCredentialsNonExpired() {
         return true;

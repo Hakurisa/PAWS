@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 // @Repository
 public interface RecenzeRepository extends CrudRepository<RecenzeRepository, Integer> {
 
-    // to-do
+    // TODO
 }

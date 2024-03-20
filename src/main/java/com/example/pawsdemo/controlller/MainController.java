@@ -5,6 +5,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class MainController {
+    @GetMapping("/index")
+    public String index() {
+        return "index";
+    }
     @GetMapping("/artistProfile")
     public String artistProfile() {
         return "artistProfile";
@@ -12,9 +16,5 @@ public class MainController {
     @GetMapping("/userProfile")
     public String userProfile() {
         return "userProfile";
-    }
-    @GetMapping("/index")
-    public String index() {
-        return "index";
     }
 }

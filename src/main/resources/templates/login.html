@@ -4,6 +4,12 @@
     <title>Spring Security Example </title>
 </head>
 <body>
+<div>
+    <select>
+        <option value="beznyuzivatel">Běžný uživatel</option>
+        <option value="umelec">Umělec</option>
+    </select>
+</div>
 <div th:if="${param.error}">
     Neplatné uživatelské jméno nebo heslo
 </div>
@@ -28,5 +34,8 @@
         <input type="submit" value="Log in">
     </div>
 </form>
+<div>
+    <a th:href="@{registration}">Registrovat se</a>
+</div>
 </body>
 </html>
