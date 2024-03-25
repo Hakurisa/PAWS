@@ -1,16 +1,6 @@
-package com.example.pawsdemo.controlller;
+package com.example.pawsdemo.controller;
 
-import com.example.pawsdemo.models.Skladba;
-import com.example.pawsdemo.models.Uzivatel;
-import com.example.pawsdemo.services.SkladbaService;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-
-import java.util.List;
 
 @Controller
 public class SkladbaController {

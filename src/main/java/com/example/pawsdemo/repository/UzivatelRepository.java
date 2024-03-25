@@ -1,25 +1,29 @@
 package com.example.pawsdemo.repository;
 
 import com.example.pawsdemo.dotIn.UzivatelDtoIn;
-import com.example.pawsdemo.models.Uzivatel;
+import com.example.pawsdemo.models.UzivatelEntity;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public interface UzivatelRepository extends CrudRepository<Uzivatel, Integer> {
+public interface UzivatelRepository extends CrudRepository<UzivatelEntity, Integer> {
         // TODO
 
-    @Query("SELECT u FROM Uzivatel u")
-    public List<Uzivatel> getAllUzivatel();
 
-    @Query("SELECT u FROM Uzivatel u WHERE u.uzivatelID = :#{uzivatel.uzivatelID}")
-    public List<Uzivatel> getUzivatelByID(@Param("uzivatel") Uzivatel uzivatel);
+    @Query("SELECT u FROM UzivatelEntity u")
+    public List<UzivatelEntity> getAllUzivatel();
 
-    Uzivatel findUzivatelByUsername(String username);
+    /*@Query("SELECT u FROM Uzivatel u WHERE u.uzivatelID = :#{uzivatel.uzivatelID}")
+    public List<Uzivatel> getUzivatelByID(@Param("uzivatel") Uzivatel uzivatel);*/
 
-    Uzivatel save(UzivatelDtoIn uzivatelDtoIn);
+    UzivatelEntity findUzivatelByUsername(String username);
+
+    UzivatelEntity findUzivatelByEmail(String email);
+
+    UzivatelEntity findUzivatelByUzivatelId(Integer id);
+
+    UzivatelEntity save(UzivatelDtoIn uzivatelDtoIn);
 }

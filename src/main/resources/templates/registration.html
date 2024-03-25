@@ -5,14 +5,34 @@
 </head>
 <body>
 <h1>Registrační formulář</h1>
-<form>
-    <div class="row">
-        <div class="col">
-            <input type="text" class="form-control" placeholder="First name">
+<form th:action="@{registration}" method="post">
+    <h1>Zaregistrovat se</h1>
+    <div>
+        <label for="username">Uživatelské jméno</label>
+        <div>
+            <input type="text" id="username" name="username" placeholder="Uživatelské jméno">
         </div>
-        <div class="col">
-            <input type="text" class="form-control" placeholder="Last name">
+    </div>
+    <div>
+        <label for="username">Email</label>
+        <div>
+            <input type="text" id="email" name="email" placeholder="muj@email.ukazka">
         </div>
+    </div>
+    <div>
+        <label for="password">Heslo</label>
+        <div>
+            <input type="password" id="password" name="password" placeholder="Heslo">
+        </div>
+    </div>
+    <div>
+        <label for="datumnarozeni">Datum narození</label>
+        <div>
+            <input type="date" id="datumnarozeni" name="datumnarozeni">
+        </div>
+    </div>
+    <div>
+        <input type="submit" value="Registrace">
     </div>
 </form>
 </body>

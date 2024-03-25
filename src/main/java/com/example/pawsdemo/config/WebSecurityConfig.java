@@ -1,6 +1,6 @@
 package com.example.pawsdemo.config;
 
-import com.example.pawsdemo.models.Uzivatel;
+import com.example.pawsdemo.models.UzivatelEntity;
 import com.example.pawsdemo.services.UzivatelService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -23,7 +23,7 @@ public class WebSecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/", "/index").permitAll()
+                        .requestMatchers("/", "/index", "/login", "/registration").permitAll()
                         .anyRequest().authenticated()
                 )
 
