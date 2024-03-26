@@ -61,7 +61,7 @@ public class UzivatelService implements UserDetailsService {
             throw new UsernameNotFoundException(username);
         }
         logger.info("User details fetched: {}", uzivatel.getUsername());
-        return new User(uzivatel.getUsername(), passwordEncoder.encode(uzivatel.getPassword()), new ArrayList<>());
+        return new User(uzivatel.getUsername(), uzivatel.getPassword(), new ArrayList<>());
     }
 
     /**

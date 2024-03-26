@@ -2,8 +2,11 @@ package com.example.pawsdemo.config;
 
 import com.example.pawsdemo.models.UzivatelEntity;
 import com.example.pawsdemo.services.UzivatelService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -17,6 +20,8 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class WebSecurityConfig {
 
+    @Autowired
+    private UserDetailsService userDetailsService;
     //Je tady chyba, kdy se může nepřihášený uživatel dostat do index.html (overview) ale nedostane se nikam jinam
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -30,16 +35,22 @@ public class WebSecurityConfig {
                 .formLogin((form)-> form
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
-                        .defaultSuccessUrl("/index")
                         .usernameParameter("username")
                         .passwordParameter("password")
-
+                        .successHandler((request, response, authentication) -> {response.sendRedirect("/index");})
+                        .failureHandler((request, response, exception) -> {response.sendRedirect("/login?error");})
                         .permitAll()
                 )
                 .logout(LogoutConfigurer::permitAll);
         return http.build();
     }
-
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
+        DaoAuthenticationProvider auth = new DaoAuthenticationProvider();
+        auth.setUserDetailsService(userDetailsService);
+        auth.setPasswordEncoder(encoder());
+        return auth;
+    }
     @Bean
     UserDetailsService userDetailsService() {
         return new UzivatelService();
