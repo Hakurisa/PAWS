@@ -7,6 +7,8 @@ import com.example.pawsdemo.repository.UzivatelRepository;
 import com.example.pawsdemo.services.UzivatelService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
@@ -36,6 +38,8 @@ public class UzivatelController {
 
     @Autowired
     private UzivatelRepository uzivatelRepository;
+
+    private static final Logger logger = LoggerFactory.getLogger(UzivatelController.class);
 
 
     @GetMapping("/index")

@@ -23,14 +23,17 @@ public class WebSecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests((auth) -> auth
-                        .requestMatchers("/", "/index", "/login", "/registration").permitAll()
+                        .requestMatchers("/", "/index", "/login", "/registration", "/login_processing").permitAll()
                         .anyRequest().authenticated()
                 )
 
                 .formLogin((form)-> form
                         .loginPage("/login")
+                        .loginProcessingUrl("/login")
+                        .defaultSuccessUrl("/index")
                         .usernameParameter("username")
                         .passwordParameter("password")
+
                         .permitAll()
                 )
                 .logout(LogoutConfigurer::permitAll);
