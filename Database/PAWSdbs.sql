@@ -234,6 +234,8 @@ CREATE TABLE `Uzivatel`
 	`BeznyuzivatelID` INT NULL,
 	`KapelaID` INT ZEROFILL NULL,
 	`UmelecID` INT NULL,
+	`Username` varchar(255)  NOT NULL,
+	`Password` varchar(255) NOT NULL,
 	CONSTRAINT `PK_Uzivatel` PRIMARY KEY (`UzivatelID` ASC)
 )
 
