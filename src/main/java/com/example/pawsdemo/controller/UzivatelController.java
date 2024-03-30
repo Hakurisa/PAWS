@@ -1,7 +1,9 @@
 package com.example.pawsdemo.controller;
 
+import com.example.pawsdemo.dotIn.AdresaDtoIn;
 import com.example.pawsdemo.dotIn.UzivatelDtoIn;
 import com.example.pawsdemo.exceptions.UserAlreadyExistsException;
+import com.example.pawsdemo.models.AdresaEntity;
 import com.example.pawsdemo.models.UzivatelEntity;
 import com.example.pawsdemo.repository.UzivatelRepository;
 import com.example.pawsdemo.services.UzivatelService;
@@ -55,15 +57,17 @@ public class UzivatelController {
     @GetMapping("/registration")
     public String registration(WebRequest requestUser, Model model) {
         UzivatelDtoIn uzivatel = new UzivatelDtoIn();
+        AdresaDtoIn adresa = new AdresaDtoIn();
         model.addAttribute("uzivatel", uzivatel);
+        model.addAttribute("adresa", adresa);
         return "registration";
     }
     @PostMapping("/registration")
-    public ModelAndView registerUserAccount(@ModelAttribute("uzivatel") @Valid UzivatelDtoIn userDto,
+    public ModelAndView registerUserAccount(@ModelAttribute("uzivatel") @Valid UzivatelDtoIn userDto, @ModelAttribute("adresa") @Valid AdresaDtoIn adresaDto,
                                             HttpServletRequest request, Errors errors) {
         try{
             final UzivatelEntity registered = uzivatelService.registerNewUserAccount(userDto);
-
+            final AdresaEntity newAddress = uzivatelService.registerUsersAddress(adresaDto);
         } catch (UserAlreadyExistsException uae) {
             ModelAndView mav = new ModelAndView("registration", "uzivatel", userDto);
             String errMessage = messages.getMessage("message.regError", null, request.getLocale());

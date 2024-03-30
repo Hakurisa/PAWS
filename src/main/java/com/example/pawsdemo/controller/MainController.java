@@ -14,4 +14,9 @@ public class MainController {
     public String userProfile() {
         return "userProfile";
     }
+
+    @GetMapping("/playlist")
+    public String playlist() {
+        return "playlist";
+    }
 }

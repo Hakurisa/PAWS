@@ -17,10 +17,20 @@ public class AdresaEntity {
     @Basic
     @Column(name = "Ulice")
     private String ulice;
+
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     @Column(name = "AdresaID")
     private int adresaId;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "adresa_id", referencedColumnName = "adresaId")
+    private UzivatelEntity uzivatel;
+
+    public UzivatelEntity getUzivatel() {
+        return uzivatel;
+    }
+    public AdresaEntity() {}
 
     public String getCislopopisne() {
         return cislopopisne;
@@ -61,7 +71,6 @@ public class AdresaEntity {
     public void setAdresaId(int adresaId) {
         this.adresaId = adresaId;
     }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

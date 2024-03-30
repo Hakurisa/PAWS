@@ -1,6 +1,7 @@
 package com.example.pawsdemo.repository;
 
 import com.example.pawsdemo.dotIn.UzivatelDtoIn;
+import com.example.pawsdemo.models.AdresaEntity;
 import com.example.pawsdemo.models.UzivatelEntity;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -10,7 +11,6 @@ import java.util.List;
 
 @Repository
 public interface UzivatelRepository extends CrudRepository<UzivatelEntity, Integer> {
-        // TODO
 
 
     @Query("SELECT u FROM UzivatelEntity u")

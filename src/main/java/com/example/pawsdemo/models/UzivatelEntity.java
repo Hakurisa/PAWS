@@ -1,12 +1,12 @@
 package com.example.pawsdemo.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.sql.Date;
 import java.time.LocalDate;
-import java.util.Collection;
+import java.util.*;
 
 @Entity
 @Table(name = "Uzivatel", schema = "PAWS", catalog = "")
@@ -31,9 +31,11 @@ public class UzivatelEntity implements UserDetails{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "UzivatelID")
     private int uzivatelId;
+
     @Basic
     @Column(name = "AdresaID")
     private int adresaId;
+
     @Basic
     @Column(name = "BeznyuzivatelID")
     private Integer beznyuzivatelId;
@@ -49,6 +51,15 @@ public class UzivatelEntity implements UserDetails{
     @Basic
     @Column(name = "Password")
     private String password;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "uzivatel")
+    private Set<AdresaEntity> addresses = new HashSet<>();
+
+    public Set<AdresaEntity> getAddresses() {
+        return addresses;
+    }
+
     @Transient
     private Collection<? extends GrantedAuthority> authorities;
 
@@ -110,14 +121,6 @@ public class UzivatelEntity implements UserDetails{
         this.uzivatelId = uzivatelId;
     }
 
-    public int getAdresaId() {
-        return adresaId;
-    }
-
-    public void setAdresaId(int adresaId) {
-        this.adresaId = adresaId;
-    }
-
     public Integer getBeznyuzivatelId() {
         return beznyuzivatelId;
     }
@@ -140,6 +143,14 @@ public class UzivatelEntity implements UserDetails{
 
     public void setUmelecId(Integer umelecId) {
         this.umelecId = umelecId;
+    }
+
+    public int getAdresaId() {
+        return adresaId;
+    }
+
+    public void setAdresaId(int adresaId) {
+        this.adresaId = adresaId;
     }
 
     public String getUsername(){

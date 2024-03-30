@@ -4,7 +4,7 @@ import com.example.pawsdemo.models.UzivatelEntity;
 import com.example.pawsdemo.repository.UzivatelRepository;
 import org.springframework.stereotype.Service;
 
-//@Service("UzivatelService")
+@Service("UzivatelService")
 public class UzivatelServiceImpl {
 
     private UzivatelRepository uzivatelRepo;

@@ -1,8 +1,11 @@
 package com.example.pawsdemo.services;
 
+import com.example.pawsdemo.dotIn.AdresaDtoIn;
 import com.example.pawsdemo.dotIn.UzivatelDtoIn;
 import com.example.pawsdemo.exceptions.UserAlreadyExistsException;
+import com.example.pawsdemo.models.AdresaEntity;
 import com.example.pawsdemo.models.UzivatelEntity;
+import com.example.pawsdemo.repository.AdresaRepository;
 import com.example.pawsdemo.repository.UzivatelRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,6 +32,9 @@ public class UzivatelService implements UserDetailsService {
     @Autowired
     private UzivatelRepository uzivatelRepo;
 
+    @Autowired
+    private AdresaRepository adresaRepo;
+
     private static final Logger logger = LoggerFactory.getLogger(UzivatelService.class);
 
     private UzivatelService uzivatelService;
@@ -48,8 +54,20 @@ public class UzivatelService implements UserDetailsService {
         user.setEmail(userDto.getEmail());
         user.setDatumzalozeni(userDto.getDatumzalozeni());
         user.setDatumnarozeni(userDto.getDatumnarozeni());
+//        user.setBeznyuzivatelId(userDto.getBeznyUzivatelID());
+//        user.setUmelecId(userDto.getUmelecID());
         user.setPlatnost((byte) 1);
+        user.setAdresaId(adresaRepo.findAdresaByAdresaId(user.getAdresaId()).getAdresaId());
         return uzivatelRepo.save(user);
+    }
+
+    public AdresaEntity registerUsersAddress(final AdresaDtoIn adresaDto) {
+        final AdresaEntity adresa = new AdresaEntity();
+        adresa.setCislopopisne(adresaDto.getCislopopisne());
+        adresa.setMesto(adresaDto.getMesto());
+        adresa.setPsc(adresaDto.getPsc());
+        adresa.setUlice(adresaDto.getUlice());
+        return adresaRepo.save(adresa);
     }
 
     @Override
