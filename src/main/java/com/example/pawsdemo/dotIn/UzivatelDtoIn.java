@@ -55,6 +55,16 @@ public class UzivatelDtoIn {
     @NotNull
     private int adresaID;
 
+    private String profilovyObrazek;
+
+    public String getProfilovyObrazek() {
+        return profilovyObrazek;
+    }
+
+    public void setProfilovyObrazek(String profilovyObrazek) {
+        this.profilovyObrazek = profilovyObrazek;
+    }
+
     public int getUzivatelID() {
         return uzivatelID;
     }

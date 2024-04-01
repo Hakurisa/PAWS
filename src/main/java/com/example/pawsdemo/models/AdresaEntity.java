@@ -24,7 +24,7 @@ public class AdresaEntity {
     private int adresaId;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "adresa_id", referencedColumnName = "adresaId")
+    @JoinColumn(name = "adresaId", referencedColumnName = "AdresaID")
     private UzivatelEntity uzivatel;
 
     public UzivatelEntity getUzivatel() {

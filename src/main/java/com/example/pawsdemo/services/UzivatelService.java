@@ -54,6 +54,9 @@ public class UzivatelService implements UserDetailsService {
         user.setEmail(userDto.getEmail());
         user.setDatumzalozeni(userDto.getDatumzalozeni());
         user.setDatumnarozeni(userDto.getDatumnarozeni());
+        //user.setProfilovyobrazek(userDto.getProfilovyObrazek());
+        //FIXME: hack, change this for when we actually have a default icon and ability to change them
+        user.setProfilovyobrazek("empty");
 //        user.setBeznyuzivatelId(userDto.getBeznyUzivatelID());
 //        user.setUmelecId(userDto.getUmelecID());
         user.setPlatnost((byte) 1);
