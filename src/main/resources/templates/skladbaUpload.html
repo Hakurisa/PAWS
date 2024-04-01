@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>PAWS - upload</title>
+</head>
+<body>
+<h2>Upload Song and Cover Image</h2>
+<form th:action="@{/skladba/new}" method="post" enctype="multipart/form-data">
+    <div>
+        <label for="jmeno">Zadej název:</label>
+        <input type="text" id="jmeno" name="jmeno" placeholder="Název skladby">
+    </div>
+    <div>
+        <label for="song">Vyber skladbu:</label>
+        <input type="file" id="song" name="song" accept="audio/*">
+    </div>
+    <div>
+        <label for="coverimage">Vyber cover alba:</label>
+        <input type="file" id="coverimage" name="coverImage" accept="image/*">
+    </div>
+    <button type="submit">Upload</button>
+</form>
+</body>
+</html>
