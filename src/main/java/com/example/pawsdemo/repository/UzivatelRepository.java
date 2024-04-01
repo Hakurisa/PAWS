@@ -16,8 +16,8 @@ public interface UzivatelRepository extends CrudRepository<UzivatelEntity, Integ
     @Query("SELECT u FROM UzivatelEntity u")
     public List<UzivatelEntity> getAllUzivatel();
 
-    /*@Query("SELECT u FROM Uzivatel u WHERE u.uzivatelID = :#{uzivatel.uzivatelID}")
-    public List<Uzivatel> getUzivatelByID(@Param("uzivatel") Uzivatel uzivatel);*/
+    @Query("SELECT LAST_INSERT_ID() FROM AdresaEntity")
+    public int getAdresaOfUzivatel();
 
     UzivatelEntity findUzivatelByUsername(String username);
 

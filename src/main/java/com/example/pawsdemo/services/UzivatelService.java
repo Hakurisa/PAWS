@@ -57,7 +57,7 @@ public class UzivatelService implements UserDetailsService {
 //        user.setBeznyuzivatelId(userDto.getBeznyUzivatelID());
 //        user.setUmelecId(userDto.getUmelecID());
         user.setPlatnost((byte) 1);
-        user.setAdresaId(adresaRepo.findAdresaByAdresaId(user.getAdresaId()).getAdresaId());
+        user.setAdresaId(uzivatelRepo.getAdresaOfUzivatel());
         return uzivatelRepo.save(user);
     }
 

@@ -66,8 +66,8 @@ public class UzivatelController {
     public ModelAndView registerUserAccount(@ModelAttribute("uzivatel") @Valid UzivatelDtoIn userDto, @ModelAttribute("adresa") @Valid AdresaDtoIn adresaDto,
                                             HttpServletRequest request, Errors errors) {
         try{
-            final UzivatelEntity registered = uzivatelService.registerNewUserAccount(userDto);
             final AdresaEntity newAddress = uzivatelService.registerUsersAddress(adresaDto);
+            final UzivatelEntity registered = uzivatelService.registerNewUserAccount(userDto);
         } catch (UserAlreadyExistsException uae) {
             ModelAndView mav = new ModelAndView("registration", "uzivatel", userDto);
             String errMessage = messages.getMessage("message.regError", null, request.getLocale());
