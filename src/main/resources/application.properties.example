@@ -11,3 +11,9 @@ spring.jpa.open-in-view=false
 logging.level.org.hibernate.SQL=DEBUG
 logging.level.org.hibernate.Type=TRACE
 logging.level.org.springframework.security=DEBUG
+
+backblaze.b2.applicationKey=
+backblaze.b2.applicationKeyId=
+backblaze.b2.bucketName=
+backblaze.b2.bucketId=
+spring.servlet.multipart.max-file-size=20MB
