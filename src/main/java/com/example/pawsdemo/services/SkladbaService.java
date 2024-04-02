@@ -68,22 +68,19 @@ public class SkladbaService {
             Date date = new Date(milliseconds);
             Time songLength = new Time(hours, minutes, seconds);
             logger.info("Song length - time format: " + songLength);
-            //uploading to cloud storage
-            //TODO: do this after saving to DB, get the song's id, make a new folder in the bucket - "songs/{ID}" and save to there
-            uploadToB2(songFileName, song.getBytes());
-            uploadToB2(coverImageFileName, coverImage.getBytes());
 
             //saving the song into database
             final SkladbaEntity skladbaEntity = new SkladbaEntity();
             final AlbumEntity album = new AlbumEntity();
-            skladbaEntity.setAudioslozka(fileUrl + songFileName);
-            skladbaEntity.setCoverimage(fileUrl + coverImageFileName);
+            //FIXME: doesn't actually set the song's ID in the database because the ID is still zero at this point
+            skladbaEntity.setAudioslozka(fileUrl + "song/" + skladbaEntity.getSkladbaId() + "/" + songFileName);
+            skladbaEntity.setCoverimage(fileUrl + "songCover/" + skladbaEntity.getSkladbaId() + "/" + coverImageFileName);
             skladbaEntity.setJmeno(skladba.getJmeno());
             skladbaEntity.setDelka(songLength);
             skladbaEntity.setPocetprehrani(0);
 
             //FIXME: hack - there's no implementation of an album yet, so I make one up
-            album.setCoverImage(fileUrl + coverImageFileName);
+            album.setCoverImage(fileUrl + "songCover/" + skladbaEntity.getSkladbaId() + "/" +  coverImageFileName);
             album.setPocetskladeb(1);
             album.setNazev(skladba.getJmeno());
             album.setPublikovano((byte) 1);
@@ -93,6 +90,10 @@ public class SkladbaService {
             albumRepo.save(album);
             skladbaEntity.setAlbumId(album.getAlbumId());
             skladbaRepo.save(skladbaEntity);
+
+            //upload to B2 with a file structure
+            uploadToB2("song/" + skladbaEntity.getSkladbaId() + "/" + songFileName, song.getBytes());
+            uploadToB2("songCover/" + skladbaEntity.getSkladbaId() + "/" + coverImageFileName, coverImage.getBytes());
         } catch (IOException ex) {
             throw new RuntimeException("Could not store file.");
         }
