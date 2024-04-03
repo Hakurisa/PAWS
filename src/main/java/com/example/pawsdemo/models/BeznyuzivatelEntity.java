@@ -2,6 +2,8 @@ package com.example.pawsdemo.models;
 
 import jakarta.persistence.*;
 
+import java.util.Collection;
+
 @Entity
 @Table(name = "Beznyuzivatel", schema = "PAWS", catalog = "")
 public class BeznyuzivatelEntity {
@@ -18,6 +20,8 @@ public class BeznyuzivatelEntity {
     @Id
     @Column(name = "BeznyuzivatelID")
     private int beznyuzivatelId;
+//    @OneToMany(mappedBy = "beznyuzivatelByBeznyuzivatelId")
+//    private Collection<UzivatelEntity> uzivatelsByBeznyuzivatelId;
 
     public String getJmeno() {
         return jmeno;
@@ -75,4 +79,12 @@ public class BeznyuzivatelEntity {
         result = 31 * result + beznyuzivatelId;
         return result;
     }
+
+//    public Collection<UzivatelEntity> getUzivatelsByBeznyuzivatelId() {
+//        return uzivatelsByBeznyuzivatelId;
+//    }
+//
+//    public void setUzivatelsByBeznyuzivatelId(Collection<UzivatelEntity> uzivatelsByBeznyuzivatelId) {
+//        this.uzivatelsByBeznyuzivatelId = uzivatelsByBeznyuzivatelId;
+//    }
 }

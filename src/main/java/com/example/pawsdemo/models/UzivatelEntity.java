@@ -52,6 +52,29 @@ public class UzivatelEntity implements UserDetails{
     @Column(name = "Password")
     private String password;
 
+//    @ManyToOne
+//    @JoinColumn(name = "BeznyuzivatelID", referencedColumnName = "BeznyuzivatelID")
+//    private BeznyuzivatelEntity beznyuzivatelByBeznyuzivatelId;
+//    @ManyToOne
+//    @JoinColumn(name = "UmelecID", referencedColumnName = "UmelecID")
+//    private UmelecEntity umelecByUmelecId;
+
+//    public BeznyuzivatelEntity getBeznyuzivatelByBeznyuzivatelId() {
+//        return beznyuzivatelByBeznyuzivatelId;
+//    }
+//
+//    public void setBeznyuzivatelByBeznyuzivatelId(BeznyuzivatelEntity beznyuzivatelByBeznyuzivatelId) {
+//        this.beznyuzivatelByBeznyuzivatelId = beznyuzivatelByBeznyuzivatelId;
+//    }
+
+//    public UmelecEntity getUmelecByUmelecId() {
+//        return umelecByUmelecId;
+//    }
+//
+//    public void setUmelecByUmelecId(UmelecEntity umelecByUmelecId) {
+//        this.umelecByUmelecId = umelecByUmelecId;
+//    }
+
     @JsonIgnore
     @OneToMany(mappedBy = "uzivatel")
     private Set<AdresaEntity> addresses = new HashSet<>();

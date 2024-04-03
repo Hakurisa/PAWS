@@ -19,6 +19,12 @@ public interface UzivatelRepository extends CrudRepository<UzivatelEntity, Integ
     @Query("SELECT LAST_INSERT_ID() FROM AdresaEntity")
     public int getAdresaOfUzivatel();
 
+    @Query("SELECT LAST_INSERT_ID() FROM BeznyuzivatelEntity")
+    public int getBUIdOfNewUzivatel();
+
+    @Query("SELECT LAST_INSERT_ID() FROM UmelecEntity")
+    public int getUmelecIdOfNewUzivatel();
+
     UzivatelEntity findUzivatelByUsername(String username);
 
     UzivatelEntity findUzivatelByEmail(String email);

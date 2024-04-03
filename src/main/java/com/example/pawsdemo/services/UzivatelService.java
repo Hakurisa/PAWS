@@ -10,18 +10,15 @@ import com.example.pawsdemo.repository.UzivatelRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 
 @Service
 public class UzivatelService implements UserDetailsService {
@@ -39,13 +36,13 @@ public class UzivatelService implements UserDetailsService {
 
     private UzivatelService uzivatelService;
 
-    public UzivatelEntity create(UzivatelEntity uzivatel){
-        return  uzivatelRepo.save(uzivatel);
+    public UzivatelEntity create(UzivatelEntity uzivatel) {
+        return uzivatelRepo.save(uzivatel);
     }
 
     public UzivatelEntity registerNewUserAccount(final UzivatelDtoIn userDto) {
         logger.info("in register");
-        if(emailExists(userDto.getEmail())) {
+        if (emailExists(userDto.getEmail())) {
             throw new UserAlreadyExistsException("Účet s emailem " + userDto.getEmail() + " již existuje.");
         }
         final UzivatelEntity user = new UzivatelEntity();
@@ -57,8 +54,13 @@ public class UzivatelService implements UserDetailsService {
         //user.setProfilovyobrazek(userDto.getProfilovyObrazek());
         //FIXME: hack, change this for when we actually have a default icon and ability to change them
         user.setProfilovyobrazek("empty");
-//        user.setBeznyuzivatelId(userDto.getBeznyUzivatelID());
-//        user.setUmelecId(userDto.getUmelecID());
+        /* if(isBU) {
+            user.setBeznyuzivatelId(uzivatelRepo.getBUIdOfNewUzivatel());
+            user.setUmelecId(null);
+        } else if(isUmelec) {
+            user.setBeznyuzivatelId(null);
+            user.setUmelecId(uzivatelRepo.getUmelecIdOfNewUzivatel());
+        } */
         user.setPlatnost((byte) 1);
         user.setAdresaId(uzivatelRepo.getAdresaOfUzivatel());
         return uzivatelRepo.save(user);
@@ -77,7 +79,7 @@ public class UzivatelService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         logger.info("in user load!");
         final UzivatelEntity uzivatel = uzivatelRepo.findUzivatelByUsername(username);
-        if(uzivatel == null) {
+        if (uzivatel == null) {
             logger.info("User is null!");
             throw new UsernameNotFoundException(username);
         }
@@ -87,6 +89,7 @@ public class UzivatelService implements UserDetailsService {
 
     /**
      * Checks if the email already existing in database
+     *
      * @param email email we're searching
      * @return true if no account with email exists in DB
      */
