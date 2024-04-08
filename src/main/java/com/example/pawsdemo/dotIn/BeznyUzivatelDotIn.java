@@ -2,15 +2,47 @@ package com.example.pawsdemo.dotIn;
 
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class BeznyUzivatelDotIn {
     @Id
-    @NotBlank
+    @NotNull
     private int beznyuzivatelID;
-    @NotBlank
+    @NotNull
     private String jmeno;
-
-    @NotBlank
+    @NotNull
     private String prijmeni;
     private Integer oblibeneZanry;
+
+    public int getBeznyuzivatelID() {
+        return beznyuzivatelID;
+    }
+
+    public void setBeznyuzivatelID(int beznyuzivatelID) {
+        this.beznyuzivatelID = beznyuzivatelID;
+    }
+
+    public String getJmeno() {
+        return jmeno;
+    }
+
+    public void setJmeno(String jmeno) {
+        this.jmeno = jmeno;
+    }
+
+    public String getPrijmeni() {
+        return prijmeni;
+    }
+
+    public void setPrijmeni(String prijmeni) {
+        this.prijmeni = prijmeni;
+    }
+
+    public Integer getOblibeneZanry() {
+        return oblibeneZanry;
+    }
+
+    public void setOblibeneZanry(Integer oblibeneZanry) {
+        this.oblibeneZanry = oblibeneZanry;
+    }
 }

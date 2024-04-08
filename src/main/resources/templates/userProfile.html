@@ -10,7 +10,28 @@
 <body>
 <div class="container min-vh-100 d-flex justify-content-center align-items-center bg-dark-subtle">
 
-    <div class="fs-2">Profil uživatele <span th:remove="tag" sec:authentication="name">thymeleaf</span></div>
+    <div class="fs-2">Profil uživatele <span th:remove="tag" sec:authentication="name"></span></div>
+
+    <form th:action="@{updateAccount}" method="post">
+        <div>
+            <!-- <img src=""> -->
+            <div>
+                <input type="button" id="profilovyobrazek" name="profilovyobrazek" value="Upravit obrázek" accept="image/*" />
+            </div>
+        </div>
+        <div>
+            <label for="jmeno">Jméno</label>
+            <div>
+                <input type="text" id="jmeno" name="jmeno" />
+            </div>
+        </div>
+        <div>
+            <label for="prijmeni">Příjmení</label>
+            <div>
+                <input type="text" id="prijmeni" name="prijmeni" />
+            </div>
+        </div>
+    </form>
 
     <a class="btn btn-secondary" th:href="@{index}">Zpět na hl. stránku</a>
 </div>

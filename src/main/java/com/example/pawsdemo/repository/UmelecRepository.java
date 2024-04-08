@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 // @Repository
 public interface UmelecRepository /* implements CrudRepository<UmelecEntity, Integer> */ {
-    //TODO
-//    @Query("SELECT u FROM Umelec u WHERE u.Jmeno LIKE %searchInput%")
+//TODO    @Query("SELECT u FROM Umelec u WHERE u.Jmeno LIKE %searchInput%")
 //    public List<UmelecEntity> getAllresults();
+
 }
