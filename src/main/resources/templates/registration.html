@@ -8,13 +8,25 @@
 <form th:action="@{registration}" method="post">
     <h1>Zaregistrovat se</h1>
     <div>
+        <label for="jmeno">Jméno</label>
+        <div>
+            <input type="text" id="jmeno" name="jmeno" placeholder="Jméno"/>
+        </div>
+    </div>
+    <div id="prijmeniBU">
+        <label for="prijmeni">Příjmení</label>
+        <div>
+            <input type="text" id="prijmeni" name="prijemni" placeholder="Příjmení"/>
+        </div>
+    </div>
+    <div>
         <label for="username">Uživatelské jméno</label>
         <div>
             <input type="text" id="username" name="username" placeholder="Uživatelské jméno">
         </div>
     </div>
     <div>
-        <label for="username">Email</label>
+        <label for="email">Email</label>
         <div>
             <input type="text" id="email" name="email" placeholder="muj@email.ukazka">
         </div>
@@ -27,10 +39,10 @@
     </div>
     <div>
         <label class="typ-uctu" for="buaccount">
-            <input type="radio" class="typ-uctu" name="typUctu" id="buaccount" autocomplete="off" value="isBU" checked>
+            <input type="radio" class="typ-uctu" name="typUctu" id="buaccount" autocomplete="off" onclick="displaySpecificInputs()" value="isBU" checked>
             Běžný profil</label>
         <label class="typ-uctu" for="umelecaccount">
-            <input type="radio" class="typ-uctu" name="typUctu" id="umelecaccount" autocomplete="off" value="isUmelec">
+            <input type="radio" class="typ-uctu" name="typUctu" id="umelecaccount" autocomplete="off" onclick="displaySpecificInputs()" value="isUmelec">
             Umělecký profil</label>
     </div>
     <div>
@@ -67,5 +79,17 @@
         <input type="submit" value="Registrace">
     </div>
 </form>
+
+<script>
+    function displaySpecificInputs() {
+    var info = document.getElementById('prijmeniBU');
+    var choice = document.getElementsByName('typUctu');
+    if (!choice[0].checked) {
+        info.style.visibility = 'hidden';
+    } else {
+        info.style.visibility= 'visible';
+    }
+}
+</script>
 </body>
 </html>
