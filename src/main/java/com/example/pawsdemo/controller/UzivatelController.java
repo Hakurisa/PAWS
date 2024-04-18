@@ -41,17 +41,18 @@ public class UzivatelController {
 
     @Autowired
     private MessageSource messages;
-    @Autowired
     private UzivatelService uzivatelService;
-
-    @Qualifier("uzivatelService")
-    @Autowired
     private UserDetailsService userDetService;
-
-    @Autowired
     private UzivatelRepository uzivatelRepository;
 
     private static final Logger logger = LoggerFactory.getLogger(UzivatelController.class);
+
+    @Autowired
+    public UzivatelController(UzivatelService uzivatelService, @Qualifier("uzivatelService") UserDetailsService userDetService, UzivatelRepository uzivatelRepository) {
+        this.uzivatelService = uzivatelService;
+        this.userDetService = userDetService;
+        this.uzivatelRepository = uzivatelRepository;
+    }
 
     @GetMapping("/index")
     public String index(Model model, Principal principal) {
