@@ -13,4 +13,6 @@ public class UzivatelServiceImpl {
         return uzivatelRepo.save(uzivatelEntity);
     }
 
+
+
 }

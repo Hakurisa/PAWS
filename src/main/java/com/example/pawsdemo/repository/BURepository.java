@@ -1,5 +1,6 @@
 package com.example.pawsdemo.repository;
 
+import com.example.pawsdemo.dotIn.BeznyUzivatelDotIn;
 import com.example.pawsdemo.models.BeznyuzivatelEntity;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -11,4 +12,6 @@ public interface BURepository extends CrudRepository<BeznyuzivatelEntity, Intege
 
     @Query("SELECT LAST_INSERT_ID() FROM UzivatelEntity")
     public int getUzivatelIdOfNewBU();
+
+    BeznyuzivatelEntity save(BeznyUzivatelDotIn beznyUzivatelDot);
 }

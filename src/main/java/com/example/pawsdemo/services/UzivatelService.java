@@ -1,11 +1,17 @@
 package com.example.pawsdemo.services;
 
 import com.example.pawsdemo.dotIn.AdresaDtoIn;
+import com.example.pawsdemo.dotIn.BeznyUzivatelDotIn;
+import com.example.pawsdemo.dotIn.UmelecDtoIn;
 import com.example.pawsdemo.dotIn.UzivatelDtoIn;
 import com.example.pawsdemo.exceptions.UserAlreadyExistsException;
 import com.example.pawsdemo.models.AdresaEntity;
+import com.example.pawsdemo.models.BeznyuzivatelEntity;
+import com.example.pawsdemo.models.UmelecEntity;
 import com.example.pawsdemo.models.UzivatelEntity;
 import com.example.pawsdemo.repository.AdresaRepository;
+import com.example.pawsdemo.repository.BURepository;
+import com.example.pawsdemo.repository.UmelecRepository;
 import com.example.pawsdemo.repository.UzivatelRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +21,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -30,6 +37,12 @@ public class UzivatelService implements UserDetailsService {
     private UzivatelRepository uzivatelRepo;
 
     @Autowired
+    private BURepository buRepo;
+
+    @Autowired
+    private UmelecRepository umelecRepo;
+
+    @Autowired
     private AdresaRepository adresaRepo;
 
     private static final Logger logger = LoggerFactory.getLogger(UzivatelService.class);
@@ -40,7 +53,11 @@ public class UzivatelService implements UserDetailsService {
         return uzivatelRepo.save(uzivatel);
     }
 
-    public UzivatelEntity registerNewUserAccount(final UzivatelDtoIn userDto) {
+    public BeznyuzivatelEntity create(BeznyuzivatelEntity bu){
+        return buRepo.save(bu);
+    }
+
+    public UzivatelEntity registerNewUserAccount(final UzivatelDtoIn userDto, String typUctu) {
         logger.info("in register");
         if (emailExists(userDto.getEmail())) {
             throw new UserAlreadyExistsException("Účet s emailem " + userDto.getEmail() + " již existuje.");
@@ -51,16 +68,16 @@ public class UzivatelService implements UserDetailsService {
         user.setEmail(userDto.getEmail());
         user.setDatumzalozeni(userDto.getDatumzalozeni());
         user.setDatumnarozeni(userDto.getDatumnarozeni());
-        //user.setProfilovyobrazek(userDto.getProfilovyObrazek());
-        //FIXME: hack, change this for when we actually have a default icon and ability to change them
-        user.setProfilovyobrazek("empty");
-        /* if(isBU) {
+        if("isBU".equals(typUctu)){
             user.setBeznyuzivatelId(uzivatelRepo.getBUIdOfNewUzivatel());
             user.setUmelecId(null);
-        } else if(isUmelec) {
+        }
+        if("isUmelec".equals(typUctu)){
             user.setBeznyuzivatelId(null);
             user.setUmelecId(uzivatelRepo.getUmelecIdOfNewUzivatel());
-        } */
+        }
+        //FIXME: hack, change this for when we actually have a default icon and ability to change them
+        user.setProfilovyobrazek("empty");
         user.setPlatnost((byte) 1);
         user.setAdresaId(uzivatelRepo.getAdresaOfUzivatel());
         return uzivatelRepo.save(user);
@@ -74,6 +91,22 @@ public class UzivatelService implements UserDetailsService {
         adresa.setUlice(adresaDto.getUlice());
         return adresaRepo.save(adresa);
     }
+
+    public BeznyuzivatelEntity registerNewUserAccountAsBU(final BeznyUzivatelDotIn buDto) {
+        final BeznyuzivatelEntity bu = new BeznyuzivatelEntity();
+        bu.setJmeno(buDto.getJmeno());
+        bu.setPrijmeni(buDto.getPrijmeni());
+        bu.setOblibenezanry(null);
+        return buRepo.save(bu);
+    }
+    public UmelecEntity registerNewUserAccountAsUmelec(final UmelecDtoIn umelecDto) {
+        UmelecEntity umelec = new UmelecEntity();
+        umelec.setJmeno(umelecDto.getJmeno());
+        umelec.setPopis("Krátký popis posluchačům o tom kdo jste");
+        umelec.setClenkapely(null);
+        return umelecRepo.save(umelec);
+    }
+
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

@@ -22,7 +22,7 @@ public class WebSecurityConfig {
 
     @Autowired
     private UserDetailsService userDetailsService;
-    //Je tady chyba, kdy se může nepřihášený uživatel dostat do index.html (overview) ale nedostane se nikam jinam
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
