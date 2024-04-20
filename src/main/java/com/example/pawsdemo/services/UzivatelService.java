@@ -16,6 +16,8 @@ import com.example.pawsdemo.repository.UzivatelRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -23,6 +25,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
@@ -55,6 +58,10 @@ public class UzivatelService implements UserDetailsService {
 
     public BeznyuzivatelEntity create(BeznyuzivatelEntity bu){
         return buRepo.save(bu);
+    }
+
+    public UmelecEntity create(UmelecEntity umelec){
+        return umelecRepo.save(umelec);
     }
 
     public UzivatelEntity registerNewUserAccount(final UzivatelDtoIn userDto, String typUctu) {
@@ -106,7 +113,6 @@ public class UzivatelService implements UserDetailsService {
         umelec.setClenkapely(null);
         return umelecRepo.save(umelec);
     }
-
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

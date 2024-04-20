@@ -22,13 +22,19 @@
         <div>
             <label for="jmeno">Jméno</label>
             <div>
-                <input type="text" id="jmeno" name="jmeno" />
+                <input type="text" id="jmeno" name="jmeno" th:value="${currentBU.getJmeno()}" />
             </div>
         </div>
         <div>
             <label for="prijmeni">Příjmení</label>
             <div>
-                <input type="text" id="prijmeni" name="prijmeni" />
+                <input type="text" id="prijmeni" name="prijmeni" th:value="${currentBU.getPrijmeni()}" />
+            </div>
+        </div>
+        <div>
+            <label for="email">Email:</label>
+            <div>
+                <input type="email" id="email" name="email" th:value="${currentUser.getEmail()}" />
             </div>
         </div>
     </form>

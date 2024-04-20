@@ -12,8 +12,11 @@
 
 <h1 th:inline="text">Welcome <span th:remove="tag" sec:authentication="name">thymeleaf</span>!</h1>
 
-    <a class="btn btn-primary" th:href="@{/skladba/new}">Nová skladba (not functional)</a>
-    <a class="btn btn-primary" th:href="@{userProfile}">Zobrazit profil</a>
+    <a th:if="${isBu}" class="btn btn-primary" th:href="@{userProfile}">Zobrazit profil</a>
+
+    <a th:if="${isUmelec}" class="btn btn-primary" th:href="@{/skladba/new}">Nová skladba (not functional)</a>
+    <a th:if="${isUmelec}" class="btn btn-primary" th:href="@{artistProfile}">Zobrazit profil</a>
+
     <form th:action="@{/logout}" method="post">
         <button type="submit" class="btn btn-secondary">Odhlásit se</button>
     </form>
