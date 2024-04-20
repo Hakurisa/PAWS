@@ -31,6 +31,6 @@ public class SkladbaController {
     @PostMapping("/skladba/new")
     public String uploadSong(@ModelAttribute SkladbaDtoIn skladba, @RequestParam("song") MultipartFile song, @RequestParam("coverImage") MultipartFile coverImage) throws IOException {
         service.saveSong(skladba, song, coverImage);
-        return "skladbaUpload";
+        return "index";
     }
 }

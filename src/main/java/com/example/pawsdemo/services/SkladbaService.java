@@ -10,6 +10,7 @@ import com.example.pawsdemo.models.AlbumEntity;
 import com.example.pawsdemo.models.SkladbaEntity;
 import com.example.pawsdemo.repository.AlbumRepository;
 import com.example.pawsdemo.repository.SkladbaRepository;
+import com.example.pawsdemo.utils.B2Services;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,8 +38,9 @@ public class SkladbaService {
     @Autowired
     B2StorageClient storageClient;
 
-    @Value("${backblaze.b2.bucketId}")
-    private String bucketId;
+    @Autowired
+    B2Services b2Services;
+
 
     @Value("${backblaze.b2.fileUrl}")
     private String fileUrl;
@@ -91,29 +93,25 @@ public class SkladbaService {
             skladbaEntity.setAlbumId(album.getAlbumId());
             skladbaRepo.save(skladbaEntity);
 
+            int generatedAlbumId = album.getAlbumId();
+            int generatedSkladbaId = skladbaEntity.getSkladbaId();
+
+            skladbaEntity.setAudioslozka(fileUrl + "song/" + generatedSkladbaId + "/" + songFileName);
+            skladbaEntity.setCoverimage(fileUrl + "songCover/" + generatedSkladbaId + "/" + coverImageFileName);
+            album.setCoverImage(fileUrl + "songCover/" + generatedSkladbaId + "/" + coverImageFileName);
+
+            skladbaRepo.save(skladbaEntity);
+            albumRepo.save(album);
+
             //upload to B2 with a file structure
-            uploadToB2("song/" + skladbaEntity.getSkladbaId() + "/" + songFileName, song.getBytes());
-            uploadToB2("songCover/" + skladbaEntity.getSkladbaId() + "/" + coverImageFileName, coverImage.getBytes());
+            b2Services.uploadToB2("song/" + skladbaEntity.getSkladbaId() + "/" + songFileName, song.getBytes(), true);
+            b2Services.uploadToB2("songCover/" + skladbaEntity.getSkladbaId() + "/" + coverImageFileName, coverImage.getBytes(), false);
         } catch (IOException ex) {
             throw new RuntimeException("Could not store file.");
         }
     }
 
-    private void uploadToB2(String fileName, byte[] fileBytes) {
-        try{
-            //finding this in the documentation made me very sad
-            B2ContentSource contentSource = B2ByteArrayContentSource.build(fileBytes);
-            B2UploadFileRequest request = builder(
-                    bucketId,
-                    fileName,
-                    "application/octet-stream",
-                    contentSource
-            ).build();
-            storageClient.uploadSmallFile(request);
-        } catch (B2Exception e) {
-            throw new RuntimeException("Error when saving to B2.");
-        }
-    }
+
 
     /**
      * Takes a multipart file, assumes it's a song and returns its length in seconds

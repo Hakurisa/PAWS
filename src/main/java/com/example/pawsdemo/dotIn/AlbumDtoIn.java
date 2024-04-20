@@ -16,7 +16,7 @@ public class AlbumDtoIn {
     @NotNull
     private int pocetSkladeb;
     @NotNull
-    private TinyIntJdbcType publikovano;
+    private boolean publikovano;
     private String coverImage;
     @Id
     @NotNull
@@ -54,11 +54,11 @@ public class AlbumDtoIn {
         this.pocetSkladeb = pocetSkladeb;
     }
 
-    public TinyIntJdbcType getPublikovano() {
+    public boolean getPublikovano() {
         return publikovano;
     }
 
-    public void setPublikovano(TinyIntJdbcType publikovano) {
+    public void setPublikovano(boolean publikovano) {
         this.publikovano = publikovano;
     }
 

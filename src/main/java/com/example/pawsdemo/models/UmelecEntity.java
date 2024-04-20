@@ -3,6 +3,8 @@ package com.example.pawsdemo.models;
 import jakarta.persistence.*;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "Umelec", schema = "PAWS", catalog = "")
@@ -22,6 +24,9 @@ public class UmelecEntity {
     private int umelecId;
 //    @OneToMany(mappedBy = "umelecByUmelecId")
 //    private Collection<UzivatelEntity> uzivatelsByUmelecId;
+
+    @ManyToMany(mappedBy = "umelci")
+    private Set<AlbumEntity> albums = new HashSet<>();
 
     public String getJmeno() {
         return jmeno;
@@ -54,6 +59,7 @@ public class UmelecEntity {
     public void setUmelecId(int umelecId) {
         this.umelecId = umelecId;
     }
+
 
     @Override
     public boolean equals(Object o) {
