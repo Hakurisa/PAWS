@@ -13,7 +13,7 @@ public class UmelecService {
 
     private AlbumRepository albumRepo;
 
-    public UmelecEntity create(UmelecEntity umelec){
-        return umelecRepo.save(umelec);
-    }
+//    public UmelecEntity create(UmelecEntity umelec){
+//        return umelecRepo.save(umelec);
+//    }
 }
