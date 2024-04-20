@@ -53,6 +53,6 @@ public class AlbumController {
             return "redirect:/index";
         }
         service.addNewAlbum(album, coverImage, umelecId);
-        return "/";
+        return "/index";
     }
 }

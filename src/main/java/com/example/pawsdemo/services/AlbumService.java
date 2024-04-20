@@ -57,15 +57,24 @@ public class AlbumService {
         newAlbum.setPublikovano((byte) 1); //TODO: Před odevzdáním implementovat změnu v updatu
         newAlbum.setDelka(Time.valueOf("00:00:00")); //TODO: Při vytvoření není sice potřeba počítat, jak je album dlouhé ale implementuji později
         albumRepo.save(newAlbum);
-        newAlbum.setCoverImage(fileUrl + "albumCover/" + newAlbum.getAlbumId() + "/" +  coverImageFileName);
+        if(coverImageFileName.isBlank()) {
+            newAlbum.setCoverImage(fileUrl + "default/playlistPlaceholder.png");
+        } else {
+            newAlbum.setCoverImage(fileUrl + "albumCover/" + newAlbum.getAlbumId() + "/" +  coverImageFileName);
+        }
         logger.info("New album has been created");
         UmelecEntity umelec = umelecRepo.findById(umelecId).orElseThrow(() -> new RuntimeException("Artist not found"));
         newAlbum.getUmelci().add(umelec); // Associate the artist with the album
-        try {
-            b2Services.uploadToB2("albumCover/" + newAlbum.getAlbumId() + "/" + coverImageFileName, coverImage.getBytes(), false);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if(!coverImageFileName.isBlank()) {
+            try {
+                b2Services.uploadToB2("albumCover/" + newAlbum.getAlbumId() + "/" + coverImageFileName, coverImage.getBytes(), false);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            logger.info("we ain't uploadin' shit");
         }
+
 
         return albumRepo.save(newAlbum);
     }
