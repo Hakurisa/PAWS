@@ -5,11 +5,14 @@ import com.backblaze.b2.client.contentSources.B2ByteArrayContentSource;
 import com.backblaze.b2.client.contentSources.B2ContentSource;
 import com.backblaze.b2.client.exceptions.B2Exception;
 import com.backblaze.b2.client.structures.B2UploadFileRequest;
+import com.example.pawsdemo.dotIn.AlbumDtoIn;
 import com.example.pawsdemo.dotIn.SkladbaDtoIn;
 import com.example.pawsdemo.models.AlbumEntity;
 import com.example.pawsdemo.models.SkladbaEntity;
+import com.example.pawsdemo.models.ZanrEntity;
 import com.example.pawsdemo.repository.AlbumRepository;
 import com.example.pawsdemo.repository.SkladbaRepository;
+import com.example.pawsdemo.repository.ZanrRepository;
 import com.example.pawsdemo.utils.B2Services;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +31,7 @@ import java.io.IOException;
 import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.TimeZone;
 
@@ -53,8 +57,11 @@ public class SkladbaService {
 
     private static final Logger logger = LoggerFactory.getLogger(SkladbaService.class);
 
+    @Autowired
+    private ZanrRepository zanrRepository;
 
-    public void saveSong(SkladbaDtoIn skladba, MultipartFile song, Integer albumId) {
+
+    public void saveSong(SkladbaDtoIn skladba, MultipartFile song, Integer albumId, Integer zanrId) {
         try {
             String songFileName = song.getOriginalFilename();
 
@@ -75,6 +82,7 @@ public class SkladbaService {
             skladbaEntity.setJmeno(skladba.getJmeno());
             skladbaEntity.setDelka(songLength);
             skladbaEntity.setPocetprehrani(0);
+
 
             Optional<AlbumEntity> albumOptional = albumRepo.findById(albumId);
 
@@ -108,8 +116,10 @@ public class SkladbaService {
 
             skladbaEntity.setAudioslozka(fileUrl + "song/" + generatedSkladbaId + "/" + songFileName);
 
-            skladbaRepo.save(skladbaEntity);
+            ZanrEntity zanr = zanrRepository.findById(zanrId).orElseThrow(() -> new RuntimeException("Genre not found"));
+            skladbaEntity.getZanry().add(zanr);
 
+            skladbaRepo.save(skladbaEntity);
             //upload to B2 with a file structure
             b2Services.uploadToB2("song/" + skladbaEntity.getSkladbaId() + "/" + songFileName, song.getBytes(), true);
         } catch (IOException ex) {
@@ -117,7 +127,19 @@ public class SkladbaService {
         }
     }
 
+    public SkladbaEntity updateSkladba(SkladbaDtoIn skladba, Integer id) {
+        logger.info("In service update");
+        SkladbaEntity existingSkladba = getSkladbaById(id);
+        existingSkladba.setJmeno(skladba.getJmeno());
+        //TODO: changing albums but that's a problem for later me :)
+        return skladbaRepo.save(existingSkladba);
+    }
 
+    public void deleteSkladba(int id) {
+        SkladbaEntity skladba = skladbaRepo.findById(id).orElseThrow(() -> new RuntimeException("Skladba not found"));
+
+        skladbaRepo.delete(skladba);
+    }
 
     /**
      * Takes a multipart file, assumes it's a song and returns its length in seconds
@@ -155,5 +177,18 @@ public class SkladbaService {
     private boolean removeFileFromDirectory(MultipartFile multipartFile) {
         File file = new File("./target/" + multipartFile.getOriginalFilename());
         return file.delete();
+    }
+
+    public SkladbaDtoIn getSkladbaDtoById(int skladbaId) {
+        SkladbaEntity skladba = skladbaRepo.findById(skladbaId).orElseThrow(() -> new RuntimeException("Skladba not found"));
+        SkladbaDtoIn skladbaDtoIn = new SkladbaDtoIn();
+        skladbaDtoIn.setSkladbaId(skladba.getSkladbaId());
+        skladbaDtoIn.setAlbumId(skladba.getAlbumId());
+        skladbaDtoIn.setJmeno(skladba.getJmeno());
+        return skladbaDtoIn;
+    }
+
+    public SkladbaEntity getSkladbaById(int skladbaId) {
+        return skladbaRepo.findById(skladbaId).orElseThrow(() -> new RuntimeException("Skladba not found"));
     }
 }

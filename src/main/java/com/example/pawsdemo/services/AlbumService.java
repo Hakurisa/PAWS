@@ -96,6 +96,13 @@ public class AlbumService {
             try {
                 existingAlbum.setCoverImage(fileUrl + "albumCover/" + existingAlbum.getAlbumId() + "/" +  coverImageFileName);
                 b2Services.uploadToB2("albumCover/" + existingAlbum.getAlbumId() + "/" + coverImageFileName, coverImage.getBytes(), false);
+                //gotta change all the songs' covers when changing an album too
+                List<SkladbaEntity> skladbas = skladbaRepo.findSkladbaEntityByAlbumId(id);
+                for (SkladbaEntity skladba : skladbas) {
+                    skladba.setCoverimage(fileUrl + "albumCover/" + existingAlbum.getAlbumId() + "/" +  coverImageFileName);
+                    skladbaRepo.save(skladba);
+                }
+
             } catch (IOException e) {
                 e.printStackTrace();
             }

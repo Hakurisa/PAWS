@@ -11,7 +11,7 @@
 <form th:action="@{/album/{albumId}/edit(albumId=${album.albumId})}" method="post" enctype="multipart/form-data">
     <div>
         <label for="jmeno">Název alba:</label>
-        <input type="text" id="jmeno" name="nazev" placeholder="Název skladby" th:value="${album.nazev}">
+        <input type="text" id="jmeno" name="nazev" placeholder="Název alba" th:value="${album.nazev}">
     </div>
     <div>
         <label for="popis">Popis alba:</label>
