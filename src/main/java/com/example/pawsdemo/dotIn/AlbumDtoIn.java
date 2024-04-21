@@ -16,7 +16,7 @@ public class AlbumDtoIn {
     @NotNull
     private int pocetSkladeb;
     @NotNull
-    private boolean publikovano;
+    private byte publikovano;
     private String coverImage;
     @Id
     @NotNull
@@ -54,11 +54,11 @@ public class AlbumDtoIn {
         this.pocetSkladeb = pocetSkladeb;
     }
 
-    public boolean getPublikovano() {
+    public byte getPublikovano() {
         return publikovano;
     }
 
-    public void setPublikovano(boolean publikovano) {
+    public void setPublikovano(byte publikovano) {
         this.publikovano = publikovano;
     }
 

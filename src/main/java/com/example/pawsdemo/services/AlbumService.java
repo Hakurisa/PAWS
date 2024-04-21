@@ -49,8 +49,7 @@ public class AlbumService {
         String coverImageFileName = coverImage.getOriginalFilename();
 
         final AlbumEntity newAlbum = new AlbumEntity();
-        //junk parameter that we'll rewrite with the actual file path, when we know the album's ID
-        newAlbum.setCoverImage("ta");
+        newAlbum.setCoverImage("ta");  //junk parameter that we'll rewrite with the actual file path, when we know the album's ID
         newAlbum.setPocetskladeb(0);
         newAlbum.setNazev(album.getNazev());
         newAlbum.setPopis(album.getPopis());
@@ -77,6 +76,18 @@ public class AlbumService {
 
 
         return albumRepo.save(newAlbum);
+    }
+
+    public AlbumDtoIn getAlbumById(int albumId) {
+        AlbumEntity album = albumRepo.findById(albumId).orElseThrow(() -> new RuntimeException("Album not found"));
+        AlbumDtoIn albumDtoIn = new AlbumDtoIn();
+        albumDtoIn.setAlbumId(album.getAlbumId());
+        albumDtoIn.setNazev(album.getNazev());
+        albumDtoIn.setPopis(album.getPopis());
+        albumDtoIn.setCoverImage(album.getCoverImage());
+        albumDtoIn.setPublikovano(albumDtoIn.getPublikovano());
+        albumDtoIn.setDelka(album.getDelka());
+        return albumDtoIn; //this don't work
     }
 
     public AlbumEntity update(AlbumEntity album){
