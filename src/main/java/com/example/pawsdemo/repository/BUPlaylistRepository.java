@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BUPlaylistRepository extends CrudRepository<BeznyUzivatelPlaylistEntity, Integer>{
 
-    // BeznyUzivatelPlaylistEntity findBeznyUzivatelPlaylistEntityByBeznyuzivatelId(Integer id);
+    BeznyUzivatelPlaylistEntity findBeznyUzivatelPlaylistEntityByBeznyuzivatelId(Integer id);
     BeznyUzivatelPlaylistEntity save(BeznyUzivatelDotIn beznyUzivatelDotIn);
 
 }

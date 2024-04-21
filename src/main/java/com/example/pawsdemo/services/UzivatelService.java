@@ -114,6 +114,19 @@ public class UzivatelService implements UserDetailsService {
         return umelecRepo.save(umelec);
     }
 
+    public UzivatelEntity updateProfile(UzivatelDtoIn uzivatel, Integer currentUserId, BeznyUzivatelDotIn bu, Integer currentBuId) {
+        UzivatelEntity user = uzivatelRepo.findUzivatelEntityByBeznyuzivatelId(currentUserId);
+        BeznyuzivatelEntity buEntity = buRepo.findBeznyuzivatelEntityByBeznyuzivatelId(currentBuId);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found with username: " + currentUserId);
+        }
+        buEntity.setJmeno(bu.getJmeno());
+        buEntity.setPrijmeni(bu.getPrijmeni());
+        user.setEmail(uzivatel.getEmail());
+        buRepo.save(buEntity);
+        return uzivatelRepo.save(user);
+    }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         logger.info("in user load!");

@@ -5,6 +5,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "Playlist", schema = "PAWS", catalog = "")
@@ -13,9 +14,8 @@ public class PlaylistEntity {
     @Column(name = "Coverimage")
     private String coverimage;
     @Basic
-    @CreationTimestamp
     @Column(name = "Datumvzniku")
-    private Date datumvzniku;
+    private LocalDate datumvzniku;
     @Basic
     @Column(name = "Delka")
     private Time delka;
@@ -44,11 +44,11 @@ public class PlaylistEntity {
         this.coverimage = coverimage;
     }
 
-    public Date getDatumvzniku() {
+    public LocalDate getDatumvzniku() {
         return datumvzniku;
     }
 
-    public void setDatumvzniku(Date datumvzniku) {
+    public void setDatumvzniku(LocalDate datumvzniku) {
         this.datumvzniku = datumvzniku;
     }
 

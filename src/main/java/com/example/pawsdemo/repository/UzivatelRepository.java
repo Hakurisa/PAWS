@@ -25,9 +25,8 @@ public interface UzivatelRepository extends CrudRepository<UzivatelEntity, Integ
 
     UzivatelEntity findUzivatelByUsername(String username);
 
-    UzivatelEntity findUzivatelByUzivatelId(Integer id);
+    UzivatelEntity findUzivatelEntityByBeznyuzivatelId(Integer id);
 
     UzivatelEntity findUzivatelByEmail(String email);
-
     UzivatelEntity save(UzivatelDtoIn uzivatelDtoIn);
 }

@@ -1,13 +1,15 @@
 package com.example.pawsdemo.controller;
 
-import com.example.pawsdemo.dotIn.BeznyUzivatelDotIn;
 import com.example.pawsdemo.dotIn.PlaylistDtoIn;
+import com.example.pawsdemo.models.BeznyUzivatelPlaylistEntity;
 import com.example.pawsdemo.models.BeznyuzivatelEntity;
+import com.example.pawsdemo.models.PlaylistEntity;
 import com.example.pawsdemo.models.UzivatelEntity;
 import com.example.pawsdemo.repository.BURepository;
 import com.example.pawsdemo.repository.PlaylistRepository;
 import com.example.pawsdemo.repository.UzivatelRepository;
-import com.example.pawsdemo.services.BUService;
+import com.example.pawsdemo.services.PlaylistService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +23,7 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.io.IOException;
+import java.util.Map;
 
 @Controller
 public class BUController {
@@ -34,28 +36,43 @@ public class BUController {
 
     private PlaylistRepository playlistRepo;
 
+    private PlaylistService playlistService;
+
     @Autowired
-    public BUController(BURepository buRepo, UzivatelRepository uzivatelRepo, PlaylistRepository playlistRepo) {
+    public BUController(BURepository buRepo, UzivatelRepository uzivatelRepo, PlaylistRepository playlistRepo, PlaylistService playlistService) {
         this.buRepo = buRepo;
         this.uzivatelRepo = uzivatelRepo;
         this.playlistRepo = playlistRepo;
+        this.playlistService = playlistService;
+    }
+
+    private UzivatelEntity getCurrentUser(){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth.getName();
+        return uzivatelRepo.findUzivatelByUsername(username);
     }
 
     @GetMapping("/playlist/new")
     public String createNewPlayist(Model model, WebRequest requestInfo){
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String username = auth.getName();
-        UzivatelEntity currentUser = uzivatelRepo.findUzivatelByUsername(username);
-        int buId = currentUser.getBeznyuzivatelId();
+        int buId = getCurrentUser().getBeznyuzivatelId();
         BeznyuzivatelEntity bu = buRepo.findBeznyuzivatelEntityByBeznyuzivatelId(buId);
+
         PlaylistDtoIn playlist = new PlaylistDtoIn();
+
         model.addAttribute("creator", bu);
         model.addAttribute("playlist", playlist);
         return "createPlaylist";
     }
 
-    // public ModelAndView createPlaylist(@ModelAttribute("playlist") @Valid  PlaylistDtoIn playlistDto){
+    @PostMapping("playlist/new")
+    public ModelAndView createPlaylist(@ModelAttribute("playlist") PlaylistDtoIn playlistDto, @RequestParam Map<MultipartFile, MultipartFile> formDate){
+        int buId = getCurrentUser().getBeznyuzivatelId();
+        BeznyuzivatelEntity bu = buRepo.findBeznyuzivatelEntityByBeznyuzivatelId(buId);
+        MultipartFile coverImage = formDate.get("coverImage");
 
-    // }
+        final PlaylistEntity uploadPlaylist = playlistService.newPlaylist(playlistDto, coverImage, bu.getJmeno());
+        final BeznyUzivatelPlaylistEntity uploadBuPlaylist = playlistService.newBUToPlaylistConnection(buId);
+        return new ModelAndView("createPlaylist", "playlist", playlistDto);
+    }
 
 }

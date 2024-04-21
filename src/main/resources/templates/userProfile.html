@@ -12,7 +12,7 @@
 
     <div class="fs-2">Profil uživatele <span th:remove="tag" sec:authentication="name"></span></div>
 
-    <form th:action="@{updateAccount}" method="post">
+    <form th:action="@{/userProfile}" method="post">
         <div>
             <!-- <img src=""> -->
             <div>
@@ -22,21 +22,22 @@
         <div>
             <label for="jmeno">Jméno</label>
             <div>
-                <input type="text" id="jmeno" name="jmeno" th:value="${currentBU.getJmeno()}" />
+                <input type="text" id="jmeno" name="jmeno" th:value="${currentBU.getJmeno()}">
             </div>
         </div>
         <div>
             <label for="prijmeni">Příjmení</label>
             <div>
-                <input type="text" id="prijmeni" name="prijmeni" th:value="${currentBU.getPrijmeni()}" />
+                <input type="text" id="prijmeni" name="prijmeni" th:value="${currentBU.getPrijmeni()}">
             </div>
         </div>
         <div>
             <label for="email">Email:</label>
             <div>
-                <input type="email" id="email" name="email" th:value="${currentUser.getEmail()}" />
+                <input type="email" id="email" name="email" th:value="${currentUser.getEmail()}">
             </div>
         </div>
+        <button type="submit">Uložit úpravy</button>
     </form>
 
     <a class="btn btn-secondary" th:href="@{index}">Zpět na hl. stránku</a>

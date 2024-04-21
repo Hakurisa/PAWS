@@ -2,6 +2,8 @@ package com.example.pawsdemo.models;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
+
 @Entity
 @Table(name = "beznyUzivatelPlaylist", schema = "PAWS", catalog = "")
 public class BeznyUzivatelPlaylistEntity {

@@ -17,12 +17,10 @@ public class BUService {
     //@Autowired
     private UzivatelRepository uzivatelRepo;
 
-    //@Autowired
-    private BURepository buRepo;
-
     private static final Logger logger = LoggerFactory.getLogger(BUService.class);
 
-    public BeznyuzivatelEntity create(BeznyuzivatelEntity bu){
-        return buRepo.save(bu);
+    @Autowired
+    public BUService(UzivatelRepository uzivatelRepo) {
+        this.uzivatelRepo = uzivatelRepo;
     }
 }

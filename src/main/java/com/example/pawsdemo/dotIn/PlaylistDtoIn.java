@@ -2,6 +2,7 @@ package com.example.pawsdemo.dotIn;
 
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.sql.Time;
 import java.time.LocalDate;
@@ -12,6 +13,7 @@ public class PlaylistDtoIn {
     private String coverImage;
 
     @NotNull
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     private LocalDate datumVzniku;
 
     @NotNull
