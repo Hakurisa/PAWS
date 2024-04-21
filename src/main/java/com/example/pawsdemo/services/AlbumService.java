@@ -2,6 +2,7 @@ package com.example.pawsdemo.services;
 
 import com.example.pawsdemo.dotIn.AlbumDtoIn;
 import com.example.pawsdemo.models.AlbumEntity;
+import com.example.pawsdemo.models.SkladbaEntity;
 import com.example.pawsdemo.models.UmelecEntity;
 import com.example.pawsdemo.repository.AlbumRepository;
 import com.example.pawsdemo.repository.SkladbaRepository;
@@ -12,10 +13,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.sql.Time;
+import java.util.List;
 import java.util.TimeZone;
 
 @Service
@@ -81,7 +84,44 @@ public class AlbumService {
         return albumRepo.save(newAlbum);
     }
 
-    public AlbumDtoIn getAlbumById(int albumId) {
+    public AlbumEntity updateAlbum(AlbumDtoIn album, MultipartFile coverImage, Integer id) {
+        AlbumEntity existingAlbum = getAlbumById(id);
+        String coverImageFileName = coverImage.getOriginalFilename();
+
+        existingAlbum.setNazev(album.getNazev());
+        existingAlbum.setPopis(album.getPopis());
+        existingAlbum.setPublikovano(album.getPublikovano());
+        logger.info("Publikováno service:" + album.getPublikovano());
+        if(!coverImageFileName.isBlank()) {
+            try {
+                existingAlbum.setCoverImage(fileUrl + "albumCover/" + existingAlbum.getAlbumId() + "/" +  coverImageFileName);
+                b2Services.uploadToB2("albumCover/" + existingAlbum.getAlbumId() + "/" + coverImageFileName, coverImage.getBytes(), false);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return update(existingAlbum);
+    }
+
+    public AlbumEntity update(AlbumEntity album){
+        return albumRepo.save(album); // will add when I finish album creator
+    }
+
+    @Transactional
+    public void deleteAlbum(int albumId) {
+        // Retrieve the album entity by ID
+        AlbumEntity album = albumRepo.findById(albumId)
+                .orElseThrow(() -> new RuntimeException("Album not found"));
+
+        // Delete all skladba entities associated with the album
+        List<SkladbaEntity> skladbas = skladbaRepo.findSkladbaEntityByAlbumId(albumId);
+        skladbaRepo.deleteAll(skladbas);
+
+        // Delete the album entity
+        albumRepo.delete(album);
+    }
+
+    public AlbumDtoIn getAlbumDtoById(int albumId) {
         AlbumEntity album = albumRepo.findById(albumId).orElseThrow(() -> new RuntimeException("Album not found"));
         AlbumDtoIn albumDtoIn = new AlbumDtoIn();
         albumDtoIn.setAlbumId(album.getAlbumId());
@@ -90,10 +130,10 @@ public class AlbumService {
         albumDtoIn.setCoverImage(album.getCoverImage());
         albumDtoIn.setPublikovano(albumDtoIn.getPublikovano());
         albumDtoIn.setDelka(album.getDelka());
-        return albumDtoIn; //this don't work
+        return albumDtoIn;
     }
 
-    public AlbumEntity update(AlbumEntity album){
-        return null; // will add when I finish album creator
+    public AlbumEntity getAlbumById(int albumId) {
+        return albumRepo.findById(albumId).orElseThrow(() -> new RuntimeException("Album not found"));
     }
 }

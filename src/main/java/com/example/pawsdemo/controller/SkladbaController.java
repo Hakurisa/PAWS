@@ -56,6 +56,6 @@ public class SkladbaController {
             return "redirect:/index";
         }
         service.saveSong(skladba, song, albumId);
-        return "index";
+        return "redirect:/index";
     }
 }
