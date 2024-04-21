@@ -18,8 +18,10 @@
         <input type="file" id="song" name="song" accept="audio/*">
     </div>
     <div>
-        <label for="coverimage">Vyber cover alba:</label>
-        <input type="file" id="coverimage" name="coverImage" accept="image/*">
+        <label for="album">Vyber album:</label>
+        <select id="album" name="album">
+            <option th:each="album : ${albums}" th:value="${album.albumId}" th:text="${album.nazev}"></option>
+        </select>
     </div>
     <button type="submit">Upload</button>
 </form>

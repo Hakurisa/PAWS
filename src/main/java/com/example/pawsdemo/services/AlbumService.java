@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.sql.Time;
+import java.util.TimeZone;
 
 @Service
 public class AlbumService {
@@ -53,8 +54,9 @@ public class AlbumService {
         newAlbum.setPocetskladeb(0);
         newAlbum.setNazev(album.getNazev());
         newAlbum.setPopis(album.getPopis());
-        newAlbum.setPublikovano((byte) 1); //TODO: Před odevzdáním implementovat změnu v updatu
-        newAlbum.setDelka(Time.valueOf("00:00:00")); //TODO: Při vytvoření není sice potřeba počítat, jak je album dlouhé ale implementuji později
+        newAlbum.setPublikovano(album.getPublikovano()); //TODO: Před odevzdáním implementovat změnu v updatu
+        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+        newAlbum.setDelka(new Time(0, 0, 0)); //TODO: Při vytvoření není sice potřeba počítat, jak je album dlouhé ale implementuji později
         albumRepo.save(newAlbum);
         if(coverImageFileName.isBlank()) {
             newAlbum.setCoverImage(fileUrl + "default/playlistPlaceholder.png");
@@ -62,6 +64,7 @@ public class AlbumService {
             newAlbum.setCoverImage(fileUrl + "albumCover/" + newAlbum.getAlbumId() + "/" +  coverImageFileName);
         }
         logger.info("New album has been created");
+        logger.info("Délka: " + newAlbum.getDelka().getTime());
         UmelecEntity umelec = umelecRepo.findById(umelecId).orElseThrow(() -> new RuntimeException("Artist not found"));
         newAlbum.getUmelci().add(umelec); // Associate the artist with the album
         if(!coverImageFileName.isBlank()) {

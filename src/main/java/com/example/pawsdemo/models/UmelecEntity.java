@@ -60,6 +60,13 @@ public class UmelecEntity {
         this.umelecId = umelecId;
     }
 
+    public Set<AlbumEntity> getAlbums() {
+        return albums;
+    }
+
+    public void setAlbums(Set<AlbumEntity> albums) {
+        this.albums = albums;
+    }
 
     @Override
     public boolean equals(Object o) {

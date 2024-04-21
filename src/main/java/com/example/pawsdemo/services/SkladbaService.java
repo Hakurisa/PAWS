@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalTime;
+import java.util.Optional;
 import java.util.TimeZone;
 
 import static com.backblaze.b2.client.structures.B2UploadFileRequest.builder;
@@ -53,59 +54,64 @@ public class SkladbaService {
     private static final Logger logger = LoggerFactory.getLogger(SkladbaService.class);
 
 
-    public void saveSong(SkladbaDtoIn skladba, MultipartFile song, MultipartFile coverImage) {
-        //TODO - save on DB
+    public void saveSong(SkladbaDtoIn skladba, MultipartFile song, Integer albumId) {
         try {
             String songFileName = song.getOriginalFilename();
-            String coverImageFileName = coverImage.getOriginalFilename();
 
             int durationInSeconds = getSongDurationInSeconds(song); //result - 158
             logger.info("Duration in seconds: " + durationInSeconds);
-            long milliseconds = durationInSeconds * 1000L;
 
             int seconds = durationInSeconds % 60;
             int minutes = (durationInSeconds / 60) % 60;
             int hours = durationInSeconds / 3600;
 
-            Date date = new Date(milliseconds);
             Time songLength = new Time(hours, minutes, seconds);
             logger.info("Song length - time format: " + songLength);
 
             //saving the song into database
             final SkladbaEntity skladbaEntity = new SkladbaEntity();
-            final AlbumEntity album = new AlbumEntity();
-            //FIXME: doesn't actually set the song's ID in the database because the ID is still zero at this point
-            skladbaEntity.setAudioslozka(fileUrl + "song/" + skladbaEntity.getSkladbaId() + "/" + songFileName);
-            skladbaEntity.setCoverimage(fileUrl + "songCover/" + skladbaEntity.getSkladbaId() + "/" + coverImageFileName);
+            skladbaEntity.setAudioslozka("ta");
+            skladbaEntity.setCoverimage("ta");
             skladbaEntity.setJmeno(skladba.getJmeno());
             skladbaEntity.setDelka(songLength);
             skladbaEntity.setPocetprehrani(0);
 
-            //FIXME: hack - there's no implementation of an album yet, so I make one up
-            album.setCoverImage(fileUrl + "songCover/" + skladbaEntity.getSkladbaId() + "/" +  coverImageFileName);
-            album.setPocetskladeb(1);
-            album.setNazev(skladba.getJmeno());
-            album.setPublikovano((byte) 1);
-            album.setPopis("Popis...");
-            album.setDelka(songLength);
+            Optional<AlbumEntity> albumOptional = albumRepo.findById(albumId);
 
-            albumRepo.save(album);
-            skladbaEntity.setAlbumId(album.getAlbumId());
+            if(albumOptional.isPresent()) {
+                AlbumEntity album = albumOptional.get();
+
+                skladbaEntity.setAlbumId(album.getAlbumId());
+                skladbaEntity.setCoverimage(album.getCoverImage());
+                int currentPocetSkladeb = album.getPocetskladeb();
+
+                long currentAlbumLength = album.getDelka().getTime();
+                logger.info("Current album length: " + currentAlbumLength);
+                logger.info("Duration of the song (in seconds): " + durationInSeconds);
+                long sumMilis = currentAlbumLength + (durationInSeconds * 1000);
+                int sumSeconds = (int) (sumMilis/1000) % 60;
+                int sumMinutes = (int) ((sumMilis / (1000 * 60)) % 60);;
+                int sumHours = (int) ((sumMilis / (1000 * 60 * 60)) % 24);
+                Time newTime = new Time(sumHours, sumMinutes, sumSeconds);
+                album.setDelka(newTime);
+
+
+                album.setPocetskladeb(++currentPocetSkladeb);
+                albumRepo.save(album);
+
+            } else {
+                throw new RuntimeException("Album with ID " + albumId + " not found.");
+            }
+
             skladbaRepo.save(skladbaEntity);
-
-            int generatedAlbumId = album.getAlbumId();
             int generatedSkladbaId = skladbaEntity.getSkladbaId();
 
             skladbaEntity.setAudioslozka(fileUrl + "song/" + generatedSkladbaId + "/" + songFileName);
-            skladbaEntity.setCoverimage(fileUrl + "songCover/" + generatedSkladbaId + "/" + coverImageFileName);
-            album.setCoverImage(fileUrl + "songCover/" + generatedSkladbaId + "/" + coverImageFileName);
 
             skladbaRepo.save(skladbaEntity);
-            albumRepo.save(album);
 
             //upload to B2 with a file structure
             b2Services.uploadToB2("song/" + skladbaEntity.getSkladbaId() + "/" + songFileName, song.getBytes(), true);
-            b2Services.uploadToB2("songCover/" + skladbaEntity.getSkladbaId() + "/" + coverImageFileName, coverImage.getBytes(), false);
         } catch (IOException ex) {
             throw new RuntimeException("Could not store file.");
         }
