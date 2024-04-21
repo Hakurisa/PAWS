@@ -8,62 +8,64 @@
 <body>
 
 <div class="container min-vh-100 d-flex justify-content-center align-items-center bg-dark-subtle">
-    <form th:action="@{registration}" method="post">
+    <form th:action="@{registration}" method="post" class="row">
         <div class="mb-3">
-                <label class="typ-uctu" for="buaccount">
-                    <input type="radio" class="form-check-input" name="typUctu" id="buaccount" autocomplete="off" onclick="displaySpecificInputs()" value="isBU" checked>
-                    Běžný profil</label>
-                <label class="typ-uctu" for="umelecaccount">
-                    <input type="radio" class="form-check-input" name="typUctu" id="umelecaccount" autocomplete="off" onclick="displaySpecificInputs()" value="isUmelec">
-                    Umělecký profil</label>
+            <label class="typ-uctu" for="buaccount">
+                <input type="radio" class="form-check-input" name="typUctu" id="buaccount" autocomplete="off" onclick="displaySpecificInputs()" value="isBU" checked>
+                Běžný profil</label>
+            <label class="typ-uctu" for="umelecaccount">
+                <input type="radio" class="form-check-input" name="typUctu" id="umelecaccount" autocomplete="off" onclick="displaySpecificInputs()" value="isUmelec">
+                Umělecký profil</label>
         </div>
-        <div class="mb-3">
-            <label for="jmeno" class="form-label">Jméno</label>
-            <input type="text" class="form-control" id="jmeno" name="jmeno" placeholder="Jméno"/>
+        <div class="col-md-6">
+            <div class="mb-3">
+                <label for="jmeno" class="form-label">Jméno</label>
+                <input type="text" class="form-control" id="jmeno" name="jmeno" placeholder="Jméno"/>
+            </div>
+            <div class="mb-3" id="prijmeniBU">
+                <label for="prijmeni" class="form-label">Příjmení</label>
+                <input type="text" class="form-control" id="prijmeni" name="prijmeni" placeholder="Příjmení"/>
+            </div>
+            <div class="mb-3">
+                <label for="username" class="form-label">Uživatelské jméno</label>
+                <input type="text" class="form-control" id="username" name="username" placeholder="Jméno">
+            </div>
+            <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="muj@email.ukazka">
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Heslo</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Heslo">
+            </div>
         </div>
-        <div class="mb-3" id="prijmeniBU">
-            <label for="prijmeni" class="form-label">Příjmení</label>
-            <input type="text" class="form-control" id="prijmeni" name="prijmeni" placeholder="Příjmení"/>
-        </div>
-        <div class="mb-3">
-            <label for="username" class="form-label">Uživatelské jméno</label>
-            <input type="text" class="form-control" id="username" name="username" placeholder="Jméno">
-        </div>
-        <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
-            <input type="text" class="form-control" id="email" name="email" placeholder="muj@email.ukazka">
-        </div>
-        <div class="mb-3">
-            <label for="password" class="form-label">Heslo</label>
-            <input type="password" class="form-control" id="password" name="password" placeholder="Heslo">
-        </div>
-        <div class="mb-3">
-            <label for="datumnarozeni" class="col-form-label">Datum narozeni</label>
-            <input type="date" id="datumnarozeni" name="datumnarozeni" class="form-control">
-        </div>
+        <div class="col-md-6">
+            <div class="mb-3">
+                <label for="datumnarozeni" class="col-form-label">Datum narozeni</label>
+                <input type="date" id="datumnarozeni" name="datumnarozeni" class="form-control">
+            </div>
 
-        <div class="mb-3">
-            <label for="mesto" class="form-label">Město</label>
-            <input type="text" class="form-control" id="mesto" name="mesto">
+            <div class="mb-3">
+                <label for="mesto" class="form-label">Město</label>
+                <input type="text" class="form-control" id="mesto" name="mesto">
+            </div>
+            <div class="mb-3">
+                <label for="ulice" class="form-label">Ulice</label>
+                <input type="text" class="form-control" id="ulice" name="ulice">
+            </div>
+            <div class="mb-3">
+                <label for="cislopopisne" class="form-label">Číslo popisné</label>
+                <input type="text" class="form-control" id="cislopopisne" name="cislopopisne">
+            </div>
+            <div class="mb-3">
+                <label for="psc" class="form-label">PSČ</label>
+                <input type="text" class="form-control" id="psc" name="psc">
+            </div>
+            <button type="submit" class="btn btn-primary" value="Registrace">Registrace</button>
         </div>
-        <div class="mb-3">
-            <label for="ulice" class="form-label">Ulice</label>
-            <input type="text" class="form-control" id="ulice" name="ulice">
-        </div>
-        <div class="mb-3">
-            <label for="cislopopisne" class="form-label">Číslo popisné</label>
-            <input type="text" class="form-control" id="cislopopisne" name="cislopopisne">
-        </div>
-        <div class="mb-3">
-            <label for="psc" class="form-label">PSČ</label>
-            <input type="text" class="form-control" id="psc" name="psc">
-        </div>
-
-        <button type="submit" class="btn btn-primary" value="Registrace">Registrace</button>
-
-
     </form>
 </div>
+
 
 
 <script>

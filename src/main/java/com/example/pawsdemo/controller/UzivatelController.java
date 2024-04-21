@@ -53,13 +53,6 @@ public class UzivatelController {
         this.userDetService = userDetService;
         this.uzivatelRepository = uzivatelRepository;
     }
-
-    @GetMapping("/index")
-    public String index(Model model, Principal principal) {
-        UserDetails userDet = userDetService.loadUserByUsername(principal.getName());
-        model.addAttribute("userdetail", userDet);
-        return "index";
-    }
     @GetMapping("/login")
     public String login() {
         return "login";

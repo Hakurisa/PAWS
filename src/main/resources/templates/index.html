@@ -7,34 +7,131 @@
     <meta charset="UTF-8">
     <title>Welcome in PAWS</title>
 </head>
+<style>
+    .music-player {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        padding: 10px;
+        box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.1);
+    }
+</style>
 <body>
-<div class="container min-vh-100 d-flex justify-content-center align-items-center bg-dark-subtle">
+<i class="bi bi-music-note-list"></i>
+<table class="song-list">
+    <tr>
+        <th scope="col">Název</th>
+        <th scope="col">Umělec</th>
+        <th scope="col">Album</th>
+        <th scope="col"></th>
+        <!--Play button column with requst to play the song - there will be if when person is not logged in it will redirect to login, if is than request to play the song--></tr>
+    <tr th:each="Skladba: ${skladba}">
+        <td th:text="${skladba.jmeno}" />
+        <td th:text="${skladba.umelec}" />
+        <td th:text="${skladba.album}" />
+    </tr>
+</table>
 
-<h1 th:inline="text">Welcome <span th:remove="tag" sec:authentication="name">thymeleaf</span>!</h1>
 
-    <a class="btn btn-primary" th:href="@{/skladba/new}">Nová skladba (not functional)</a>
-    <a class="btn btn-primary" th:href="@{userProfile}">Zobrazit profil</a>
-    <form th:action="@{/logout}" method="post">
-        <button type="submit" class="btn btn-secondary">Odhlásit se</button>
-    </form>
+<div class="row">
+    <!-- Sidebar -->
 
-    <i class="bi bi-music-note-list"></i>
-    <table class="song-list">
-        <tr>
-            <th scope="col">Název</th>
-            <th scope="col">Umělec</th>
-            <th scope="col">Album</th>
-            <th scope="col"></th>
-            <!--Play button column with requst to play the song - there will be if when person is not logged in it will redirect to login, if is than request to play the song--></tr>
-        <tr th:each="Skladba: ${skladba}">
-            <td th:text="${skladba.jmeno}" />
-            <td th:text="${skladba.umelec}" />
-            <td th:text="${skladba.album}" />
-        </tr>
-    </table>
-    <audio id="music-player" controls="" style="position: absolute; bottom: 0; width: 100%;">
-        <source><!-- th:src="${link on audio file}" -->
-    </audio>
+    <div class="d-flex flex-column flex-shrink-0 p-3 bg-light" style="width: 280px;">
+        <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+            <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"/></svg>
+            <span class="fs-4">PAWS</span>
+        </a>
+        <hr>
+        <ul class="nav nav-pills flex-column mb-auto">
+            <li class="nav-item">
+                <a href="/index" class="nav-link active" aria-current="page">
+                    <svg class="bi me-2" width="16" height="16"><use xlink:href="#home"/></svg>
+                    Domů
+                </a>
+            </li>
+            <li>
+
+                <a th:if="${isBu}" class="nav-link link-dark" th:href="@{userProfile}">
+                    <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"/></svg>
+                    User Profil
+                </a>
+            </li>
+            <li>
+                <a th:if="${isUmelec}" class="nav-link link-dark" th:href="@{artistProfile}">
+                    <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"/></svg>
+                    Artist profil
+                </a>
+            </li>
+            <li>
+                <a th:if="${isUmelec}" class="nav-link link-dark" th:href="@{/skladba/new}">
+                    <svg class="bi me-2" width="16" height="16"><use xlink:href="#grid"/></svg>
+                    Nová skladba (X)
+                </a>
+            </li>
+
+        </ul>
+        <hr>
+        <div class="dropdown">
+            <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
+                <img src="https://static.thenounproject.com/png/2894393-200.png" alt="" width="32" height="32" class="rounded-circle me-2">
+                <strong th:remove="tag" sec:authentication="name">thymeleaf</strong>
+            </a>
+            <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
+                <li><a class="dropdown-item" href="/">Zatim nic</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="/logout">Odhlásit se</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Main content area -->
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4 main-content">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2">Hudba</h1>
+        </div>
+
+
+        <div class="col-sm-2">
+            <div class="card sm-2 shadow-sm">
+                <img src="https://via.placeholder.com/300" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title">Song Title</h5>
+                    <p class="card-text">Artist Name</p>
+                    <button class="btn btn-success">Play</button>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Add more cards here -->
+
+    </main>
+
+</div>
+
+<div class="music-player bg-dark-subtle">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-md-3">
+                <!-- Song Info -->
+                <div class="song-info">
+                    <h6>%Song Title%</h6>
+                    <p>%Artist Name%</p>
+                </div>
+            </div>
+
+
+            <div class="col-md-9">
+                <audio class="col-md-9" id="music-player" controls="">
+                    <source><!-- th:src="${link on audio file}" -->
+                </audio>
+            </div>
+
+        </div>
+    </div>
+</div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </div>

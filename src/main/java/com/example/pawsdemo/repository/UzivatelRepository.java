@@ -1,7 +1,6 @@
 package com.example.pawsdemo.repository;
 
 import com.example.pawsdemo.dotIn.UzivatelDtoIn;
-import com.example.pawsdemo.models.AdresaEntity;
 import com.example.pawsdemo.models.UzivatelEntity;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -12,7 +11,6 @@ import java.util.List;
 
 @Repository
 public interface UzivatelRepository extends CrudRepository<UzivatelEntity, Integer> {
-
 
     @Query("SELECT u FROM UzivatelEntity u")
     public List<UzivatelEntity> getAllUzivatel();
@@ -31,9 +29,9 @@ public interface UzivatelRepository extends CrudRepository<UzivatelEntity, Integ
 
     UzivatelEntity findUzivatelByUsername(String username);
 
-    UzivatelEntity findUzivatelByEmail(String email);
-
     UzivatelEntity findUzivatelByUzivatelId(Integer id);
+
+    UzivatelEntity findUzivatelByEmail(String email);
 
     UzivatelEntity save(UzivatelDtoIn uzivatelDtoIn);
 }
