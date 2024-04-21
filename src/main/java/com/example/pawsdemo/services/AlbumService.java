@@ -2,58 +2,145 @@ package com.example.pawsdemo.services;
 
 import com.example.pawsdemo.dotIn.AlbumDtoIn;
 import com.example.pawsdemo.models.AlbumEntity;
+import com.example.pawsdemo.models.SkladbaEntity;
+import com.example.pawsdemo.models.UmelecEntity;
 import com.example.pawsdemo.repository.AlbumRepository;
 import com.example.pawsdemo.repository.SkladbaRepository;
 import com.example.pawsdemo.repository.UmelecRepository;
+import com.example.pawsdemo.utils.B2Services;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.sql.Time;
+import java.util.List;
+import java.util.TimeZone;
 
-//@Service
+@Service
 public class AlbumService {
 
-    /* @Value("${backblaze.b2.bucketId}")
-    private String bucketId;
 
     @Value("${backblaze.b2.fileUrl}")
     private String fileUrl;
 
+    @Autowired
     private AlbumRepository albumRepo;
 
+    @Autowired
+    private B2Services b2Services;
+    @Autowired
     private UmelecRepository umelecRepo;
 
+    @Autowired
     private SkladbaRepository skladbaRepo;
 
     //TODO: private RecenzeRepository recenzeRepo; -- When we gonna implemenet it
 
     private static final Logger logger = LoggerFactory.getLogger(AlbumService.class);
 
-    private AlbumService albumService;
     public AlbumEntity create(AlbumEntity album){
         return albumRepo.save(album);
     }
 
-    public AlbumEntity addNewAlbum(final AlbumDtoIn album, MultipartFile coverImage) {
+    public AlbumEntity addNewAlbum(final AlbumDtoIn album, MultipartFile coverImage, Integer umelecId) {
 
+        logger.info("entering album zone");
         String coverImageFileName = coverImage.getOriginalFilename();
 
         final AlbumEntity newAlbum = new AlbumEntity();
-        newAlbum.setCoverImage(fileUrl + "albumCover/" + album.getAlbumId() + "/" +  coverImageFileName);
+        newAlbum.setCoverImage("ta");  //junk parameter that we'll rewrite with the actual file path, when we know the album's ID
         newAlbum.setPocetskladeb(0);
         newAlbum.setNazev(album.getNazev());
         newAlbum.setPopis(album.getPopis());
-        newAlbum.setPublikovano((byte) 1); //TODO: Před odevzdáním implementovat změnu v updatu
-        newAlbum.setDelka(Time.valueOf("00:00:00")); //TODO: Při vytvoření není sice potřeba počítat, jak je album dlouhé ale implementuji později
-
+        newAlbum.setPublikovano(album.getPublikovano()); //TODO: Před odevzdáním implementovat změnu v updatu
+        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
+        newAlbum.setDelka(new Time(0, 0, 0)); //TODO: Při vytvoření není sice potřeba počítat, jak je album dlouhé ale implementuji později
+        albumRepo.save(newAlbum);
+        if(coverImageFileName.isBlank()) {
+            newAlbum.setCoverImage(fileUrl + "default/playlistPlaceholder.png");
+        } else {
+            newAlbum.setCoverImage(fileUrl + "albumCover/" + newAlbum.getAlbumId() + "/" +  coverImageFileName);
+        }
         logger.info("New album has been created");
+        logger.info("Délka: " + newAlbum.getDelka().getTime());
+        UmelecEntity umelec = umelecRepo.findById(umelecId).orElseThrow(() -> new RuntimeException("Artist not found"));
+        newAlbum.getUmelci().add(umelec); // Associate the artist with the album
+        if(!coverImageFileName.isBlank()) {
+            try {
+                b2Services.uploadToB2("albumCover/" + newAlbum.getAlbumId() + "/" + coverImageFileName, coverImage.getBytes(), false);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            logger.info("we ain't uploadin' shit");
+        }
+
 
         return albumRepo.save(newAlbum);
     }
 
+    public AlbumEntity updateAlbum(AlbumDtoIn album, MultipartFile coverImage, Integer id) {
+        AlbumEntity existingAlbum = getAlbumById(id);
+        String coverImageFileName = coverImage.getOriginalFilename();
+
+        existingAlbum.setNazev(album.getNazev());
+        existingAlbum.setPopis(album.getPopis());
+        existingAlbum.setPublikovano(album.getPublikovano());
+        logger.info("Publikováno service:" + album.getPublikovano());
+        if(!coverImageFileName.isBlank()) {
+            try {
+                existingAlbum.setCoverImage(fileUrl + "albumCover/" + existingAlbum.getAlbumId() + "/" +  coverImageFileName);
+                b2Services.uploadToB2("albumCover/" + existingAlbum.getAlbumId() + "/" + coverImageFileName, coverImage.getBytes(), false);
+                //gotta change all the songs' covers when changing an album too
+                List<SkladbaEntity> skladbas = skladbaRepo.findSkladbaEntityByAlbumId(id);
+                for (SkladbaEntity skladba : skladbas) {
+                    skladba.setCoverimage(fileUrl + "albumCover/" + existingAlbum.getAlbumId() + "/" +  coverImageFileName);
+                    skladbaRepo.save(skladba);
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return update(existingAlbum);
+    }
+
     public AlbumEntity update(AlbumEntity album){
-        return null; // will add when I finish album creator
-    } */
+        return albumRepo.save(album); // will add when I finish album creator
+    }
+
+    @Transactional
+    public void deleteAlbum(int albumId) {
+        // Retrieve the album entity by ID
+        AlbumEntity album = albumRepo.findById(albumId)
+                .orElseThrow(() -> new RuntimeException("Album not found"));
+
+        // Delete all skladba entities associated with the album
+        List<SkladbaEntity> skladbas = skladbaRepo.findSkladbaEntityByAlbumId(albumId);
+        skladbaRepo.deleteAll(skladbas);
+
+        // Delete the album entity
+        albumRepo.delete(album);
+    }
+
+    public AlbumDtoIn getAlbumDtoById(int albumId) {
+        AlbumEntity album = albumRepo.findById(albumId).orElseThrow(() -> new RuntimeException("Album not found"));
+        AlbumDtoIn albumDtoIn = new AlbumDtoIn();
+        albumDtoIn.setAlbumId(album.getAlbumId());
+        albumDtoIn.setNazev(album.getNazev());
+        albumDtoIn.setPopis(album.getPopis());
+        albumDtoIn.setCoverImage(album.getCoverImage());
+        albumDtoIn.setPublikovano(albumDtoIn.getPublikovano());
+        albumDtoIn.setDelka(album.getDelka());
+        return albumDtoIn;
+    }
+
+    public AlbumEntity getAlbumById(int albumId) {
+        return albumRepo.findById(albumId).orElseThrow(() -> new RuntimeException("Album not found"));
+    }
 }

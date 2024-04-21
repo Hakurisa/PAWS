@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Album Details</title>
+</head>
+<body>
+<h1>Album Details</h1>
+<div th:if="${album}">
+    <h2 th:text="${album.nazev}"></h2>
+    <p>Popis: <span th:text="${album.popis}"></span></p>
+    <img th:src="${album.getCoverImage()}" alt="cover image">
+    <p>Délka: <span th:text="${album.delka}"></span></p>
+</div>
+</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <title>PAWS - edit</title>
+</head>
+<body>
+<h2>Upload Song and Cover Image</h2>
+<form th:action="@{/skladba/{skladbaId}/edit(skladbaId=${skladba.skladbaId})}" method="post" enctype="multipart/form-data">
+    <div>
+        <label for="jmeno">Název skladby:</label>
+        <input type="text" id="jmeno" name="jmeno" placeholder="Název skladby" th:value="${skladba.jmeno}">
+    </div>
+    <button type="submit">Upravit</button>
+    <a class="btn btn-danger" onclick="deleteAlbum()">Smazat</a>
+</form>
+<a class="btn btn-primary" th:href="@{/index}">Zpět na hlavní stránku</a>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    function deleteAlbum() {
+        let skladbaId = /*[[${skladba.skladbaId}]]*/ null;
+        var confirmation = confirm("Opravdu chcete smazat tuto skladbu?");
+        if (confirmation) {
+            fetch('/skladba/' + skladbaId, {
+                method: 'DELETE'
+            }).then(response => {
+                if (response.ok) {
+                    window.location.href='/index';
+                } else {
+                    console.error("shit broke");
+                    window.location.href='/index';
+                }
+            }).catch(error => {
+                console.error('Chyba při odesílání DELETE požadavku:', error);
+            });
+        }
+    }
+    /*]]>*/
+</script>
+</body>
+</html>
