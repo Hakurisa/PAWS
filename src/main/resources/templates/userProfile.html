@@ -12,10 +12,11 @@
 
     <div class="fs-2">Profil uživatele <span th:remove="tag" sec:authentication="name"></span></div>
 
-    <form th:action="@{/userProfile}" method="post">
+    <form th:action="@{userProfile}" method="post">
         <div>
             <!-- <img src=""> -->
             <div>
+                <img class="mx-auto d-block"  style="border-radius: 6.25rem; width: 12.5rem;" th:src="${currentUser.getProfilovyobrazek()}">
                 <input type="button" id="profilovyobrazek" name="profilovyobrazek" value="Upravit obrázek" accept="image/*" />
             </div>
         </div>

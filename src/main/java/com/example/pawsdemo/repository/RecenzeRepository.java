@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface RecenzeRepository extends CrudRepository<RecenzeEntity, Integer> {
     RecenzeEntity save(RecenzeDotIn recenzeDotIn);
+
+    RecenzeEntity deleteRecenzeEntityByRecenzeId(Integer id);
 }

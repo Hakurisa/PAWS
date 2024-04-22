@@ -9,8 +9,6 @@ import com.example.pawsdemo.repository.BURepository;
 import com.example.pawsdemo.repository.PlaylistRepository;
 import com.example.pawsdemo.repository.UzivatelRepository;
 import com.example.pawsdemo.services.PlaylistService;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +24,7 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.Map;
 
 @Controller
-public class BUController {
+public class PlaylistController {
 
     private static final Logger logger = LoggerFactory.getLogger(SkladbaController.class);
 
@@ -39,23 +37,23 @@ public class BUController {
     private PlaylistService playlistService;
 
     @Autowired
-    public BUController(BURepository buRepo, UzivatelRepository uzivatelRepo, PlaylistRepository playlistRepo, PlaylistService playlistService) {
+    public PlaylistController(BURepository buRepo, UzivatelRepository uzivatelRepo, PlaylistRepository playlistRepo, PlaylistService playlistService) {
         this.buRepo = buRepo;
         this.uzivatelRepo = uzivatelRepo;
         this.playlistRepo = playlistRepo;
         this.playlistService = playlistService;
     }
 
-    private UzivatelEntity getCurrentUser(){
+    private Integer currentUser(){
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         String username = auth.getName();
-        return uzivatelRepo.findUzivatelByUsername(username);
+        UzivatelEntity currentUser = uzivatelRepo.findUzivatelByUsername(username);
+        return currentUser.getBeznyuzivatelId();
     }
 
     @GetMapping("/playlist/new")
     public String createNewPlayist(Model model, WebRequest requestInfo){
-        int buId = getCurrentUser().getBeznyuzivatelId();
-        BeznyuzivatelEntity bu = buRepo.findBeznyuzivatelEntityByBeznyuzivatelId(buId);
+        BeznyuzivatelEntity bu = buRepo.findBeznyuzivatelEntityByBeznyuzivatelId(currentUser());
 
         PlaylistDtoIn playlist = new PlaylistDtoIn();
 
@@ -64,14 +62,22 @@ public class BUController {
         return "createPlaylist";
     }
 
+    @GetMapping("playlist/{id}")
+    public String showPlaylist(Model model, @PathVariable int id){
+        BeznyuzivatelEntity bu = buRepo.findBeznyuzivatelEntityByBeznyuzivatelId(currentUser());
+//        PlaylistEntity selectedPlaylist =
+        model.addAttribute("beznyuzivatel", bu);
+//        model.addAttribute("playlist", selectedPlaylist);
+        return "showPlaylist";
+    }
+
     @PostMapping("playlist/new")
     public ModelAndView createPlaylist(@ModelAttribute("playlist") PlaylistDtoIn playlistDto, @RequestParam Map<MultipartFile, MultipartFile> formDate){
-        int buId = getCurrentUser().getBeznyuzivatelId();
-        BeznyuzivatelEntity bu = buRepo.findBeznyuzivatelEntityByBeznyuzivatelId(buId);
+        BeznyuzivatelEntity bu = buRepo.findBeznyuzivatelEntityByBeznyuzivatelId(currentUser());
         MultipartFile coverImage = formDate.get("coverImage");
 
         final PlaylistEntity uploadPlaylist = playlistService.newPlaylist(playlistDto, coverImage, bu.getJmeno());
-        final BeznyUzivatelPlaylistEntity uploadBuPlaylist = playlistService.newBUToPlaylistConnection(buId);
+        final BeznyUzivatelPlaylistEntity uploadBuPlaylist = playlistService.newBUToPlaylistConnection(currentUser());
         return new ModelAndView("createPlaylist", "playlist", playlistDto);
     }
 
