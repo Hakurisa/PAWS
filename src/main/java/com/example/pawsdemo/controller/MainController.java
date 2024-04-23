@@ -93,7 +93,7 @@ public class MainController {
         int buId = getCurrentUser().getBeznyuzivatelId();
         BeznyuzivatelEntity bu = buRepo.findBeznyuzivatelEntityByBeznyuzivatelId(buId);
         uzivatelService.updateProfile(uzivatelDtoIn, currentUserId, beznyUzivatelDotIn, buId);
-        return "index";
+        return "redirect:/userProfile";
     }
 
     @GetMapping("/playlist")

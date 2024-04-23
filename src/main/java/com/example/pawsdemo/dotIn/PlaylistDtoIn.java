@@ -9,12 +9,11 @@ import java.time.LocalDate;
 
 public class PlaylistDtoIn {
 
-    @NotNull
     private String coverImage;
 
     @NotNull
     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
-    private LocalDate datumVzniku;
+    private LocalDate datumVzniku = LocalDate.now();
 
     @NotNull
     private Time delka;
@@ -28,7 +27,7 @@ public class PlaylistDtoIn {
     private int pocetSkladeb;
 
     @NotNull
-    private int tvurce; //id bezneho uzivatele
+    private String tvurce; //id bezneho uzivatele
 
     @Id
     @NotNull
@@ -82,11 +81,11 @@ public class PlaylistDtoIn {
         this.pocetSkladeb = pocetSkladeb;
     }
 
-    public int getTvurce() {
+    public String getTvurce() {
         return tvurce;
     }
 
-    public void setTvurce(int tvurce) {
+    public void setTvurce(String tvurce) {
         this.tvurce = tvurce;
     }
 

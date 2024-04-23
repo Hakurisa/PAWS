@@ -3,6 +3,8 @@ package com.example.pawsdemo.models;
 import jakarta.persistence.*;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "Beznyuzivatel", schema = "PAWS", catalog = "")
@@ -20,8 +22,10 @@ public class BeznyuzivatelEntity {
     @Id
     @Column(name = "BeznyuzivatelID")
     private int beznyuzivatelId;
-//    @OneToMany(mappedBy = "beznyuzivatelByBeznyuzivatelId")
-//    private Collection<UzivatelEntity> uzivatelsByBeznyuzivatelId;
+
+    @ManyToMany(mappedBy = "uzivatele")
+    private Set<BeznyuzivatelEntity> playlists = new HashSet<>();
+
 
     public String getJmeno() {
         return jmeno;
@@ -55,6 +59,14 @@ public class BeznyuzivatelEntity {
         this.beznyuzivatelId = beznyuzivatelId;
     }
 
+    public Set<BeznyuzivatelEntity> getPlaylists() {
+        return playlists;
+    }
+
+    public void setPlaylists(Set<BeznyuzivatelEntity> playlists) {
+        this.playlists = playlists;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -79,12 +91,4 @@ public class BeznyuzivatelEntity {
         result = 31 * result + beznyuzivatelId;
         return result;
     }
-
-//    public Collection<UzivatelEntity> getUzivatelsByBeznyuzivatelId() {
-//        return uzivatelsByBeznyuzivatelId;
-//    }
-//
-//    public void setUzivatelsByBeznyuzivatelId(Collection<UzivatelEntity> uzivatelsByBeznyuzivatelId) {
-//        this.uzivatelsByBeznyuzivatelId = uzivatelsByBeznyuzivatelId;
-//    }
 }

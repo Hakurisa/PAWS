@@ -1,9 +1,7 @@
 package com.example.pawsdemo.controller;
 
 import com.example.pawsdemo.dotIn.PlaylistDtoIn;
-import com.example.pawsdemo.models.BeznyUzivatelPlaylistEntity;
 import com.example.pawsdemo.models.BeznyuzivatelEntity;
-import com.example.pawsdemo.models.PlaylistEntity;
 import com.example.pawsdemo.models.UzivatelEntity;
 import com.example.pawsdemo.repository.BURepository;
 import com.example.pawsdemo.repository.PlaylistRepository;
@@ -17,11 +15,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.Map;
+import java.io.IOException;
 
 @Controller
 public class PlaylistController {
@@ -52,9 +49,8 @@ public class PlaylistController {
     }
 
     @GetMapping("/playlist/new")
-    public String createNewPlayist(Model model, WebRequest requestInfo){
+    public String createNewPlayist(Model model){
         BeznyuzivatelEntity bu = buRepo.findBeznyuzivatelEntityByBeznyuzivatelId(currentUser());
-
         PlaylistDtoIn playlist = new PlaylistDtoIn();
 
         model.addAttribute("creator", bu);
@@ -72,13 +68,17 @@ public class PlaylistController {
     }
 
     @PostMapping("playlist/new")
-    public ModelAndView createPlaylist(@ModelAttribute("playlist") PlaylistDtoIn playlistDto, @RequestParam Map<MultipartFile, MultipartFile> formDate){
+    public String createPlaylist(@ModelAttribute PlaylistDtoIn playlistDto, @RequestParam("coverimage") MultipartFile coverImage, RedirectAttributes redirectAttributes) throws IOException {
         BeznyuzivatelEntity bu = buRepo.findBeznyuzivatelEntityByBeznyuzivatelId(currentUser());
-        MultipartFile coverImage = formDate.get("coverImage");
+        Integer buId = bu.getBeznyuzivatelId();
 
-        final PlaylistEntity uploadPlaylist = playlistService.newPlaylist(playlistDto, coverImage, bu.getJmeno());
-        final BeznyUzivatelPlaylistEntity uploadBuPlaylist = playlistService.newBUToPlaylistConnection(currentUser());
-        return new ModelAndView("createPlaylist", "playlist", playlistDto);
+        if(buId == null){
+            redirectAttributes.addFlashAttribute("errorMessage", "Žádný uživatelský účet nebyl nalezen");
+            return "redirect:/index";
+        }
+
+        playlistService.newPlaylist(playlistDto, coverImage, bu.getJmeno(), buId);
+        return "redirect:/index";
     }
 
 }

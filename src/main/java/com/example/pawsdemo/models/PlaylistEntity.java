@@ -1,11 +1,12 @@
 package com.example.pawsdemo.models;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
 
-import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalDate;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "Playlist", schema = "PAWS", catalog = "")
@@ -35,6 +36,10 @@ public class PlaylistEntity {
     @Id
     @Column(name = "PlaylistID")
     private int playlistId;
+
+    @ManyToMany
+    @JoinTable(name="beznyUzivatelPlaylist", joinColumns = @JoinColumn(name = "PlaylistID"), inverseJoinColumns = @JoinColumn(name = "BeznyuzivatelID"))
+    private Set<BeznyuzivatelEntity> uzivatele = new HashSet<>();
 
     public String getCoverimage() {
         return coverimage;
@@ -98,6 +103,14 @@ public class PlaylistEntity {
 
     public void setPlaylistId(int playlistId) {
         this.playlistId = playlistId;
+    }
+
+    public Set<BeznyuzivatelEntity> getUzivatele() {
+        return uzivatele;
+    }
+
+    public void setUzivatele(Set<BeznyuzivatelEntity> uzivatele) {
+        this.uzivatele = uzivatele;
     }
 
     @Override

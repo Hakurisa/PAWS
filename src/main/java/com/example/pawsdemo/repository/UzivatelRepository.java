@@ -4,6 +4,7 @@ import com.example.pawsdemo.dotIn.UzivatelDtoIn;
 import com.example.pawsdemo.models.UzivatelEntity;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -26,6 +27,9 @@ public interface UzivatelRepository extends CrudRepository<UzivatelEntity, Integ
     UzivatelEntity findUzivatelByUsername(String username);
 
     UzivatelEntity findUzivatelEntityByBeznyuzivatelId(Integer id);
+
+    @Query("SELECT u.beznyuzivatelId FROM UzivatelEntity u WHERE u.username = :username")
+    public Integer getBeznyUzivatelIdOfUzivatel(@Param("username") String username);
 
     UzivatelEntity findUzivatelByEmail(String email);
     UzivatelEntity save(UzivatelDtoIn uzivatelDtoIn);
