@@ -11,37 +11,37 @@
 <div class="container min-vh-100 d-flex justify-content-center align-items-center bg-dark-subtle">
 
     <div class="fs-2">Profil uživatele <span th:remove="tag" sec:authentication="name"></span></div>
-
-    <form th:action="@{/userProfile}" method="post">
-        <div>
-            <!-- <img src=""> -->
+                
+    <form th:action="@{/userProfile}" method="post" class="mt-4" enctype="multipart/form-data">
+        <div class="mb-3">
+            <img class="mx-auto d-block"  style="border-radius: 6.25rem; width: 12.5rem;" th:src="${currentUser.getProfilovyobrazek()}">
             <div>
-                <img class="mx-auto d-block"  style="border-radius: 6.25rem; width: 12.5rem;" th:src="${currentUser.getProfilovyobrazek()}">
-                <input type="button" id="profilovyobrazek" name="profilovyobrazek" value="Upravit obrázek" accept="image/*" />
+                <input type="button" id="profilovyobrazek" name="profilovyobrazek" value="Upravit obrázek" accept="image/*" class="btn btn-primary" />
             </div>
         </div>
-        <div>
-            <label for="jmeno">Jméno</label>
+        <div class="mb-3">
+            <label for="jmeno" class="form-label">Jméno</label>
             <div>
-                <input type="text" id="jmeno" name="jmeno" th:value="${currentBU.getJmeno()}">
+                <input type="text" id="jmeno" name="jmeno" th:value="${currentBU.getJmeno()}" class="form-control" />
             </div>
         </div>
-        <div>
-            <label for="prijmeni">Příjmení</label>
+        <div class="mb-3">
+            <label for="prijmeni" class="form-label">Příjmení</label>
             <div>
-                <input type="text" id="prijmeni" name="prijmeni" th:value="${currentBU.getPrijmeni()}">
+                <input type="text" id="prijmeni" name="prijmeni" th:value="${currentBU.getPrijmeni()}" class="form-control" />
             </div>
         </div>
-        <div>
-            <label for="email">Email:</label>
+        <div class="mb-3">
+            <label for="email" class="form-label">Email:</label>
             <div>
-                <input type="email" id="email" name="email" th:value="${currentUser.getEmail()}">
+                <input type="email" id="email" name="email" th:value="${currentUser.getEmail()}" class="form-control" />
             </div>
         </div>
-        <button type="submit">Uložit úpravy</button>
+        <button type="submit" class="btn btn-primary">Uložit změny</button>
     </form>
 
-    <a class="btn btn-secondary" th:href="@{index}">Zpět na hl. stránku</a>
+    <a class="btn btn-secondary mt-3" th:href="@{index}">Zpět na hl. stránku</a>
 </div>
+
 </body>
 </html>

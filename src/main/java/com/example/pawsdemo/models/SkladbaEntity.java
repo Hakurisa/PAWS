@@ -3,6 +3,8 @@ package com.example.pawsdemo.models;
 import jakarta.persistence.*;
 
 import java.sql.Time;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "Skladba", schema = "PAWS", catalog = "")
@@ -29,6 +31,14 @@ public class SkladbaEntity {
     @Basic
     @Column(name = "AlbumID")
     private int albumId;
+
+    @ManyToMany
+    @JoinTable(
+            name = "SkladbaZanr",
+            joinColumns = @JoinColumn(name = "SkladbaID"),
+            inverseJoinColumns = @JoinColumn(name = "ZanrID")
+    )
+    private Set<ZanrEntity> zanry = new HashSet<>();
 
     public String getAudioslozka() {
         return audioslozka;
@@ -84,6 +94,14 @@ public class SkladbaEntity {
 
     public void setAlbumId(int albumId) {
         this.albumId = albumId;
+    }
+
+    public Set<ZanrEntity> getZanry() {
+        return zanry;
+    }
+
+    public void setZanry(Set<ZanrEntity> zanry) {
+        this.zanry = zanry;
     }
 
     @Override

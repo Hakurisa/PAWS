@@ -24,6 +24,9 @@ public interface UzivatelRepository extends CrudRepository<UzivatelEntity, Integ
     @Query("SELECT LAST_INSERT_ID() FROM UmelecEntity")
     public int getUmelecIdOfNewUzivatel();
 
+    @Query("SELECT u.umelecId FROM UzivatelEntity u WHERE u.username = :username")
+    public Integer getUmelecIdOfUzivatel(@Param("username") String username);
+
     UzivatelEntity findUzivatelByUsername(String username);
 
     UzivatelEntity findUzivatelEntityByBeznyuzivatelId(Integer id);
