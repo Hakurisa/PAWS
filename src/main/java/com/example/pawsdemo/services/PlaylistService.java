@@ -63,9 +63,12 @@ public class PlaylistService {
         playlist.setDelka(new Time(0,0,0));
         playlist.setTvurce(jmenoBU);
         playlist.setPocetskladeb(0);
+        playlist.setCoverimage("placeholder"); // Set placeholder first to have data
+        playlistRepo.save(playlist); // Save the playlist with the placeholder first, to let JPA generate the PlaylistID for this PlaylistEntity instance
         if(coverImageFileName.isBlank()){
             playlist.setCoverimage(fileUrl + "default/playlistPlaceholder.png");
         } else {
+            //...now, getPlaylistId() will actually return the Id you want, and the saving procedure will be correct
             playlist.setCoverimage(fileUrl + "/playlistCover" + playlist.getPlaylistId() + "/" + coverImageFileName);
         }
         if(!coverImageFileName.isBlank()) {
