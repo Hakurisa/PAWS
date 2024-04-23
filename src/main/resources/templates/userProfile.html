@@ -11,10 +11,10 @@
 <div class="container min-vh-100 d-flex justify-content-center align-items-center bg-dark-subtle">
 
     <div class="fs-2">Profil uživatele <span th:remove="tag" sec:authentication="name"></span></div>
-
-    <form th:action="@{updateAccount}" method="post" class="mt-4">
+                
+    <form th:action="@{/userProfile}" method="post" class="mt-4" enctype="multipart/form-data">
         <div class="mb-3">
-            <!-- <img src=""> -->
+            <img class="mx-auto d-block"  style="border-radius: 6.25rem; width: 12.5rem;" th:src="${currentUser.getProfilovyobrazek()}">
             <div>
                 <input type="button" id="profilovyobrazek" name="profilovyobrazek" value="Upravit obrázek" accept="image/*" class="btn btn-primary" />
             </div>

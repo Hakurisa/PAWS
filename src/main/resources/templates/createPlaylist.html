@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <head>
     <meta charset="UTF-8">
     <title>Nové playlist</title>
@@ -7,11 +8,11 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </head>
 <body>
-    <form>
+    <form th:action="@{/playlist/new}" method="post" enctype="multipart/form-data">
         <div>
-            <label for="coverImage">Vyber Cover Playlistu:</label>
+            <label for="coverimage">Vyber Cover Playlistu:</label>
             <img src="https://i.ibb.co/64q24pP/playlist-Placeholder.png" alt="playlist-Placeholder" style="display: block; width: 15%; margin: 0.5rem 0;">
-            <input type="file" id="coverImage" name="coverImage" accept="image/*">
+            <input type="file" id="coverimage" name="coverimage" accept="image/*">
         </div>
         <div class="mb-3">
             <label for="nazev" class="form-label">Název</label>

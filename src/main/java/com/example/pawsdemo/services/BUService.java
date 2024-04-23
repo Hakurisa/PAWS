@@ -40,44 +40,14 @@ public class BUService {
 
     //@Autowired
     B2StorageClient storageClient;
-
-    @Value("${backblaze.b2.bucketId}")
-    private String bucketId;
-
-    @Value("${backblaze.b2.fileUrl}")
-    private String fileUrl;
-    //@Autowired
+  
     private UzivatelRepository uzivatelRepo;
-    //@Autowired
-    private BURepository buRepo;
-    private BUPlaylistRepository buPlaylistRepo;
-    //@Autowired
-    private PlaylistRepository playlistRepo;
 
     private static final Logger logger = LoggerFactory.getLogger(BUService.class);
 
-    /* public BeznyuzivatelEntity create(BeznyuzivatelEntity bu){
-        return buRepo.save(bu);
-    } */
-
-    /* public BeznyUzivatelPlaylistEntity create(BeznyUzivatelPlaylistEntity buPlaylist){
-        return buPlaylistRepo.save(buPlaylist);
-    } */
-
-    public PlaylistEntity create(PlaylistEntity playlist){
-        return playlistRepo.save(playlist);
-    }
-
-
-
-    public void createNewPlaylist(PlaylistDtoIn playlistDto, MultipartFile coverImage){
-            String coverImageFileName = coverImage.getOriginalFilename();
-
-            PlaylistEntity playlistEntity = new PlaylistEntity();
-            playlistEntity.setNazev(playlistDto.getNazev());
-            playlistEntity.setPopis(playlistDto.getPopis());
-            playlistEntity.setCoverimage(fileUrl + "songCover/" + "/" +  coverImageFileName);
-            playlistRepo.save(playlistEntity);
+    @Autowired
+    public BUService(UzivatelRepository uzivatelRepo) {
+        this.uzivatelRepo = uzivatelRepo;
     }
 
 }

@@ -16,6 +16,7 @@ import com.example.pawsdemo.repository.UzivatelRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
@@ -27,6 +28,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 
@@ -35,6 +37,9 @@ public class UzivatelService implements UserDetailsService {
 
     @Autowired
     PasswordEncoder passwordEncoder;
+
+    @Value("${backblaze.b2.fileUrl}")
+    private String fileUrl;
 
     @Autowired
     private UzivatelRepository uzivatelRepo;
@@ -65,6 +70,7 @@ public class UzivatelService implements UserDetailsService {
     }
 
     public UzivatelEntity registerNewUserAccount(final UzivatelDtoIn userDto, String typUctu) {
+
         logger.info("in register");
         if (emailExists(userDto.getEmail())) {
             throw new UserAlreadyExistsException("Účet s emailem " + userDto.getEmail() + " již existuje.");
@@ -84,7 +90,7 @@ public class UzivatelService implements UserDetailsService {
             user.setUmelecId(uzivatelRepo.getUmelecIdOfNewUzivatel());
         }
         //FIXME: hack, change this for when we actually have a default icon and ability to change them
-        user.setProfilovyobrazek("empty");
+        user.setProfilovyobrazek(fileUrl + "default/default-user-icon.png");
         user.setPlatnost((byte) 1);
         user.setAdresaId(uzivatelRepo.getAdresaOfUzivatel());
         return uzivatelRepo.save(user);
@@ -112,6 +118,19 @@ public class UzivatelService implements UserDetailsService {
         umelec.setPopis("Krátký popis posluchačům o tom kdo jste");
         umelec.setClenkapely(null);
         return umelecRepo.save(umelec);
+    }
+
+    public UzivatelEntity updateProfile(UzivatelDtoIn uzivatel, Integer currentUserId, BeznyUzivatelDotIn bu, Integer currentBuId) {
+        UzivatelEntity user = uzivatelRepo.findUzivatelEntityByBeznyuzivatelId(currentUserId);
+        BeznyuzivatelEntity buEntity = buRepo.findBeznyuzivatelEntityByBeznyuzivatelId(currentBuId);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found with username: " + currentUserId);
+        }
+        buEntity.setJmeno(bu.getJmeno());
+        buEntity.setPrijmeni(bu.getPrijmeni());
+        user.setEmail(uzivatel.getEmail());
+        buRepo.save(buEntity);
+        return uzivatelRepo.save(user);
     }
 
     @Override

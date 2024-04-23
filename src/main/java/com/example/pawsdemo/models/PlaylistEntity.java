@@ -1,10 +1,11 @@
 package com.example.pawsdemo.models;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
 
-import java.sql.Date;
 import java.sql.Time;
+import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "Playlist", schema = "PAWS", catalog = "")
@@ -13,9 +14,8 @@ public class PlaylistEntity {
     @Column(name = "Coverimage")
     private String coverimage;
     @Basic
-    @CreationTimestamp
     @Column(name = "Datumvzniku")
-    private Date datumvzniku;
+    private LocalDate datumvzniku;
     @Basic
     @Column(name = "Delka")
     private Time delka;
@@ -36,6 +36,10 @@ public class PlaylistEntity {
     @Column(name = "PlaylistID")
     private int playlistId;
 
+    @ManyToMany
+    @JoinTable(name="beznyUzivatelPlaylist", joinColumns = @JoinColumn(name = "PlaylistID"), inverseJoinColumns = @JoinColumn(name = "BeznyuzivatelID"))
+    private Set<BeznyuzivatelEntity> beznyuzivatels = new HashSet<>();
+
     public String getCoverimage() {
         return coverimage;
     }
@@ -44,11 +48,11 @@ public class PlaylistEntity {
         this.coverimage = coverimage;
     }
 
-    public Date getDatumvzniku() {
+    public LocalDate getDatumvzniku() {
         return datumvzniku;
     }
 
-    public void setDatumvzniku(Date datumvzniku) {
+    public void setDatumvzniku(LocalDate datumvzniku) {
         this.datumvzniku = datumvzniku;
     }
 
@@ -98,6 +102,14 @@ public class PlaylistEntity {
 
     public void setPlaylistId(int playlistId) {
         this.playlistId = playlistId;
+    }
+
+    public Set<BeznyuzivatelEntity> getBeznyuzivatels() {
+        return beznyuzivatels;
+    }
+
+    public void setBeznyuzivatels(Set<BeznyuzivatelEntity> beznyuzivatels) {
+        this.beznyuzivatels = beznyuzivatels;
     }
 
     @Override

@@ -14,5 +14,10 @@ public interface PlaylistRepository extends CrudRepository<PlaylistEntity, Integ
     @Query("SELECT LAST_INSERT_ID() FROM PlaylistEntity")
     public int getNewPlaylistId();
 
+    @Query("SELECT p FROM PlaylistEntity p")
+    public List<PlaylistEntity> getAllPlaylists();
+
+    //public List<PlaylistEntity> getAllByNazevOrTvurce(PlaylistDtoIn playlistDtoIn);
+
     PlaylistEntity save(PlaylistDtoIn playlistDtoIn);
 }

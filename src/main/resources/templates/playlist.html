@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${playlist.getNazev()}"></title>
+</head>
+<body>
+<div th:if="${playlist}">
+    <h2 th:text="${playlist.nazev}"></h2>
+    <p>Popis: <span th:text="${playlist.popis}"></span></p>
+    <img th:src="${playlist.getCoverImage()}" alt="cover image">
+    <p>Délka: <span th:text="${playlist.delka}"></span></p>
+</div>
+<!--<div th:if="${isOwner}">-->
+    <a th:href="@{playlist/${id}/edit}">Upravit</a>
+    <a th:href="@{playlist/${id}/delete}">Smazat</a>
+<!--</div>-->
+</body>
+</html>

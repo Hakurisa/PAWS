@@ -20,19 +20,19 @@ public class RecenzeEntity {
     private int recenzeId;
     @Basic
     @Column(name = "AlbumID")
-    private int albumId;
+    private Integer albumId;
     @Basic
     @Column(name = "BeznyuzivatelID")
     private int beznyuzivatelId;
     @Basic
     @Column(name = "KapelaID")
-    private int kapelaId;
+    private Integer kapelaId;
     @Basic
     @Column(name = "UmelecID")
-    private int umelecId;
+    private Integer umelecId;
     @Basic
     @Column(name = "SkladbaID")
-    private int skladbaId;
+    private Integer skladbaId;
 
     public String getKomentar() {
         return komentar;
@@ -66,14 +66,6 @@ public class RecenzeEntity {
         this.recenzeId = recenzeId;
     }
 
-    public int getAlbumId() {
-        return albumId;
-    }
-
-    public void setAlbumId(int albumId) {
-        this.albumId = albumId;
-    }
-
     public int getBeznyuzivatelId() {
         return beznyuzivatelId;
     }
@@ -82,27 +74,35 @@ public class RecenzeEntity {
         this.beznyuzivatelId = beznyuzivatelId;
     }
 
-    public int getKapelaId() {
+    public Integer getAlbumId() {
+        return albumId;
+    }
+
+    public void setAlbumId(Integer albumId) {
+        this.albumId = albumId;
+    }
+
+    public Integer getKapelaId() {
         return kapelaId;
     }
 
-    public void setKapelaId(int kapelaId) {
+    public void setKapelaId(Integer kapelaId) {
         this.kapelaId = kapelaId;
     }
 
-    public int getUmelecId() {
+    public Integer getUmelecId() {
         return umelecId;
     }
 
-    public void setUmelecId(int umelecId) {
+    public void setUmelecId(Integer umelecId) {
         this.umelecId = umelecId;
     }
 
-    public int getSkladbaId() {
+    public Integer getSkladbaId() {
         return skladbaId;
     }
 
-    public void setSkladbaId(int skladbaId) {
+    public void setSkladbaId(Integer skladbaId) {
         this.skladbaId = skladbaId;
     }
 
