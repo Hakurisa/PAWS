@@ -4,9 +4,11 @@ import com.backblaze.b2.client.B2StorageClient;
 import com.example.pawsdemo.dotIn.PlaylistDtoIn;
 import com.example.pawsdemo.models.BeznyuzivatelEntity;
 import com.example.pawsdemo.models.PlaylistEntity;
+import com.example.pawsdemo.models.SkladbaEntity;
 import com.example.pawsdemo.repository.BURepository;
 import com.example.pawsdemo.repository.PlaylistRepository;
 import com.example.pawsdemo.utils.B2Services;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.sql.Time;
+import java.util.List;
 import java.util.TimeZone;
 
 @Service
@@ -33,6 +36,7 @@ public class PlaylistService {
     @Value("${backblaze.b2.fileUrl}")
     private String fileUrl;
 
+    @Autowired
     private BURepository buRepo;
 
     @Autowired
@@ -41,6 +45,10 @@ public class PlaylistService {
     private static final Logger logger = LoggerFactory.getLogger(PlaylistService.class);
 
     public PlaylistEntity create(PlaylistEntity playlist){
+        return playlistRepo.save(playlist);
+    }
+
+    public PlaylistEntity update(PlaylistEntity playlist){
         return playlistRepo.save(playlist);
     }
 
@@ -67,10 +75,55 @@ public class PlaylistService {
                 e.printStackTrace();
             }
         } else {
-            logger.info("we ain't uploadin' shit");
+            logger.info("we ain't uploadin' this shitty playlist");
         }
-        BeznyuzivatelEntity beznyuzivatel = buRepo.findById(buId).orElseThrow(() -> new RuntimeException("Artist not found"));
-        playlist.getUzivatele().add(beznyuzivatel);
+        BeznyuzivatelEntity beznyuzivatel = buRepo.findById(buId).orElseThrow(() -> new RuntimeException("Bežný uživatel nebyl nalezen"));
+        playlist.getBeznyuzivatels().add(beznyuzivatel);
         return playlistRepo.save(playlist);
+    }
+
+    public PlaylistDtoIn getPlaylistDtoById(int playlistId) {
+        PlaylistEntity playlist = playlistRepo.findById(playlistId).orElseThrow(() -> new RuntimeException("Playlist nebyl nalezen"));
+        PlaylistDtoIn playlistDto = new PlaylistDtoIn();
+        playlistDto.setPlaylistId(playlist.getPlaylistId());
+        playlistDto.setNazev(playlist.getNazev());
+        playlistDto.setPopis(playlist.getPopis());
+        playlistDto.setTvurce(playlist.getTvurce());
+        playlistDto.setDatumVzniku(playlist.getDatumvzniku());
+        playlistDto.setCoverImage(playlist.getCoverimage());
+        playlistDto.setPocetSkladeb(playlist.getPocetskladeb());
+        return playlistDto;
+    }
+
+    public PlaylistEntity getPlaylistById(int playlistId) {
+        return playlistRepo.findById(playlistId).orElseThrow(() -> new RuntimeException("Playlist not found"));
+    }
+
+    public PlaylistEntity updatePlaylist(PlaylistDtoIn playlistDto, MultipartFile coverImage,Integer playlistId){
+        PlaylistEntity pickedPlaylist = getPlaylistById(playlistId);
+        String coverImageFileName = coverImage.getOriginalFilename();
+
+        pickedPlaylist.setNazev(playlistDto.getNazev());
+        pickedPlaylist.setPopis(playlistDto.getPopis());
+        if(!coverImageFileName.isBlank()) {
+            try {
+                pickedPlaylist.setCoverimage(fileUrl + "playlistCover/" + pickedPlaylist.getPlaylistId() + "/" +  coverImageFileName);
+                b2Services.uploadToB2("playlistCover/" + pickedPlaylist.getPlaylistId() + "/" + coverImageFileName, coverImage.getBytes(), false);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return update(pickedPlaylist);
+    }
+
+    @Transactional
+    public void deletePlaylist(int playlistId) {
+        PlaylistEntity playlist = playlistRepo.findById(playlistId)
+                .orElseThrow(() -> new RuntimeException("Playlist not found"));
+
+        //TODO Connections to songs
+
+        playlistRepo.delete(playlist);
     }
 }

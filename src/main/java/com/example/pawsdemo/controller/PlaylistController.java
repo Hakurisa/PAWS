@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
+import java.security.Principal;
 
 @Controller
 public class PlaylistController {
@@ -59,18 +60,48 @@ public class PlaylistController {
     }
 
     @GetMapping("playlist/{id}")
-    public String showPlaylist(Model model, @PathVariable int id){
-        BeznyuzivatelEntity bu = buRepo.findBeznyuzivatelEntityByBeznyuzivatelId(currentUser());
-//        PlaylistEntity selectedPlaylist =
-        model.addAttribute("beznyuzivatel", bu);
-//        model.addAttribute("playlist", selectedPlaylist);
-        return "showPlaylist";
+    public String showPlaylist(Model model, @PathVariable int id, Principal principal){
+        String username = principal.getName();
+        Integer currentBu = uzivatelRepo.getBeznyUzivatelIdOfUzivatel(username);
+        PlaylistDtoIn selectedPlaylist = playlistService.getPlaylistDtoById(id);
+
+        model.addAttribute("beznyuzivatel", currentBu);
+        model.addAttribute("playlist", selectedPlaylist);
+        return "playlist";
+    }
+
+    @GetMapping("playlist/{id}/edit")
+    public String showAlbumEditForm(@PathVariable Integer id, Model model, Principal principal, RedirectAttributes redirectAttributes) {
+        String username = principal.getName();
+        Integer buId = uzivatelRepo.getBeznyUzivatelIdOfUzivatel(username);
+        if (buId == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "You are not associated with any artist.");
+            return "redirect:/index";
+        }
+
+        PlaylistDtoIn playlist = playlistService.getPlaylistDtoById(id);
+        model.addAttribute("playlist", playlist);
+        return "playlistEdit";
+    }
+
+    @PostMapping("playlist/{id}/edit")
+    public String updateAlbum(@PathVariable Integer id, PlaylistDtoIn playlistDtoIn, @RequestParam("coveriImage") MultipartFile coverImage, RedirectAttributes redirectAttributes, Principal principal) {
+        String username = principal.getName();
+        Integer buId = uzivatelRepo.getBeznyUzivatelIdOfUzivatel(username);
+        if (buId == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "You are not associated with any artist.");
+            return "redirect:/index";
+        }
+
+        playlistService.updatePlaylist(playlistDtoIn, coverImage, id);
+        return "redirect:/index";
     }
 
     @PostMapping("playlist/new")
-    public String createPlaylist(@ModelAttribute PlaylistDtoIn playlistDto, @RequestParam("coverimage") MultipartFile coverImage, RedirectAttributes redirectAttributes) throws IOException {
-        BeznyuzivatelEntity bu = buRepo.findBeznyuzivatelEntityByBeznyuzivatelId(currentUser());
-        Integer buId = bu.getBeznyuzivatelId();
+    public String createPlaylist(@ModelAttribute PlaylistDtoIn playlistDto, @RequestParam("coverImage") MultipartFile coverImage, Principal principal, RedirectAttributes redirectAttributes) throws IOException {
+        String username = principal.getName();
+        Integer buId = uzivatelRepo.getBeznyUzivatelIdOfUzivatel(username);
+        BeznyuzivatelEntity bu = buRepo.findBeznyuzivatelEntityByBeznyuzivatelId(buId);
 
         if(buId == null){
             redirectAttributes.addFlashAttribute("errorMessage", "Žádný uživatelský účet nebyl nalezen");
@@ -80,5 +111,20 @@ public class PlaylistController {
         playlistService.newPlaylist(playlistDto, coverImage, bu.getJmeno(), buId);
         return "redirect:/index";
     }
+
+    @DeleteMapping("playlist/{id}")
+    public String deleteAlbum(@PathVariable Integer id, RedirectAttributes redirectAttributes, Principal principal) {
+        String username = principal.getName();
+        Integer buId = uzivatelRepo.getBeznyUzivatelIdOfUzivatel(username);
+        if (buId == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "You are not associated with any artist.");
+            return "redirect:/index";
+        }
+        //TODO: check if umelec is the owner of this album
+        playlistService.deletePlaylist(id);
+        return "redirect:/index";
+    }
+
+
 
 }

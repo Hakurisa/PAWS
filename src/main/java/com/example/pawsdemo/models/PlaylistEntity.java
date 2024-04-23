@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 
 import java.sql.Time;
 import java.time.LocalDate;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -39,7 +38,7 @@ public class PlaylistEntity {
 
     @ManyToMany
     @JoinTable(name="beznyUzivatelPlaylist", joinColumns = @JoinColumn(name = "PlaylistID"), inverseJoinColumns = @JoinColumn(name = "BeznyuzivatelID"))
-    private Set<BeznyuzivatelEntity> uzivatele = new HashSet<>();
+    private Set<BeznyuzivatelEntity> beznyuzivatels = new HashSet<>();
 
     public String getCoverimage() {
         return coverimage;
@@ -105,12 +104,12 @@ public class PlaylistEntity {
         this.playlistId = playlistId;
     }
 
-    public Set<BeznyuzivatelEntity> getUzivatele() {
-        return uzivatele;
+    public Set<BeznyuzivatelEntity> getBeznyuzivatels() {
+        return beznyuzivatels;
     }
 
-    public void setUzivatele(Set<BeznyuzivatelEntity> uzivatele) {
-        this.uzivatele = uzivatele;
+    public void setBeznyuzivatels(Set<BeznyuzivatelEntity> beznyuzivatels) {
+        this.beznyuzivatels = beznyuzivatels;
     }
 
     @Override

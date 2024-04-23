@@ -3,7 +3,7 @@ package com.example.pawsdemo.dotIn;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
 
-public class RecenzeDotIn {
+public class RecenzeDtoIn {
 
     @Id
     @NotNull

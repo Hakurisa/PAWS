@@ -23,8 +23,8 @@ public class BeznyuzivatelEntity {
     @Column(name = "BeznyuzivatelID")
     private int beznyuzivatelId;
 
-    @ManyToMany(mappedBy = "uzivatele")
-    private Set<BeznyuzivatelEntity> playlists = new HashSet<>();
+    @ManyToMany(mappedBy = "beznyuzivatels")
+    private Set<PlaylistEntity> playlists = new HashSet<>();
 
 
     public String getJmeno() {
@@ -59,11 +59,11 @@ public class BeznyuzivatelEntity {
         this.beznyuzivatelId = beznyuzivatelId;
     }
 
-    public Set<BeznyuzivatelEntity> getPlaylists() {
+    public Set<PlaylistEntity> getPlaylists() {
         return playlists;
     }
 
-    public void setPlaylists(Set<BeznyuzivatelEntity> playlists) {
+    public void setPlaylists(Set<PlaylistEntity> playlists) {
         this.playlists = playlists;
     }
 

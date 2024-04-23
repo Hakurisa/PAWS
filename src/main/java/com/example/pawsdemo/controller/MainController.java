@@ -95,9 +95,4 @@ public class MainController {
         uzivatelService.updateProfile(uzivatelDtoIn, currentUserId, beznyUzivatelDotIn, buId);
         return "redirect:/userProfile";
     }
-
-    @GetMapping("/playlist")
-    public String playlist() {
-        return "playlist";
-    }
 }
