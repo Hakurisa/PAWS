@@ -1,18 +1,17 @@
 package com.example.pawsdemo.services;
 
+import com.backblaze.b2.client.B2StorageClient;
 import com.example.pawsdemo.dotIn.AdresaDtoIn;
 import com.example.pawsdemo.dotIn.BeznyUzivatelDotIn;
 import com.example.pawsdemo.dotIn.UmelecDtoIn;
 import com.example.pawsdemo.dotIn.UzivatelDtoIn;
 import com.example.pawsdemo.exceptions.UserAlreadyExistsException;
-import com.example.pawsdemo.models.AdresaEntity;
-import com.example.pawsdemo.models.BeznyuzivatelEntity;
-import com.example.pawsdemo.models.UmelecEntity;
-import com.example.pawsdemo.models.UzivatelEntity;
+import com.example.pawsdemo.models.*;
 import com.example.pawsdemo.repository.AdresaRepository;
 import com.example.pawsdemo.repository.BURepository;
 import com.example.pawsdemo.repository.UmelecRepository;
 import com.example.pawsdemo.repository.UzivatelRepository;
+import com.example.pawsdemo.utils.B2Services;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +29,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 @Service
@@ -37,6 +37,12 @@ public class UzivatelService implements UserDetailsService {
 
     @Autowired
     PasswordEncoder passwordEncoder;
+
+    @Autowired
+    B2StorageClient storageClient;
+
+    @Autowired
+    private B2Services b2Services;
 
     @Value("${backblaze.b2.fileUrl}")
     private String fileUrl;
@@ -68,9 +74,11 @@ public class UzivatelService implements UserDetailsService {
     public UmelecEntity create(UmelecEntity umelec){
         return umelecRepo.save(umelec);
     }
+    public UzivatelEntity update(UzivatelEntity uzivatel){
+        return uzivatelRepo.save(uzivatel);
+    }
 
     public UzivatelEntity registerNewUserAccount(final UzivatelDtoIn userDto, String typUctu) {
-
         logger.info("in register");
         if (emailExists(userDto.getEmail())) {
             throw new UserAlreadyExistsException("Účet s emailem " + userDto.getEmail() + " již existuje.");
@@ -120,17 +128,35 @@ public class UzivatelService implements UserDetailsService {
         return umelecRepo.save(umelec);
     }
 
-    public UzivatelEntity updateProfile(UzivatelDtoIn uzivatel, Integer currentUserId, BeznyUzivatelDotIn bu, Integer currentBuId) {
+    //TODO: Change on UzivatelDtoIn because it doesn't upload the changes to image
+    public UzivatelEntity updateProfile(UzivatelDtoIn uzivatel, Integer currentUserId, BeznyUzivatelDotIn buDto, Integer currentBuId, MultipartFile profilePicture) {
+        String pfpFileName = profilePicture.getOriginalFilename();
+
         UzivatelEntity user = uzivatelRepo.findUzivatelEntityByBeznyuzivatelId(currentUserId);
-        BeznyuzivatelEntity buEntity = buRepo.findBeznyuzivatelEntityByBeznyuzivatelId(currentBuId);
+        BeznyuzivatelEntity bu = buRepo.findBeznyuzivatelEntityByBeznyuzivatelId(currentBuId);
+
         if (user == null) {
             throw new UsernameNotFoundException("User not found with username: " + currentUserId);
         }
-        buEntity.setJmeno(bu.getJmeno());
-        buEntity.setPrijmeni(bu.getPrijmeni());
+
+        bu.setJmeno(buDto.getJmeno());
+        bu.setPrijmeni(buDto.getPrijmeni());
         user.setEmail(uzivatel.getEmail());
-        buRepo.save(buEntity);
-        return uzivatelRepo.save(user);
+
+        if(!pfpFileName.isBlank()) {
+            try {
+                user.setProfilovyobrazek(fileUrl + "pfp/" + user.getUzivatelId() + "/" + pfpFileName);
+                b2Services.uploadToB2("pfp/" + user.getUzivatelId() + "/" + pfpFileName, profilePicture.getBytes(), false);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        update(bu);
+        return update(user);
+    }
+
+    public BeznyuzivatelEntity update(BeznyuzivatelEntity bu){
+        return buRepo.save(bu);
     }
 
     @Override

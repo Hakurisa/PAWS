@@ -88,6 +88,7 @@ public class PlaylistController {
     public String updateAlbum(@PathVariable Integer id, PlaylistDtoIn playlistDtoIn, @RequestParam("coveriImage") MultipartFile coverImage, RedirectAttributes redirectAttributes, Principal principal) {
         String username = principal.getName();
         Integer buId = uzivatelRepo.getBeznyUzivatelIdOfUzivatel(username);
+
         if (buId == null) {
             redirectAttributes.addFlashAttribute("errorMessage", "You are not associated with any artist.");
             return "redirect:/index";

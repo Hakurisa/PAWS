@@ -21,4 +21,5 @@ public interface AlbumRepository extends CrudRepository<AlbumEntity, Integer> {
     //public int findAllSkladbyByAlbumId();
 
     //List<AlbumEntity> findAlbumEntitiesByNazev();
+    public List<AlbumEntity> findAll();
 }

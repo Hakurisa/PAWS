@@ -1,6 +1,7 @@
 package com.example.pawsdemo.repository;
 
 import com.example.pawsdemo.dotIn.PlaylistDtoIn;
+import com.example.pawsdemo.models.AlbumEntity;
 import com.example.pawsdemo.models.PlaylistEntity;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -14,8 +15,7 @@ public interface PlaylistRepository extends CrudRepository<PlaylistEntity, Integ
     @Query("SELECT LAST_INSERT_ID() FROM PlaylistEntity")
     public int getNewPlaylistId();
 
-    @Query("SELECT p FROM PlaylistEntity p")
-    public List<PlaylistEntity> getAllPlaylists();
+    public List<PlaylistEntity> findAll();
 
     //public List<PlaylistEntity> getAllByNazevOrTvurce(PlaylistDtoIn playlistDtoIn);
 

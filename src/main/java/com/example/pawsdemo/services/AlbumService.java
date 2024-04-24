@@ -2,6 +2,7 @@ package com.example.pawsdemo.services;
 
 import com.example.pawsdemo.dotIn.AlbumDtoIn;
 import com.example.pawsdemo.models.AlbumEntity;
+import com.example.pawsdemo.models.PlaylistEntity;
 import com.example.pawsdemo.models.SkladbaEntity;
 import com.example.pawsdemo.models.UmelecEntity;
 import com.example.pawsdemo.repository.AlbumRepository;
@@ -45,6 +46,10 @@ public class AlbumService {
 
     public AlbumEntity create(AlbumEntity album){
         return albumRepo.save(album);
+    }
+
+    public List<AlbumEntity> getAllAlbums() {
+        return albumRepo.findAll();
     }
 
     public AlbumEntity addNewAlbum(final AlbumDtoIn album, MultipartFile coverImage, Integer umelecId) {

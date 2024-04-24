@@ -54,13 +54,26 @@
 
                 <a th:if="${isBu}" class="nav-link link-dark" th:href="@{userProfile}">
                     <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"/></svg>
-                    User Profil
+                    Profil uživatele
+                </a>
+            </li>
+            <li>
+
+                <a th:if="${isBu}" class="nav-link link-dark" th:href="@{playlist/new}">
+                    <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"/></svg>
+                    Nový playlist
                 </a>
             </li>
             <li>
                 <a th:if="${isUmelec}" class="nav-link link-dark" th:href="@{artistProfile}">
                     <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"/></svg>
-                    Artist profil
+                    Profil umělce
+                </a>
+            </li>
+            <li>
+                <a th:if="${isUmelec}" class="nav-link link-dark" th:href="@{album/new}">
+                    <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"/></svg>
+                    Vytvořit album
                 </a>
             </li>
             <li>
@@ -78,7 +91,7 @@
                 <strong th:remove="tag" sec:authentication="name">thymeleaf</strong>
             </a>
             <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
-                <li><a class="dropdown-item" href="/">Zatim nic</a></li>
+                <li><a class="dropdown-item" href="/index">Zatim nic</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item" href="/logout">Odhlásit se</a></li>
             </ul>
@@ -103,6 +116,37 @@
             </div>
         </div>
 
+        <div th:if="${isBu}" class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2">Playlisty</h1>
+        </div>
+
+
+        <div th:if="${isBu}" class="col-sm-2" th:each=" playlist : ${playlists}" style="margin-bottom: 6rem;">
+            <div class="card sm-2 shadow-sm">
+                <img src="https://via.placeholder.com/300" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <h5 class="card-title"><a th:href="@{'/playlist/' + ${playlist.playlistId}}"><span th:text="${playlist.nazev}"></span></a></h5>
+                    <p class="card-text"><span th:text="${playlist.tvurce}"></span></p>
+                    <button class="btn btn-success">Play</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+            <h1 class="h2">Alba</h1>
+        </div>
+
+
+        <div class="col-sm-2" th:each=" album : ${albums}" style="margin-bottom: 1rem; display: inline-flex; margin: 0 1rem 1rem 0;">
+            <div class="card sm-2 shadow-sm">
+                <img th:src="${album.getCoverImage()}" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <a th:href="@{'/album/' + ${album.albumId}}"><h5 class="card-title"><span th:text="${album.nazev}"></span></h5></a>
+                    <p class="card-text">Artist name</p>
+                    <button class="btn btn-success">Play</button>
+                </div>
+            </div>
+        </div>
 
         <!-- Add more cards here -->
 

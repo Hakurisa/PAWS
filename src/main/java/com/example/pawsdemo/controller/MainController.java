@@ -1,14 +1,13 @@
 package com.example.pawsdemo.controller;
 
 import com.example.pawsdemo.dotIn.BeznyUzivatelDotIn;
+import com.example.pawsdemo.dotIn.PlaylistDtoIn;
 import com.example.pawsdemo.dotIn.UzivatelDtoIn;
-import com.example.pawsdemo.models.BeznyuzivatelEntity;
-import com.example.pawsdemo.models.UmelecEntity;
-import com.example.pawsdemo.models.UzivatelEntity;
-import com.example.pawsdemo.repository.BURepository;
-import com.example.pawsdemo.repository.UmelecRepository;
-import com.example.pawsdemo.repository.UzivatelRepository;
+import com.example.pawsdemo.models.*;
+import com.example.pawsdemo.repository.*;
+import com.example.pawsdemo.services.AlbumService;
 import com.example.pawsdemo.services.BUService;
+import com.example.pawsdemo.services.PlaylistService;
 import com.example.pawsdemo.services.UzivatelService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,13 +18,13 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
+import java.util.List;
 
 @Controller
 public class MainController {
@@ -34,14 +33,27 @@ public class MainController {
     private BURepository buRepo;
     private UmelecRepository umelecRepo;
     private UzivatelService uzivatelService;
+    private PlaylistRepository playlistRepo;
+    private AlbumService albumService;
+    private PlaylistService playlistService;
 
     @Autowired
-    public MainController(@Qualifier("uzivatelService") UserDetailsService userDetService, UzivatelRepository uzivatelRepo, BURepository buRepo, UmelecRepository umelecRepo, UzivatelService uzivatelService) {
+    public MainController(@Qualifier("uzivatelService") UserDetailsService userDetService,
+                          UzivatelRepository uzivatelRepo,
+                          BURepository buRepo,
+                          UmelecRepository umelecRepo,
+                          UzivatelService uzivatelService,
+                          PlaylistRepository playlistRepo,
+                          AlbumService albumService,
+                          PlaylistService playlistService) {
         this.userDetService = userDetService;
         this.uzivatelRepo = uzivatelRepo;
         this.buRepo = buRepo;
         this.umelecRepo = umelecRepo;
         this.uzivatelService = uzivatelService;
+        this.playlistRepo = playlistRepo;
+        this.albumService = albumService;
+        this.playlistService = playlistService;
     }
 
     private UzivatelEntity getCurrentUser(){
@@ -63,7 +75,11 @@ public class MainController {
         }
 
         UserDetails userDet = userDetService.loadUserByUsername(principal.getName());
+        List<PlaylistEntity> playlists = playlistService.getAllPlaylists();
+        List<AlbumEntity> albums = albumService.getAllAlbums();
         model.addAttribute("userdetail", userDet);
+        model.addAttribute("playlists", playlists);
+        model.addAttribute("albums", albums);
         return "index";
     }
 
@@ -88,11 +104,18 @@ public class MainController {
     //TODO: Post for profile updating
 
     @PostMapping("/userProfile")
-    public String userProfile(@ModelAttribute("uzivatel") UzivatelDtoIn uzivatelDtoIn, @ModelAttribute("beznyuzivatel") BeznyUzivatelDotIn beznyUzivatelDotIn){
-        int currentUserId = getCurrentUser().getUzivatelId();
-        int buId = getCurrentUser().getBeznyuzivatelId();
-        BeznyuzivatelEntity bu = buRepo.findBeznyuzivatelEntityByBeznyuzivatelId(buId);
-        uzivatelService.updateProfile(uzivatelDtoIn, currentUserId, beznyUzivatelDotIn, buId);
+    public String userProfile(@ModelAttribute("uzivatel") UzivatelDtoIn uzivatelDtoIn, @ModelAttribute("beznyuzivatel") BeznyUzivatelDotIn beznyUzivatelDotIn, @RequestParam("profilePicture") MultipartFile profilePicture, Principal principal, RedirectAttributes redirectAttributes){
+        String username = principal.getName();
+        Integer buId = uzivatelRepo.getBeznyUzivatelIdOfUzivatel(username);
+        Integer userId = uzivatelRepo.getUzivatelIdOfUzivatel(username);
+
+
+        if (buId == null || userId == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "You are not associated with any ordinary user account.");
+            return "redirect:/index";
+        }
+
+        uzivatelService.updateProfile(uzivatelDtoIn, userId, beznyUzivatelDotIn, buId, profilePicture);
         return "redirect:/userProfile";
     }
 }

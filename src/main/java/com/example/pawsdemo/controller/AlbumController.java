@@ -20,10 +20,15 @@ import java.security.Principal;
 public class AlbumController {
     private static final Logger logger = LoggerFactory.getLogger(AlbumController.class);
 
-    @Autowired
     private AlbumService service;
-    @Autowired
     private UzivatelRepository userRepo;
+
+    @Autowired
+    public AlbumController(AlbumService service, UzivatelRepository userRepo) {
+        this.service = service;
+        this.userRepo = userRepo;
+    }
+
     @GetMapping("/album/new")
     public String uploadView(Model model, Principal principal, RedirectAttributes redirectAttributes) {
         String username = principal.getName();

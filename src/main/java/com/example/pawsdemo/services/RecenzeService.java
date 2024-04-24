@@ -26,6 +26,10 @@ public class RecenzeService {
         return recenzeRepo.save(recenze);
     }
 
+    public RecenzeEntity update(RecenzeEntity recenze){
+        return recenzeRepo.save(recenze);
+    }
+
     public RecenzeEntity delete(RecenzeEntity recenze){
         return recenzeRepo.deleteRecenzeEntityByRecenzeId(recenze.getRecenzeId());
     }

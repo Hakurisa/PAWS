@@ -30,9 +30,6 @@ public class PlaylistService {
     @Autowired
     private B2Services b2Services;
 
-    @Value("${backblaze.b2.bucketId}")
-    private String bucketId;
-
     @Value("${backblaze.b2.fileUrl}")
     private String fileUrl;
 
@@ -50,6 +47,10 @@ public class PlaylistService {
 
     public PlaylistEntity update(PlaylistEntity playlist){
         return playlistRepo.save(playlist);
+    }
+
+    public List<PlaylistEntity> getAllPlaylists() {
+        return playlistRepo.findAll();
     }
 
     public PlaylistEntity newPlaylist(PlaylistDtoIn playlistDto, MultipartFile coverImage, String jmenoBU, Integer buId) {

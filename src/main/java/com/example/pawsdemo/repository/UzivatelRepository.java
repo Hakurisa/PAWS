@@ -34,6 +34,9 @@ public interface UzivatelRepository extends CrudRepository<UzivatelEntity, Integ
     @Query("SELECT u.beznyuzivatelId FROM UzivatelEntity u WHERE u.username = :username")
     public Integer getBeznyUzivatelIdOfUzivatel(@Param("username") String username);
 
+    @Query("SELECT u.uzivatelId FROM UzivatelEntity u WHERE u.username = :username")
+    public Integer getUzivatelIdOfUzivatel(@Param("username") String username);
+
     UzivatelEntity findUzivatelByEmail(String email);
     UzivatelEntity save(UzivatelDtoIn uzivatelDtoIn);
 }
