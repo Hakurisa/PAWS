@@ -10,10 +10,27 @@
     <p>Popis: <span th:text="${playlist.popis}"></span></p>
     <img th:src="${playlist.getCoverImage()}" alt="cover image">
     <p>Délka: <span th:text="${playlist.delka}"></span></p>
+
+    <h4>Songlist</h4>
+    <table>
+        <thead>
+        <tr>
+            <th>Název</th>
+            <th>Umělec</th>
+            <th>Album</th>
+            <th>Délka</th>
+        </tr>
+        </thead>
+        <tbody>
+        <!-- Iterate over the list of songs and display them -->
+        <!--<tr th:each="skladba : ${skladby}">
+            <td th:text="${skladby.}"></td>
+            <td th:text="${song.artist}"></td>
+            <td th:text="${song.duration}"></td>
+        </tr> -->
+        </tbody>
+    </table>
 </div>
-<!--<div th:if="${isOwner}">-->
-    <a th:href="@{'playlist/' + ${playlist.playlistId} '/edit'}">Upravit</a>
-    <a th:href="@{'playlist/' + ${playlist.playlistId} + '/delete'}">Smazat</a>
-<!--</div>-->
+<a th:href="@{'/playlist/' + ${playlist.playlistId} + '/edit'}">Upravit</a>
 </body>
 </html>

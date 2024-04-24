@@ -123,7 +123,7 @@
 
         <div th:if="${isBu}" class="col-sm-2" th:each=" playlist : ${playlists}" style="margin-bottom: 6rem;">
             <div class="card sm-2 shadow-sm">
-                <img src="https://via.placeholder.com/300" class="card-img-top" alt="...">
+                <img th:src="${playlist.getCoverimage()}" class="card-img-top" alt="...">
                 <div class="card-body">
                     <h5 class="card-title"><a th:href="@{'/playlist/' + ${playlist.playlistId}}"><span th:text="${playlist.nazev}"></span></a></h5>
                     <p class="card-text"><span th:text="${playlist.tvurce}"></span></p>

@@ -6,6 +6,8 @@ import com.example.pawsdemo.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class RecenzeService {
 
@@ -30,16 +32,19 @@ public class RecenzeService {
         return recenzeRepo.save(recenze);
     }
 
+    public List<RecenzeEntity> getAllRecenzeOfAlbum(Integer albumId) {
+        return recenzeRepo.getRecenzeEntityByAlbumId(albumId);
+    }
+
     public RecenzeEntity delete(RecenzeEntity recenze){
         return recenzeRepo.deleteRecenzeEntityByRecenzeId(recenze.getRecenzeId());
     }
 
-    public RecenzeEntity createRecenze(RecenzeDtoIn recenzeDot, String typRecenze, Integer buId, Integer id){
+    public RecenzeEntity createRecenze(RecenzeDtoIn recenzeDot, String typRecenze, Integer buId, Integer id, Integer pocetHvezd){
         RecenzeEntity recenze = new RecenzeEntity();
         recenze.setNadpis(recenzeDot.getNadpis());
         recenze.setKomentar(recenzeDot.getKomentar());
-        recenze.setPocethvezd(1);
-        //TODO Optional for number of stars when giving review to an entity
+        recenze.setPocethvezd(pocetHvezd);
         recenze.setBeznyuzivatelId(buId);
         if("isSkladba".equals(typRecenze)){
             recenze.setSkladbaId(id);
@@ -65,7 +70,6 @@ public class RecenzeService {
             recenze.setUmelecId(null);
             recenze.setKapelaId(id);
         }
-
         return recenzeRepo.save(recenze);
     }
 }

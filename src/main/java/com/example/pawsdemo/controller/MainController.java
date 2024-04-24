@@ -2,13 +2,11 @@ package com.example.pawsdemo.controller;
 
 import com.example.pawsdemo.dotIn.BeznyUzivatelDotIn;
 import com.example.pawsdemo.dotIn.PlaylistDtoIn;
+import com.example.pawsdemo.dotIn.RecenzeDtoIn;
 import com.example.pawsdemo.dotIn.UzivatelDtoIn;
 import com.example.pawsdemo.models.*;
 import com.example.pawsdemo.repository.*;
-import com.example.pawsdemo.services.AlbumService;
-import com.example.pawsdemo.services.BUService;
-import com.example.pawsdemo.services.PlaylistService;
-import com.example.pawsdemo.services.UzivatelService;
+import com.example.pawsdemo.services.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -36,6 +34,7 @@ public class MainController {
     private PlaylistRepository playlistRepo;
     private AlbumService albumService;
     private PlaylistService playlistService;
+    private RecenzeService recenzeService;
 
     @Autowired
     public MainController(@Qualifier("uzivatelService") UserDetailsService userDetService,
@@ -45,7 +44,8 @@ public class MainController {
                           UzivatelService uzivatelService,
                           PlaylistRepository playlistRepo,
                           AlbumService albumService,
-                          PlaylistService playlistService) {
+                          PlaylistService playlistService,
+                          RecenzeService recenzeService) {
         this.userDetService = userDetService;
         this.uzivatelRepo = uzivatelRepo;
         this.buRepo = buRepo;
@@ -54,6 +54,7 @@ public class MainController {
         this.playlistRepo = playlistRepo;
         this.albumService = albumService;
         this.playlistService = playlistService;
+        this.recenzeService = recenzeService;
     }
 
     private UzivatelEntity getCurrentUser(){
@@ -104,7 +105,7 @@ public class MainController {
     //TODO: Post for profile updating
 
     @PostMapping("/userProfile")
-    public String userProfile(@ModelAttribute("uzivatel") UzivatelDtoIn uzivatelDtoIn, @ModelAttribute("beznyuzivatel") BeznyUzivatelDotIn beznyUzivatelDotIn, @RequestParam("profilePicture") MultipartFile profilePicture, Principal principal, RedirectAttributes redirectAttributes){
+    public String userProfile(@ModelAttribute("uzivatel") UzivatelDtoIn uzivatelDtoIn, @ModelAttribute("beznyuzivatel") BeznyUzivatelDotIn beznyUzivatelDotIn, @RequestParam("profilepicture") MultipartFile profilePicture, Principal principal, RedirectAttributes redirectAttributes){
         String username = principal.getName();
         Integer buId = uzivatelRepo.getBeznyUzivatelIdOfUzivatel(username);
         Integer userId = uzivatelRepo.getUzivatelIdOfUzivatel(username);
@@ -117,5 +118,13 @@ public class MainController {
 
         uzivatelService.updateProfile(uzivatelDtoIn, userId, beznyUzivatelDotIn, buId, profilePicture);
         return "redirect:/userProfile";
+    }
+
+    @PostMapping("artistProfile/{id}/review/new")
+    public String createNewRecenze(@PathVariable Integer id, RecenzeDtoIn recenzeDtoIn,@RequestParam("pocetHvezd") Integer pocetHvezd, Principal principal, RedirectAttributes redirectAttributes){
+        String username = principal.getName();
+        Integer umelecId = uzivatelRepo.getUmelecIdOfUzivatel(username);
+        recenzeService.createRecenze(recenzeDtoIn, "isUmelec", umelecId, id, pocetHvezd);
+        return "redirect:/album/{id}";
     }
 }

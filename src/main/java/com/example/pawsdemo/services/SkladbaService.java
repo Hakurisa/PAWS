@@ -60,6 +60,10 @@ public class SkladbaService {
     @Autowired
     private ZanrRepository zanrRepository;
 
+    public List<SkladbaEntity> getAllSkladbyByAlbumId(Integer id){
+        return skladbaRepo.getSkladbaEntitiesByAlbumId(id);
+    }
+
 
     public void saveSong(SkladbaDtoIn skladba, MultipartFile song, Integer albumId, Integer zanrId) {
         try {

@@ -40,6 +40,9 @@ public class PlaylistEntity {
     @JoinTable(name="beznyUzivatelPlaylist", joinColumns = @JoinColumn(name = "PlaylistID"), inverseJoinColumns = @JoinColumn(name = "BeznyuzivatelID"))
     private Set<BeznyuzivatelEntity> beznyuzivatels = new HashSet<>();
 
+    @ManyToMany(mappedBy = "playlists")
+    private Set<SkladbaEntity> skladbas = new HashSet<>();
+
     public String getCoverimage() {
         return coverimage;
     }
@@ -110,6 +113,14 @@ public class PlaylistEntity {
 
     public void setBeznyuzivatels(Set<BeznyuzivatelEntity> beznyuzivatels) {
         this.beznyuzivatels = beznyuzivatels;
+    }
+
+    public Set<SkladbaEntity> getSkladbas() {
+        return skladbas;
+    }
+
+    public void setSkladbas(Set<SkladbaEntity> skladbas) {
+        this.skladbas = skladbas;
     }
 
     @Override

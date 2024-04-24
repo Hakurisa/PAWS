@@ -14,4 +14,6 @@ public interface SkladbaRepository extends CrudRepository<SkladbaEntity, Integer
     SkladbaEntity save(SkladbaDtoIn skladbaDtoIn);
 
     List<SkladbaEntity> findSkladbaEntityByAlbumId(Integer albumId);
+
+    List<SkladbaEntity> getSkladbaEntitiesByAlbumId(Integer albumId);
 }

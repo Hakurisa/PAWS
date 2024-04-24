@@ -53,8 +53,8 @@ public class PlaylistService {
         return playlistRepo.findAll();
     }
 
-    public PlaylistEntity newPlaylist(PlaylistDtoIn playlistDto, MultipartFile coverImage, String jmenoBU, Integer buId) {
-        String coverImageFileName = coverImage.getOriginalFilename();
+    public PlaylistEntity newPlaylist(PlaylistDtoIn playlistDto, MultipartFile coverimage, String jmenoBU, Integer buId) {
+        String coverImageFileName = coverimage.getOriginalFilename();
 
         final PlaylistEntity playlist = new PlaylistEntity();
         playlist.setNazev(playlistDto.getNazev());
@@ -70,11 +70,11 @@ public class PlaylistService {
             playlist.setCoverimage(fileUrl + "default/playlistPlaceholder.png");
         } else {
             //...now, getPlaylistId() will actually return the Id you want, and the saving procedure will be correct
-            playlist.setCoverimage(fileUrl + "/playlistCover" + playlist.getPlaylistId() + "/" + coverImageFileName);
+            playlist.setCoverimage(fileUrl + "playlistCover/" + playlist.getPlaylistId() + "/" + coverImageFileName);
         }
         if(!coverImageFileName.isBlank()) {
             try {
-                b2Services.uploadToB2("playlistCover/" + playlist.getPlaylistId() + "/" + coverImageFileName, coverImage.getBytes(), false);
+                b2Services.uploadToB2("playlistCover/" + playlist.getPlaylistId() + "/" + coverImageFileName, coverimage.getBytes(), false);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -103,16 +103,16 @@ public class PlaylistService {
         return playlistRepo.findById(playlistId).orElseThrow(() -> new RuntimeException("Playlist not found"));
     }
 
-    public PlaylistEntity updatePlaylist(PlaylistDtoIn playlistDto, MultipartFile coverImage,Integer playlistId){
+    public PlaylistEntity updatePlaylist(PlaylistDtoIn playlistDto, MultipartFile coverimage,Integer playlistId){
         PlaylistEntity pickedPlaylist = getPlaylistById(playlistId);
-        String coverImageFileName = coverImage.getOriginalFilename();
+        String coverImageFileName = coverimage.getOriginalFilename();
 
         pickedPlaylist.setNazev(playlistDto.getNazev());
         pickedPlaylist.setPopis(playlistDto.getPopis());
         if(!coverImageFileName.isBlank()) {
             try {
                 pickedPlaylist.setCoverimage(fileUrl + "playlistCover/" + pickedPlaylist.getPlaylistId() + "/" +  coverImageFileName);
-                b2Services.uploadToB2("playlistCover/" + pickedPlaylist.getPlaylistId() + "/" + coverImageFileName, coverImage.getBytes(), false);
+                b2Services.uploadToB2("playlistCover/" + pickedPlaylist.getPlaylistId() + "/" + coverImageFileName, coverimage.getBytes(), false);
 
             } catch (IOException e) {
                 e.printStackTrace();

@@ -12,5 +12,91 @@
     <img th:src="${album.getCoverImage()}" alt="cover image">
     <p>Délka: <span th:text="${album.delka}"></span></p>
 </div>
+<table class="songlist">
+    <thead class="table-header">
+        <tr>
+            <th>Název</th>
+            <th>Umělec</th>
+            <th>Délka</th>
+            <th>Album</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="skladba : ${skladby}">
+            <td th:text="${skladba.jmeno}"></td>
+            <td>Artist name</td>
+            <td th:text="${skladba.delka}"></td>
+            <td th:text="${album.nazev}"></td>
+        </tr>
+    </tbody>
+</table>
+<ul class="recenze">
+    <li th:each="recenze : ${recenzes}">
+        <div>
+            <h5><span th:text="${recenze.nadpis}"></span></h5>
+            <p><span th:text="${recenze.komentar}"></span></p>
+            <div><span th:number="${recenze.pocethvezd}"></span></div>
+        </div>
+    </li>
+</ul>
+<form th:action="@{'/album/' + ${album.albumId} + '/recenze/new'}" method="post">
+    <div>
+        <label for="nadpis">Pojmenujte komentář:</label>
+        <input type="text" id="nadpis" name="nadpis" placeholder="Název">
+    </div>
+    <div>
+        <label for="komentar">Popisek:</label>
+        <input type="text" id="komentar" name="komentar" placeholder="Jaký je váš názor na album?">
+    </div>
+    <div>
+        <label for="pocethvezd">Vaše hodnocení</label>
+        <div class="rating">
+            <span class="star" data-value="1">&#9733;</span>
+            <span class="star" data-value="2">&#9733;</span>
+            <span class="star" data-value="3">&#9733;</span>
+            <span class="star" data-value="4">&#9733;</span>
+            <span class="star" data-value="5">&#9733;</span>
+        </div>
+        <input type="hidden" id="pocethvezd" name="pocethvezd">
+    </div>
+    <button type="submit">Vytvořit komentář</button>
+</form>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const stars = document.querySelectorAll(".star");
+        const ratingInput = document.getElementById("pocethvezd");
+
+        stars.forEach(function(star) {
+            star.addEventListener("click", function() {
+                const value = parseInt(this.getAttribute("data-value"));
+                ratingInput.value = value;
+                highlightStars(value);
+            });
+        });
+
+        function highlightStars(value) {
+            stars.forEach(function(star) {
+                if (parseInt(star.getAttribute("data-value")) <= value) {
+                    star.classList.add("selected");
+                } else {
+                    star.classList.remove("selected");
+                }
+            });
+        }
+    });
+</script>
+<style>
+    .stars {
+        font-size: 24px;
+    }
+
+    .star {
+        cursor: pointer;
+    }
+
+    .star.selected {
+        color: #0048ff;
+    }
+</style>
 </body>
 </html>

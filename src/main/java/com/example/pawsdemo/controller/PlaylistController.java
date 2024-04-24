@@ -85,7 +85,7 @@ public class PlaylistController {
     }
 
     @PostMapping("playlist/{id}/edit")
-    public String updateAlbum(@PathVariable Integer id, PlaylistDtoIn playlistDtoIn, @RequestParam("coveriImage") MultipartFile coverImage, RedirectAttributes redirectAttributes, Principal principal) {
+    public String updateAlbum(@PathVariable Integer id, PlaylistDtoIn playlistDtoIn, @RequestParam("coverimage") MultipartFile coverImage, RedirectAttributes redirectAttributes, Principal principal) {
         String username = principal.getName();
         Integer buId = uzivatelRepo.getBeznyUzivatelIdOfUzivatel(username);
 
@@ -99,7 +99,7 @@ public class PlaylistController {
     }
 
     @PostMapping("playlist/new")
-    public String createPlaylist(@ModelAttribute PlaylistDtoIn playlistDto, @RequestParam("coverImage") MultipartFile coverImage, Principal principal, RedirectAttributes redirectAttributes) throws IOException {
+    public String createPlaylist(@ModelAttribute PlaylistDtoIn playlistDto, @RequestParam("coverimage") MultipartFile coverimage, Principal principal, RedirectAttributes redirectAttributes) throws IOException {
         String username = principal.getName();
         Integer buId = uzivatelRepo.getBeznyUzivatelIdOfUzivatel(username);
         BeznyuzivatelEntity bu = buRepo.findBeznyuzivatelEntityByBeznyuzivatelId(buId);
@@ -109,7 +109,7 @@ public class PlaylistController {
             return "redirect:/index";
         }
 
-        playlistService.newPlaylist(playlistDto, coverImage, bu.getJmeno(), buId);
+        playlistService.newPlaylist(playlistDto, coverimage, bu.getJmeno(), buId);
         return "redirect:/index";
     }
 

@@ -40,6 +40,13 @@ public class SkladbaEntity {
     )
     private Set<ZanrEntity> zanry = new HashSet<>();
 
+    @ManyToMany
+    @JoinTable(
+            name="PlaylistSkladba",
+            joinColumns = @JoinColumn(name = "SkladbaID"),
+            inverseJoinColumns = @JoinColumn(name = "PlaylistID"))
+    private Set<PlaylistEntity> playlists = new HashSet<>();
+
     public String getAudioslozka() {
         return audioslozka;
     }
@@ -102,6 +109,14 @@ public class SkladbaEntity {
 
     public void setZanry(Set<ZanrEntity> zanry) {
         this.zanry = zanry;
+    }
+
+    public Set<PlaylistEntity> getPlaylists() {
+        return playlists;
+    }
+
+    public void setPlaylists(Set<PlaylistEntity> playlists) {
+        this.playlists = playlists;
     }
 
     @Override
