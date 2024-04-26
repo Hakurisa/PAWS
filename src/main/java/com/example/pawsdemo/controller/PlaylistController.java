@@ -128,7 +128,7 @@ public class PlaylistController {
         return "redirect:/index";
     }
 
-    @PutMapping("album/{albumId}/add/skladba")
+    @PostMapping("album/{albumId}/get/skladba")
     public String addSongToPlaylist(@PathVariable Integer albumId, @RequestParam("pickedplaylist") Integer playlistid, @RequestParam("pickedskladba") Integer skladbaid){
 
         playlistService.addSongtoUsersPlaylist(playlistid, skladbaid);

@@ -62,6 +62,7 @@ public class MainController {
         String username = auth.getName();
         return uzivatelRepo.findUzivatelByUsername(username);
     }
+
     @GetMapping({"/index" , "/"})
     public String index(Model model, Principal principal) {
         Integer buId = getCurrentUser().getBeznyuzivatelId();
@@ -93,8 +94,9 @@ public class MainController {
     }
 
     @GetMapping("/userProfile")
-    public String userProfile(Model model) {
-        int buId = getCurrentUser().getBeznyuzivatelId();
+    public String userProfile(Model model, Principal principal) {
+        String username = principal.getName();
+        int buId = uzivatelRepo.getBeznyUzivatelIdOfUzivatel(username);
         BeznyuzivatelEntity bu = buRepo.findBeznyuzivatelEntityByBeznyuzivatelId(buId);
         model.addAttribute("currentUser", getCurrentUser());
         model.addAttribute("currentBU", bu);

@@ -84,18 +84,26 @@ public class AlbumController {
 
         String username = principal.getName();
         Integer buId = userRepo.getBeznyUzivatelIdOfUzivatel(username);
-        BeznyuzivatelEntity beznyuzivatel = buRepo.findBeznyuzivatelEntityByBeznyuzivatelId(buId);
-        String tvurce = beznyuzivatel.getJmeno();
-        List<PlaylistEntity> playlists = playlistService.getAllUsersPlaylists(tvurce);
+        if(buId != null) {
+            BeznyuzivatelEntity beznyuzivatel = buRepo.findBeznyuzivatelEntityByBeznyuzivatelId(buId);
+            String tvurce = beznyuzivatel.getJmeno();
+            List<PlaylistEntity> playlists = playlistService.getAllUsersPlaylists(tvurce);
+            model.addAttribute("playlists", playlists);
+            model.addAttribute("isBu", true);
+        }
+
+        Integer umelecId = userRepo.getUmelecIdOfUzivatel(username);
+        if(umelecId != null){
+            model.addAttribute("isUmelec", true);
+        }
 
         model.addAttribute("album", album);
         model.addAttribute("recenzes", recenzes);
         model.addAttribute("skladby", skladby);
-        model.addAttribute("playlists", playlists);
         return "album";
     }
 
-    @PostMapping("album/{albumId}/review/new")
+    @PostMapping("album/{albumId}")
     public String createNewRecenze(@PathVariable Integer albumId,
                                    RecenzeDtoIn recenzeDtoIn,
                                    @RequestParam("pocethvezd") int pocetHvezd,
@@ -106,12 +114,12 @@ public class AlbumController {
 
         if (buId == null) {
             redirectAttributes.addFlashAttribute("errorMessage", "User not found");
-            return "redirect:/album/" + albumId;
+            return "redirect:/index";
         }
 
         try {
             recenzeService.createRecenze(recenzeDtoIn, "isAlbum", buId, albumId, pocetHvezd);
-            return "redirect:/index";
+            return "redirect:/album/" + albumId;
         } catch (Exception e){
             redirectAttributes.addFlashAttribute("errorMessage", "Unable to create new review");
             return "redirect:/index";
