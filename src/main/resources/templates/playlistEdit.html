@@ -7,7 +7,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
 </head>
-<body>
+<body class="bg-dark-subtle">
 <div class="d-flex flex-column flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom gap-3 bg-dark-subtle">
     <h2>Uprav playlist</h2>
     <form th:action="@{'/playlist/' + ${playlist.playlistId} + '/edit'}" method="post" enctype="multipart/form-data">
@@ -20,7 +20,7 @@
             <textarea class="form-control" id="popis" name="popis" th:text="${playlist.popis}"></textarea>
         </div>
         <div class="mb-3">
-            <p><i class="bi bi-journal-album"></i> Cover:</p>
+            <p><i class="bi bi-card-image"></i> Cover:</p>
             <img class="rounded float-left" style="max-width: 200px" th:src="${playlist.coverImage}" alt="cover image">
         </div>
         <div class="mb-3">

@@ -15,11 +15,10 @@
     <form th:action="@{userProfile}" method="post" class="mt-4" enctype="multipart/form-data">
         <div class="form-label">Profil uživatele <span th:remove="tag" sec:authentication="name"></span></div>
         <div class="mb-3">
-
             <img class="mx-auto d-block"  style="border-radius: 6.25rem; width: 12.5rem;" th:src="${currentUser.profilovyobrazek}">
-            <div>
-                <input type="file" id="profilepicture" name="profilepicture" value="Upravit obrázek" accept="image/*" class="btn btn-primary" />
-            </div>
+        </div>
+        <div class="mb-3">
+            <input class="form-control" type="file" id="profilepicture" name="profilepicture" value="Upravit obrázek" accept="image/*" />
         </div>
         <div class="mb-3">
             <label for="jmeno" class="form-label">Jméno</label>

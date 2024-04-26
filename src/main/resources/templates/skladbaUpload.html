@@ -5,32 +5,36 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <title>PAWS - upload</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
 </head>
-<body>
-<h2>Upload Song and Cover Image</h2>
-<form th:action="@{/skladba/new}" method="post" enctype="multipart/form-data">
-    <div>
-        <label for="jmeno">Zadej název:</label>
-        <input type="text" id="jmeno" name="jmeno" placeholder="Název skladby">
-    </div>
-    <div>
-        <label for="song">Vyber skladbu:</label>
-        <input type="file" id="song" name="song" accept="audio/*">
-    </div>
-    <div>
-        <label for="album">Vyber album:</label>
-        <select id="album" name="album">
-            <option th:each="album : ${albums}" th:value="${album.albumId}" th:text="${album.nazev}"></option>
-        </select>
-    </div>
-    <div>
-        <label for="zanr">Vyber žánr:</label>
-        <select id="zanr" name="zanr">
-            <option th:each="zanr : ${zanry}" th:value="${zanr.id}" th:text="${zanr.nazev}"></option>
-        </select>
-    </div>
-    <button type="submit">Upload</button>
-</form>
-<a class="btn btn-primary" th:href="@{/index}">Zpět na hlavní stránku</a>
+<body class="bg-dark-subtle">
+<div class="d-flex flex-column flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom gap-3 bg-dark-subtle">
+    <h2>Upload Song and Cover Image</h2>
+    <form th:action="@{/skladba/new}" method="post" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label class="form-label" for="jmeno">Zadej název:</label>
+            <input class="form-control" type="text" id="jmeno" name="jmeno" placeholder="Název skladby">
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="song"><i class="bi bi-file-earmark-music"></i> Vyber skladbu:</label>
+            <input class="form-control"type="file" id="song" name="song" accept="audio/*">
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="album"><i class="bi bi-journal-album"></i> Vyber album:</label>
+            <select class="form-control" id="album" name="album">
+                <option th:each="album : ${albums}" th:value="${album.albumId}" th:text="${album.nazev}"></option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="zanr"><i class="bi bi-cassette"></i> Vyber žánr:</label>
+            <select class="form-control" id="zanr" name="zanr">
+                <option th:each="zanr : ${zanry}" th:value="${zanr.id}" th:text="${zanr.nazev}"></option>
+            </select>
+        </div>
+        <button type="submit" class="btn btn-success">Upload</button>
+        <a class="btn btn-secondary" th:href="@{/index}">Zpět na hlavní stránku</a>
+    </form>
+
+</div>
 </body>
 </html>
