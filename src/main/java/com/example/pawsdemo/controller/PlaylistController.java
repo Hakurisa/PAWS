@@ -1,13 +1,18 @@
 package com.example.pawsdemo.controller;
 
+import com.example.pawsdemo.dotIn.AlbumDtoIn;
 import com.example.pawsdemo.dotIn.PlaylistDtoIn;
 import com.example.pawsdemo.dotIn.SkladbaDtoIn;
+import com.example.pawsdemo.models.AlbumEntity;
 import com.example.pawsdemo.models.BeznyuzivatelEntity;
+import com.example.pawsdemo.models.SkladbaEntity;
 import com.example.pawsdemo.models.UzivatelEntity;
 import com.example.pawsdemo.repository.BURepository;
 import com.example.pawsdemo.repository.PlaylistRepository;
+import com.example.pawsdemo.repository.SkladbaRepository;
 import com.example.pawsdemo.repository.UzivatelRepository;
 import com.example.pawsdemo.services.PlaylistService;
+import com.example.pawsdemo.services.SkladbaService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +26,9 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Controller
 public class PlaylistController {
@@ -35,13 +42,17 @@ public class PlaylistController {
     private PlaylistRepository playlistRepo;
 
     private PlaylistService playlistService;
+    private SkladbaRepository skladbaRepo;
+    private SkladbaService skladbaService;
 
     @Autowired
-    public PlaylistController(BURepository buRepo, UzivatelRepository uzivatelRepo, PlaylistRepository playlistRepo, PlaylistService playlistService) {
+    public PlaylistController(BURepository buRepo, UzivatelRepository uzivatelRepo, PlaylistRepository playlistRepo, PlaylistService playlistService, SkladbaRepository skladbaRepo, SkladbaService skladbaService) {
         this.buRepo = buRepo;
         this.uzivatelRepo = uzivatelRepo;
         this.playlistRepo = playlistRepo;
         this.playlistService = playlistService;
+        this.skladbaRepo = skladbaRepo;
+        this.skladbaService = skladbaService;
     }
 
     private Integer currentUser(){
@@ -66,6 +77,9 @@ public class PlaylistController {
         String username = principal.getName();
         Integer currentBu = uzivatelRepo.getBeznyUzivatelIdOfUzivatel(username);
         PlaylistDtoIn selectedPlaylist = playlistService.getPlaylistDtoById(id);
+
+        List<SkladbaEntity> skladbas = playlistService.getAllSkladbyByPlaylistId(id);
+        model.addAttribute("skladbas", skladbas);
 
         model.addAttribute("beznyuzivatel", currentBu);
         model.addAttribute("playlist", selectedPlaylist);
@@ -128,10 +142,12 @@ public class PlaylistController {
         return "redirect:/index";
     }
 
-    @PostMapping("album/{albumId}/get/skladba")
-    public String addSongToPlaylist(@PathVariable Integer albumId, @RequestParam("pickedplaylist") Integer playlistid, @RequestParam("pickedskladba") Integer skladbaid){
+    @PostMapping("album/{albumId}/add/{skladbaId}")
+    public String addSongToPlaylist(@PathVariable Integer albumId, @RequestParam("pickedplaylist") String pickedPlaylist, @RequestParam("pickedskladba") Integer skladbaId){
 
-        playlistService.addSongtoUsersPlaylist(playlistid, skladbaid);
+        int playlistId = Integer.parseInt(pickedPlaylist);
+
+        playlistService.addSongtoUsersPlaylist(playlistId, skladbaId);
 
         return "redirect:/album/" + albumId;
     }

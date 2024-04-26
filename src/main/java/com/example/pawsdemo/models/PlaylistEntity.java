@@ -40,7 +40,11 @@ public class PlaylistEntity {
     @JoinTable(name="beznyUzivatelPlaylist", joinColumns = @JoinColumn(name = "PlaylistID"), inverseJoinColumns = @JoinColumn(name = "BeznyuzivatelID"))
     private Set<BeznyuzivatelEntity> beznyuzivatels = new HashSet<>();
 
-    @ManyToMany(mappedBy = "playlists")
+    @ManyToMany
+    @JoinTable(
+            name="PlaylistSkladba",
+            joinColumns = @JoinColumn(name = "PlaylistID"),
+            inverseJoinColumns = @JoinColumn(name = "SkladbaID"))
     private Set<SkladbaEntity> skladbas = new HashSet<>();
 
     public String getCoverimage() {

@@ -104,14 +104,19 @@
                     <td th:text="${skladba.delka}">DELKA</td>
                     <td th:text="${album.nazev}">ALBUMNAZEV</td>
                     <td th:if="${isBu}">
-                        <form th:action="@{'/playlist/' + ${playlis} + '/skladba/' + ${skladba.skladbaId} + '/add'}" method="post">
-                            <select>
-                                <option selected disabled> Vyber playlist </option>
+                        <div class="dropdown">
+                            <a href="" class="d-flex align-items-center link-dark text-decoration-none" data-bs-toggle="dropdown" aria-expanded="false">•••</a>
+                            <div class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
+                            <form th:action="@{'/album/' + ${album.albumId} + '/add/' + ${skladba.skladbaId}}" method="post" class="add-song-form">
+                            <select name="pickedplaylist" class="form-control" style="width: 10rem;" required>
+                                <option selected disabled value=""> Vyber playlist </option>
                                 <option th:each="playlist : ${playlists}" th:text="${playlist.nazev}" th:value="${playlist.playlistId}"></option>
                             </select>
-                            <input type="hidden" name="skladbaId" th:value="${skladba.getSkladbaId()}">
-                            <button type="submit">&plus;</button>
-                        </form>
+                            <input type="hidden" name="pickedskladba" th:value="${skladba.skladbaId}">
+                            <button type="submit" class="btn btn-outline-secondary">&plus;</button>
+                            </form>
+                            </div>
+                        </div>
                     </td>
                     <td><a th:href="${skladba.audioslozka}">▶</a></td>
                 </tr>
@@ -130,7 +135,6 @@
                 </div>
 
             </div>
-
             <form th:if="${isBu}" th:action="@{'/album/' + ${album.albumId}}" method="post">
                 <div class="bg-light">
                 <div class="mb-3">
@@ -156,7 +160,6 @@
                 <button type="submit" class="btn btn-primary">Vytvořit komentář</button>
                 </div>
             </form>
-
         </div>
     </main>
 </div>
@@ -196,6 +199,10 @@
 
     .star.selected {
         color: #0048ff;
+    }
+    .add-song-form {
+        display: flex;
+        padding: 0.5rem 1rem;
     }
 </style>
 </body>

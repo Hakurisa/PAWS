@@ -40,11 +40,7 @@ public class SkladbaEntity {
     )
     private Set<ZanrEntity> zanry = new HashSet<>();
 
-    @ManyToMany
-    @JoinTable(
-            name="PlaylistSkladba",
-            joinColumns = @JoinColumn(name = "SkladbaID"),
-            inverseJoinColumns = @JoinColumn(name = "PlaylistID"))
+    @ManyToMany(mappedBy = "skladbas")
     private Set<PlaylistEntity> playlists = new HashSet<>();
 
     public String getAudioslozka() {

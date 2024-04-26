@@ -1,11 +1,6 @@
 package com.example.pawsdemo.services;
 
 import com.backblaze.b2.client.B2StorageClient;
-import com.backblaze.b2.client.contentSources.B2ByteArrayContentSource;
-import com.backblaze.b2.client.contentSources.B2ContentSource;
-import com.backblaze.b2.client.exceptions.B2Exception;
-import com.backblaze.b2.client.structures.B2UploadFileRequest;
-import com.example.pawsdemo.dotIn.AlbumDtoIn;
 import com.example.pawsdemo.dotIn.SkladbaDtoIn;
 import com.example.pawsdemo.models.AlbumEntity;
 import com.example.pawsdemo.models.SkladbaEntity;
@@ -28,14 +23,8 @@ import org.jaudiotagger.audio.AudioHeader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.sql.Date;
 import java.sql.Time;
-import java.time.LocalTime;
-import java.util.List;
-import java.util.Optional;
-import java.util.TimeZone;
-
-import static com.backblaze.b2.client.structures.B2UploadFileRequest.builder;
+import java.util.*;
 
 @Service
 public class SkladbaService {
@@ -63,7 +52,6 @@ public class SkladbaService {
     public List<SkladbaEntity> getAllSkladbyByAlbumId(Integer id){
         return skladbaRepo.getSkladbaEntitiesByAlbumId(id);
     }
-
 
     public void saveSong(SkladbaDtoIn skladba, MultipartFile song, Integer albumId, Integer zanrId) {
         try {

@@ -4,9 +4,12 @@ import com.example.pawsdemo.dotIn.AlbumDtoIn;
 import com.example.pawsdemo.dotIn.RecenzeDtoIn;
 import com.example.pawsdemo.dotIn.SkladbaDtoIn;
 import com.example.pawsdemo.models.AlbumEntity;
+import com.example.pawsdemo.models.RecenzeEntity;
 import com.example.pawsdemo.models.ZanrEntity;
+import com.example.pawsdemo.repository.RecenzeRepository;
 import com.example.pawsdemo.repository.UzivatelRepository;
 import com.example.pawsdemo.repository.ZanrRepository;
+import com.example.pawsdemo.services.RecenzeService;
 import com.example.pawsdemo.services.SkladbaService;
 import com.example.pawsdemo.services.UmelecService;
 import org.slf4j.Logger;
@@ -28,17 +31,28 @@ public class SkladbaController {
 
     private static final Logger logger = LoggerFactory.getLogger(SkladbaController.class);
 
-    @Autowired
     private SkladbaService service;
-
-    @Autowired
     private UzivatelRepository userRepo;
-
-    @Autowired
     private UmelecService umelecService;
+    private ZanrRepository zanrRepository;
+    private RecenzeService recenzeService;
+    private RecenzeRepository recenzeRepo;
 
     @Autowired
-    private ZanrRepository zanrRepository;
+    public SkladbaController(SkladbaService service,
+                             UzivatelRepository userRepo,
+                             UmelecService umelecService,
+                             ZanrRepository zanrRepository,
+                             RecenzeService recenzeService,
+                             RecenzeRepository recenzeRepo) {
+        this.service = service;
+        this.userRepo = userRepo;
+        this.umelecService = umelecService;
+        this.zanrRepository = zanrRepository;
+        this.recenzeService = recenzeService;
+        this.recenzeRepo = recenzeRepo;
+    }
+
     @GetMapping("/skladba/new")
     public String uploadView(Model model, Principal principal, RedirectAttributes redirectAttributes) {
         String username = principal.getName();
@@ -82,6 +96,20 @@ public class SkladbaController {
         logger.info("Skladba ID:" + skladba.getSkladbaId());
         model.addAttribute("skladba", skladba);
         return "skladbaEdit";
+    }
+
+    @PostMapping("skladba/{skladbaId}")
+    public String creatNewRecenze(@PathVariable Integer skladbaId, RecenzeDtoIn recenzeDtoIn, @RequestParam("pocethvezd") int pocetHvezd, RedirectAttributes redirectAttributes, Principal principal){
+        String username = principal.getName();
+        Integer buId = userRepo.getBeznyUzivatelIdOfUzivatel(username);
+
+        if(buId != null){
+            recenzeService.createRecenze(recenzeDtoIn, "isSkladba", buId, skladbaId, pocetHvezd);
+        } else {
+            redirectAttributes.addFlashAttribute("errorMessage", "You're not an user");
+        }
+
+        return "redirect:/index";
     }
 
     @PostMapping("skladba/{id}/edit")

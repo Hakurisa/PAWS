@@ -80,26 +80,29 @@
     <img class="rounded float-left" style="max-width: 100px" th:src="${playlist.getCoverImage()}" alt="cover image">
     <p><span th:text="${playlist.popis}"></span></p>
     <p>Délka: <span th:text="${playlist.delka}"></span></p>
+    <a type="button" class="btn btn-secondary" th:href="@{'/playlist/' + ${playlist.playlistId} + '/edit'}">Upravit</a>
 
     <h4>Songlist</h4>
     <table class="table">
-        <thead>
+        <thead class="table-header">
         <tr>
             <th>Název</th>
             <th>Umělec</th>
-            <th>Album</th>
             <th>Délka</th>
+            <th>Album</th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
-        <!-- Iterate over the list of songs and display them -->
-        <!--<tr th:each="skladba : ${skladby}">
-            <td th:text="${skladby.}"></td>
-        </tr> -->
+            <tr th:each="skladba : ${skladbas}">
+                <td th:text="${skladba.jmeno}"></td>
+                <td>Artist name</td>
+                <td th:text="${skladba.delka}"></td>
+                <td th:text="${skladba.albumId}"></td>
+                <td><a th:href="${skladba.audioslozka}">▶</a></td>
+            </tr>
         </tbody>
     </table>
-
-    <a type="button" class="btn btn-secondary" th:href="@{'/playlist/' + ${playlist.playlistId} + '/edit'}">Upravit</a>
 
         </div>
         </div>

@@ -20,7 +20,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.sql.Time;
 import java.util.List;
+import java.util.Set;
 import java.util.TimeZone;
+import java.util.stream.Collectors;
 
 @Service
 public class PlaylistService {
@@ -63,6 +65,12 @@ public class PlaylistService {
 
     public List<PlaylistEntity> getAllUsersPlaylists(String tvurce) {
         return playlistRepo.findAllByTvurce(tvurce);
+    }
+
+    @Transactional
+    public List<SkladbaEntity> getAllSkladbyByPlaylistId(Integer playlistId){
+        PlaylistEntity playlist = playlistRepo.findById(playlistId).orElseThrow(() -> new RuntimeException("Chyba při načítání"));
+        return playlist.getSkladbas().stream().collect(Collectors.toList());
     }
 
     public PlaylistEntity newPlaylist(PlaylistDtoIn playlistDto, MultipartFile coverimage, String jmenoBU, Integer buId) {
@@ -125,7 +133,6 @@ public class PlaylistService {
             try {
                 pickedPlaylist.setCoverimage(fileUrl + "playlistCover/" + pickedPlaylist.getPlaylistId() + "/" +  coverImageFileName);
                 b2Services.uploadToB2("playlistCover/" + pickedPlaylist.getPlaylistId() + "/" + coverImageFileName, coverimage.getBytes(), false);
-
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -138,11 +145,12 @@ public class PlaylistService {
         PlaylistEntity playlist = playlistRepo.findById(playlistId)
                 .orElseThrow(() -> new RuntimeException("Playlist not found"));
 
-        //TODO Connections to songs
+        playlist.getSkladbas().clear();
 
         playlistRepo.delete(playlist);
     }
 
+    @Transactional
     public void addSongtoUsersPlaylist(int playlistId, int songId){
         PlaylistEntity playlist = playlistRepo.findById(playlistId).orElseThrow(() -> new RuntimeException("Playlist neexistuje"));
         SkladbaEntity skladba = skladbaRepo.findById(songId).orElseThrow(() -> new RuntimeException("Skladba nebyla nalezena"));
