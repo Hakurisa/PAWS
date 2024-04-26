@@ -10,10 +10,12 @@
 <body>
 <div class="container min-vh-100 d-flex justify-content-center align-items-center bg-dark-subtle">
 
-    <div class="fs-2">Profil uživatele <span th:remove="tag" sec:authentication="name"></span></div>
-                
+
+
     <form th:action="@{userProfile}" method="post" class="mt-4" enctype="multipart/form-data">
+        <div class="form-label">Profil uživatele <span th:remove="tag" sec:authentication="name"></span></div>
         <div class="mb-3">
+
             <img class="mx-auto d-block"  style="border-radius: 6.25rem; width: 12.5rem;" th:src="${currentUser.profilovyobrazek}">
             <div>
                 <input type="file" id="profilepicture" name="profilepicture" value="Upravit obrázek" accept="image/*" class="btn btn-primary" />
@@ -38,9 +40,10 @@
             </div>
         </div>
         <button type="submit" class="btn btn-primary">Uložit změny</button>
+        <a class="btn btn-secondary mt-3" th:href="@{index}">Zpět na hl. stránku</a>
     </form>
 
-    <a class="btn btn-secondary mt-3" th:href="@{index}">Zpět na hl. stránku</a>
+
 </div>
 
 </body>

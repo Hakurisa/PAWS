@@ -5,25 +5,32 @@
     <title>Edit Playlist</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
 </head>
 <body>
-<form th:action="@{'/playlist/' + ${playlist.playlistId} + '/edit'}" method="post" enctype="multipart/form-data">
-    <div>
-        <p>Cover:</p>
-        <img th:src="${playlist.coverImage}" alt="cover image">
-        <label for="coverimage">Změň cover alba:</label>
-        <input type="file" id="coverimage" name="coverimage" accept="image/*">
-    </div>
-    <div>
-        <label for="jmeno">Název:</label>
-        <input type="text" id="jmeno" name="nazev" placeholder="Název alba" th:value="${playlist.nazev}">
-    </div>
-    <div>
-        <label for="popis">Popis:</label>
-        <textarea id="popis" name="popis" th:text="${playlist.popis}"></textarea>
-    </div>
-    <button type="submit">Uložit úpravy</button>
-</form>
-<a class="btn btn-primary" th:href="@{/playlist/{playlistId}}">Zpět na hlavní stránku</a>
+<div class="d-flex flex-column flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom gap-3 bg-dark-subtle">
+    <h2>Uprav playlist</h2>
+    <form th:action="@{'/playlist/' + ${playlist.playlistId} + '/edit'}" method="post" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label class="form-label" for="jmeno"><i class="bi bi-journal-album"></i> Název playlistu:</label>
+            <input class="form-control" type="text" id="jmeno" name="nazev" placeholder="Název alba" th:value="${playlist.nazev}">
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="popis"><i class="bi bi-pencil"></i> Popis playlistu:</label>
+            <textarea class="form-control" id="popis" name="popis" th:text="${playlist.popis}"></textarea>
+        </div>
+        <div class="mb-3">
+            <p><i class="bi bi-journal-album"></i> Cover:</p>
+            <img class="rounded float-left" style="max-width: 200px" th:src="${playlist.coverImage}" alt="cover image">
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="coverimage">Změň cover playlistu:</label>
+            <input class="form-control" type="file" id="coverimage" name="coverimage" accept="image/*">
+        </div>
+        <button type="submit" class="btn btn-success">Uložit úpravy</button>
+        <a class="btn btn-danger" onclick="deleteAlbum()">Smazat</a>
+    </form>
+    <a class="btn btn-secondary" th:href="@{/playlist/{playlistId}}">Zpět na hlavní stránku</a>
+</div>
 </body>
 </html>

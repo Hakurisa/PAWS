@@ -4,57 +4,62 @@
     <meta charset="UTF-8">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
     <title>PAWS - album</title>
 </head>
 <body>
-<h2>Uprav album</h2>
-<form th:action="@{/album/{albumId}/edit(albumId=${album.albumId})}" method="post" enctype="multipart/form-data">
-    <div>
-        <label for="jmeno">Název alba:</label>
-        <input type="text" id="jmeno" name="nazev" placeholder="Název alba" th:value="${album.nazev}">
-    </div>
-    <div>
-        <label for="popis">Popis alba:</label>
-        <textarea id="popis" name="popis" th:text="${album.popis}"></textarea>
-    </div>
-    <div>
-        <p>Aktuální cover:</p>
-        <img th:src="${album.coverImage}" alt="cover image">
-        <label for="coverimage">Změň cover alba:</label>
-        <input type="file" id="coverimage" name="coverimage" accept="image/*">
-    </div>
-    <div>
-        <p>Publikovat album?</p>
-        <label for="private-yes">Ano</label>
-        <input type="radio" id="private-yes" name="publikovano" value="1" th:checked="${album.publikovano == 1}">
-        <label for="private-no">Ne</label>
-        <input type="radio" id="private-no" name="publikovano" value="0" th:checked="${album.publikovano == 0}">
-    </div>
-    <button type="submit">Vytvořit</button>
-    <a class="btn btn-danger" onclick="deleteAlbum()">Smazat</a>
-</form>
-<a class="btn btn-primary" th:href="@{/index}">Zpět na hlavní stránku</a>
-<script th:inline="javascript">
-    /*<![CDATA[*/
-    function deleteAlbum() {
-        let albumId = /*[[${album.albumId}]]*/ null;
-        var confirmation = confirm("Opravdu chcete smazat toto album?");
-        if (confirmation) {
-            fetch('/album/' + albumId, {
-                method: 'DELETE'
-            }).then(response => {
-                if (response.ok) {
-                    window.location.href='/index';
-                } else {
-                    console.error("shit broke");
-                    window.location.href='/index';
-                }
-            }).catch(error => {
-                console.error('Chyba při odesílání DELETE požadavku:', error);
-            });
+<div class="d-flex flex-column flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom gap-3 bg-dark-subtle">
+    <h2>Uprav album</h2>
+    <form th:action="@{/album/{albumId}/edit(albumId=${album.albumId})}" method="post" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label class="form-label" for="jmeno"><i class="bi bi-journal-album"></i> Název alba:</label>
+            <input class="form-control" type="text" id="jmeno" name="nazev" placeholder="Název alba" th:value="${album.nazev}">
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="popis"><i class="bi bi-pencil"></i> Popis alba:</label>
+            <textarea class="form-control" id="popis" name="popis" th:text="${album.popis}"></textarea>
+        </div>
+        <div class="mb-3">
+            <p><i class="bi bi-card-image"></i> <span>Aktuální cover:</span></p>
+            <img class="rounded float-left" style="max-width: 200px" th:src="${album.coverImage}" alt="cover image">
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="coverimage">Změň cover alba:</label>
+            <input class="form-control" type="file" id="coverimage" name="coverimage" accept="image/*">
+        </div>
+        <div class="mb-3">
+            <p><i class="bi bi-share"></i>  <span>Publikovat album?</span></p>
+            <input class="form-check-input" type="radio" id="private-yes" name="publikovano" value="1" th:checked="${album.publikovano == 1}">
+            <label class="form-check-label" for="private-yes">Ano</label>
+            <input class="form-check-input" type="radio" id="private-no" name="publikovano" value="0" th:checked="${album.publikovano == 0}">
+            <label class="form-check-label" for="private-no">Ne</label>
+        </div>
+        <button class="btn btn-success" type="submit">Upravit</button>
+        <a class="btn btn-danger" onclick="deleteAlbum()">Smazat</a>
+    </form>
+    <a class="btn btn-secondary" th:href="@{/index}">Zpět na hlavní stránku</a>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        function deleteAlbum() {
+            let albumId = /*[[${album.albumId}]]*/ null;
+            var confirmation = confirm("Opravdu chcete smazat toto album?");
+            if (confirmation) {
+                fetch('/album/' + albumId, {
+                    method: 'DELETE'
+                }).then(response => {
+                    if (response.ok) {
+                        window.location.href='/index';
+                    } else {
+                        console.error("shit broke");
+                        window.location.href='/index';
+                    }
+                }).catch(error => {
+                    console.error('Chyba při odesílání DELETE požadavku:', error);
+                });
+            }
         }
-    }
-    /*]]>*/
-</script>
+        /*]]>*/
+    </script>
+</div>
 </body>
 </html>
