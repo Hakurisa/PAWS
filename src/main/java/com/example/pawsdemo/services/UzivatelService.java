@@ -78,6 +78,10 @@ public class UzivatelService implements UserDetailsService {
         return uzivatelRepo.save(uzivatel);
     }
 
+    public BeznyuzivatelEntity updateBU(BeznyuzivatelEntity beznyuzivatel) {
+        return buRepo.save(beznyuzivatel);
+    }
+
     public UzivatelEntity registerNewUserAccount(final UzivatelDtoIn userDto, String typUctu) {
         logger.info("in register");
         if (emailExists(userDto.getEmail())) {
@@ -151,12 +155,8 @@ public class UzivatelService implements UserDetailsService {
                 e.printStackTrace();
             }
         }
-        update(bu);
+        updateBU(bu);
         return update(user);
-    }
-
-    public BeznyuzivatelEntity update(BeznyuzivatelEntity bu){
-        return buRepo.save(bu);
     }
 
     @Override

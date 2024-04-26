@@ -7,6 +7,7 @@ import com.example.pawsdemo.models.PlaylistEntity;
 import com.example.pawsdemo.models.SkladbaEntity;
 import com.example.pawsdemo.repository.BURepository;
 import com.example.pawsdemo.repository.PlaylistRepository;
+import com.example.pawsdemo.repository.SkladbaRepository;
 import com.example.pawsdemo.utils.B2Services;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
@@ -39,6 +40,9 @@ public class PlaylistService {
     @Autowired
     private PlaylistRepository playlistRepo;
 
+    @Autowired
+    private SkladbaRepository skladbaRepo;
+
     private static final Logger logger = LoggerFactory.getLogger(PlaylistService.class);
 
     public PlaylistEntity create(PlaylistEntity playlist){
@@ -49,8 +53,16 @@ public class PlaylistService {
         return playlistRepo.save(playlist);
     }
 
+    public SkladbaEntity updateSkladba(SkladbaEntity skladba){
+        return skladbaRepo.save(skladba);
+    }
+
     public List<PlaylistEntity> getAllPlaylists() {
         return playlistRepo.findAll();
+    }
+
+    public List<PlaylistEntity> getAllUsersPlaylists(String tvurce) {
+        return playlistRepo.findAllByTvurce(tvurce);
     }
 
     public PlaylistEntity newPlaylist(PlaylistDtoIn playlistDto, MultipartFile coverimage, String jmenoBU, Integer buId) {
@@ -103,7 +115,7 @@ public class PlaylistService {
         return playlistRepo.findById(playlistId).orElseThrow(() -> new RuntimeException("Playlist not found"));
     }
 
-    public PlaylistEntity updatePlaylist(PlaylistDtoIn playlistDto, MultipartFile coverimage,Integer playlistId){
+    public PlaylistEntity update(PlaylistDtoIn playlistDto, MultipartFile coverimage, Integer playlistId){
         PlaylistEntity pickedPlaylist = getPlaylistById(playlistId);
         String coverImageFileName = coverimage.getOriginalFilename();
 
@@ -129,5 +141,13 @@ public class PlaylistService {
         //TODO Connections to songs
 
         playlistRepo.delete(playlist);
+    }
+
+    public void addSongtoUsersPlaylist(int playlistId, int songId){
+        PlaylistEntity playlist = playlistRepo.findById(playlistId).orElseThrow(() -> new RuntimeException("Playlist neexistuje"));
+        SkladbaEntity skladba = skladbaRepo.findById(songId).orElseThrow(() -> new RuntimeException("Skladba nebyla nalezena"));
+        playlist.getSkladbas().add(skladba);
+        update(playlist);
+        updateSkladba(skladba);
     }
 }

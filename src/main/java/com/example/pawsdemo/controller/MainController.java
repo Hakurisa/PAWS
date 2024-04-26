@@ -62,8 +62,7 @@ public class MainController {
         String username = auth.getName();
         return uzivatelRepo.findUzivatelByUsername(username);
     }
-
-    @GetMapping("/index")
+    @GetMapping({"/index" , "/"})
     public String index(Model model, Principal principal) {
         Integer buId = getCurrentUser().getBeznyuzivatelId();
         Integer umelecId = getCurrentUser().getUmelecId();
@@ -118,13 +117,5 @@ public class MainController {
 
         uzivatelService.updateProfile(uzivatelDtoIn, userId, beznyUzivatelDotIn, buId, profilePicture);
         return "redirect:/userProfile";
-    }
-
-    @PostMapping("artistProfile/{id}/review/new")
-    public String createNewRecenze(@PathVariable Integer id, RecenzeDtoIn recenzeDtoIn,@RequestParam("pocetHvezd") Integer pocetHvezd, Principal principal, RedirectAttributes redirectAttributes){
-        String username = principal.getName();
-        Integer umelecId = uzivatelRepo.getUmelecIdOfUzivatel(username);
-        recenzeService.createRecenze(recenzeDtoIn, "isUmelec", umelecId, id, pocetHvezd);
-        return "redirect:/album/{id}";
     }
 }

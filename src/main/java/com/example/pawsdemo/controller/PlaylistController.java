@@ -1,6 +1,7 @@
 package com.example.pawsdemo.controller;
 
 import com.example.pawsdemo.dotIn.PlaylistDtoIn;
+import com.example.pawsdemo.dotIn.SkladbaDtoIn;
 import com.example.pawsdemo.models.BeznyuzivatelEntity;
 import com.example.pawsdemo.models.UzivatelEntity;
 import com.example.pawsdemo.repository.BURepository;
@@ -20,6 +21,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.io.IOException;
 import java.security.Principal;
+import java.util.Optional;
 
 @Controller
 public class PlaylistController {
@@ -76,7 +78,7 @@ public class PlaylistController {
         Integer buId = uzivatelRepo.getBeznyUzivatelIdOfUzivatel(username);
         if (buId == null) {
             redirectAttributes.addFlashAttribute("errorMessage", "You are not associated with any artist.");
-            return "redirect:/index";
+            return "redirect:/playlist/" + id;
         }
 
         PlaylistDtoIn playlist = playlistService.getPlaylistDtoById(id);
@@ -94,8 +96,8 @@ public class PlaylistController {
             return "redirect:/index";
         }
 
-        playlistService.updatePlaylist(playlistDtoIn, coverImage, id);
-        return "redirect:/index";
+        playlistService.update(playlistDtoIn, coverImage, id);
+        return "redirect:/playlist/" + id;
     }
 
     @PostMapping("playlist/new")
@@ -118,14 +120,20 @@ public class PlaylistController {
         String username = principal.getName();
         Integer buId = uzivatelRepo.getBeznyUzivatelIdOfUzivatel(username);
         if (buId == null) {
-            redirectAttributes.addFlashAttribute("errorMessage", "You are not associated with any artist.");
+            redirectAttributes.addFlashAttribute("errorMessage", "No outsiders");
             return "redirect:/index";
         }
-        //TODO: check if umelec is the owner of this album
+
         playlistService.deletePlaylist(id);
         return "redirect:/index";
     }
 
+    @PutMapping("album/{albumId}/add/skladba")
+    public String addSongToPlaylist(@PathVariable Integer albumId, @RequestParam("pickedplaylist") Integer playlistid, @RequestParam("pickedskladba") Integer skladbaid){
 
+        playlistService.addSongtoUsersPlaylist(playlistid, skladbaid);
+
+        return "redirect:/album/" + albumId;
+    }
 
 }

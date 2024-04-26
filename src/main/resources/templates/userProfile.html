@@ -14,7 +14,7 @@
                 
     <form th:action="@{userProfile}" method="post" class="mt-4" enctype="multipart/form-data">
         <div class="mb-3">
-            <img class="mx-auto d-block"  style="border-radius: 6.25rem; width: 12.5rem;" th:src="${currentUser.getProfilovyobrazek()}">
+            <img class="mx-auto d-block"  style="border-radius: 6.25rem; width: 12.5rem;" th:src="${currentUser.profilovyobrazek}">
             <div>
                 <input type="file" id="profilepicture" name="profilepicture" value="Upravit obrázek" accept="image/*" class="btn btn-primary" />
             </div>
@@ -22,19 +22,19 @@
         <div class="mb-3">
             <label for="jmeno" class="form-label">Jméno</label>
             <div>
-                <input type="text" id="jmeno" name="jmeno" th:value="${currentBU.getJmeno()}" class="form-control" />
+                <input type="text" id="jmeno" name="jmeno" th:value="${currentBU.jmeno}" class="form-control" />
             </div>
         </div>
         <div class="mb-3">
             <label for="prijmeni" class="form-label">Příjmení</label>
             <div>
-                <input type="text" id="prijmeni" name="prijmeni" th:value="${currentBU.getPrijmeni()}" class="form-control" />
+                <input type="text" id="prijmeni" name="prijmeni" th:value="${currentBU.prijmeni}" class="form-control" />
             </div>
         </div>
         <div class="mb-3">
             <label for="email" class="form-label">Email:</label>
             <div>
-                <input type="email" id="email" name="email" th:value="${currentUser.getEmail()}" class="form-control" />
+                <input type="email" id="email" name="email" th:value="${currentUser.email}" class="form-control" />
             </div>
         </div>
         <button type="submit" class="btn btn-primary">Uložit změny</button>

@@ -113,7 +113,6 @@ public class RecenzeEntity {
 
         RecenzeEntity that = (RecenzeEntity) o;
 
-        if (pocethvezd != that.pocethvezd) return false;
         if (recenzeId != that.recenzeId) return false;
         if (albumId != that.albumId) return false;
         if (beznyuzivatelId != that.beznyuzivatelId) return false;
@@ -130,7 +129,6 @@ public class RecenzeEntity {
     public int hashCode() {
         int result = komentar != null ? komentar.hashCode() : 0;
         result = 31 * result + (nadpis != null ? nadpis.hashCode() : 0);
-        result = 31 * result + pocethvezd;
         result = 31 * result + recenzeId;
         result = 31 * result + albumId;
         result = 31 * result + beznyuzivatelId;

@@ -40,7 +40,7 @@ public class RecenzeService {
         return recenzeRepo.deleteRecenzeEntityByRecenzeId(recenze.getRecenzeId());
     }
 
-    public RecenzeEntity createRecenze(RecenzeDtoIn recenzeDot, String typRecenze, Integer buId, Integer id, Integer pocetHvezd){
+    public RecenzeEntity createRecenze(RecenzeDtoIn recenzeDot, String typRecenze, Integer buId, Integer id, int pocetHvezd){
         RecenzeEntity recenze = new RecenzeEntity();
         recenze.setNadpis(recenzeDot.getNadpis());
         recenze.setKomentar(recenzeDot.getKomentar());
