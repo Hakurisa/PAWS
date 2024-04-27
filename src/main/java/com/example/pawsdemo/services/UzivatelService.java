@@ -7,11 +7,9 @@ import com.example.pawsdemo.dotIn.UmelecDtoIn;
 import com.example.pawsdemo.dotIn.UzivatelDtoIn;
 import com.example.pawsdemo.exceptions.UserAlreadyExistsException;
 import com.example.pawsdemo.models.*;
-import com.example.pawsdemo.repository.AdresaRepository;
-import com.example.pawsdemo.repository.BURepository;
-import com.example.pawsdemo.repository.UmelecRepository;
-import com.example.pawsdemo.repository.UzivatelRepository;
+import com.example.pawsdemo.repository.*;
 import com.example.pawsdemo.utils.B2Services;
+import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +29,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UzivatelService implements UserDetailsService {
@@ -59,6 +59,9 @@ public class UzivatelService implements UserDetailsService {
     @Autowired
     private AdresaRepository adresaRepo;
 
+    @Autowired
+    private PlaylistRepository playlistRepo;
+
     private static final Logger logger = LoggerFactory.getLogger(UzivatelService.class);
 
     private UzivatelService uzivatelService;
@@ -80,6 +83,12 @@ public class UzivatelService implements UserDetailsService {
 
     public BeznyuzivatelEntity updateBU(BeznyuzivatelEntity beznyuzivatel) {
         return buRepo.save(beznyuzivatel);
+    }
+
+    @Transactional
+    public List<PlaylistEntity> getAllPlaylistsByBuId(Integer playlistId){
+        BeznyuzivatelEntity beznyuzivatel = buRepo.findById(playlistId).orElseThrow(() -> new RuntimeException("Chyba při načítání"));
+        return beznyuzivatel.getPlaylists().stream().collect(Collectors.toList());
     }
 
     public UzivatelEntity registerNewUserAccount(final UzivatelDtoIn userDto, String typUctu) {
@@ -124,6 +133,7 @@ public class UzivatelService implements UserDetailsService {
         bu.setOblibenezanry(null);
         return buRepo.save(bu);
     }
+
     public UmelecEntity registerNewUserAccountAsUmelec(final UmelecDtoIn umelecDto) {
         UmelecEntity umelec = new UmelecEntity();
         umelec.setJmeno(umelecDto.getJmeno());
@@ -132,8 +142,7 @@ public class UzivatelService implements UserDetailsService {
         return umelecRepo.save(umelec);
     }
 
-    //TODO: Change on UzivatelDtoIn because it doesn't upload the changes to image
-    public UzivatelEntity updateProfile(UzivatelDtoIn uzivatel, Integer currentUserId, BeznyUzivatelDotIn buDto, Integer currentBuId, MultipartFile profilePicture) {
+    public void updateProfile(UzivatelDtoIn uzivatel, Integer currentUserId, BeznyUzivatelDotIn buDto, Integer currentBuId, MultipartFile profilePicture) {
         String pfpFileName = profilePicture.getOriginalFilename();
 
         UzivatelEntity user = uzivatelRepo.findUzivatelEntityByBeznyuzivatelId(currentUserId);
@@ -149,14 +158,14 @@ public class UzivatelService implements UserDetailsService {
 
         if(!pfpFileName.isBlank()) {
             try {
-                user.setProfilovyobrazek(fileUrl + "pfp/" + user.getUzivatelId() + "/" + pfpFileName);
+                user.setProfilovyobrazek(fileUrl + "pfp/" + user.getUzivatelId() + "/" +  pfpFileName);
                 b2Services.uploadToB2("pfp/" + user.getUzivatelId() + "/" + pfpFileName, profilePicture.getBytes(), false);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
+        update(user);
         updateBU(bu);
-        return update(user);
     }
 
     @Override

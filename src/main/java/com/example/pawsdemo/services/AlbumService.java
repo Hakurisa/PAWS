@@ -53,6 +53,10 @@ public class AlbumService {
         return albumRepo.findAll();
     }
 
+    public List<AlbumEntity> getAllAlbumsByStatus(Byte albumStatus){
+        return albumRepo.findAllByPublikovano(albumStatus);
+    }
+
     public AlbumEntity addNewAlbum(final AlbumDtoIn album, MultipartFile coverImage, Integer umelecId) {
 
         logger.info("entering album zone");

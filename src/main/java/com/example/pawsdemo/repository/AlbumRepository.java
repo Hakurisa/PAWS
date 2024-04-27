@@ -22,4 +22,6 @@ public interface AlbumRepository extends CrudRepository<AlbumEntity, Integer> {
 
     //List<AlbumEntity> findAlbumEntitiesByNazev();
     public List<AlbumEntity> findAll();
+
+    public List<AlbumEntity> findAllByPublikovano(Byte status);
 }

@@ -65,22 +65,29 @@ public class MainController {
 
     @GetMapping({"/index" , "/"})
     public String index(Model model, Principal principal) {
-        Integer buId = getCurrentUser().getBeznyuzivatelId();
-        Integer umelecId = getCurrentUser().getUmelecId();
+        String username = principal.getName();
+        Integer buId = uzivatelRepo.getBeznyUzivatelIdOfUzivatel(username);
+        Integer umelecId = uzivatelRepo.getUmelecIdOfUzivatel(username);
+        UserDetails userDet = userDetService.loadUserByUsername(principal.getName());
 
         if (buId != null) {
+            List<PlaylistEntity> buplaylists = uzivatelService.getAllPlaylistsByBuId(buId);
+
             model.addAttribute("isBu", true);
+            model.addAttribute("buplaylists", buplaylists);
         }
         if (umelecId != null) {
             model.addAttribute("isUmelec", true);
         }
 
-        UserDetails userDet = userDetService.loadUserByUsername(principal.getName());
         List<PlaylistEntity> playlists = playlistService.getAllPlaylists();
         List<AlbumEntity> albums = albumService.getAllAlbums();
+        List<AlbumEntity> publishedAlbums = albumService.getAllAlbumsByStatus((byte) 1);
+
         model.addAttribute("userdetail", userDet);
         model.addAttribute("playlists", playlists);
         model.addAttribute("albums", albums);
+        model.addAttribute("publishedalbum", publishedAlbums);
         return "index";
     }
 
@@ -102,8 +109,6 @@ public class MainController {
         model.addAttribute("currentBU", bu);
         return "userProfile";
     }
-
-    //TODO: Post for profile updating
 
     @PostMapping("/userProfile")
     public String userProfile(@ModelAttribute("uzivatel") UzivatelDtoIn uzivatelDtoIn, @ModelAttribute("beznyuzivatel") BeznyUzivatelDotIn beznyUzivatelDotIn, @RequestParam("profilepicture") MultipartFile profilePicture, Principal principal, RedirectAttributes redirectAttributes){

@@ -10,30 +10,23 @@
 <body>
 <div class="container min-vh-100 d-flex justify-content-center align-items-center bg-dark-subtle">
 
-    <div class="fs-2">Profil uživatele <span th:remove="tag" sec:authentication="name"></span></div>
-
-    <form th:action="@{artistProfile}" method="post">
-        <div>
-            <div>
-                <img class="rounded mx-auto d-block" th:src="${currentUser.getProfilovyobrazek()}">
-                <input type="button" id="profilovyobrazek" name="profilovyobrazek" value="Upravit obrázek" accept="image/*" />
-            </div>
+    <form th:action="@{artistProfile}" method="post" class="mt-4" enctype="multipart/form-data">
+        <div class="mb-3">
+            <img class="mx-auto d-block" style="border-radius: 6.25rem; width: 12.5rem;" th:src="${currentUser.profilovyobrazek}">
+            <input class="form-control" type="file" id="profilovyobrazek" name="profilovyobrazek" value="Upravit obrázek" accept="image/*" />
         </div>
-        <div>
-            <label for="jmeno">Jméno</label>
-            <div>
-                <input type="text" id="jmeno" name="jmeno" th:value="${currentUmelec.getJmeno()}" />
-            </div>
+        <div class="mb-3">
+            <label for="jmeno" class="form-label">Jméno</label>
+            <input type="text" class="form-control" id="jmeno" name="jmeno" th:value="${currentUmelec.jmeno}" />
         </div>
-        <div>
-            <label for="email">Email:</label>
-            <div>
-                <input type="email" id="email" name="email" th:value="${currentUser.getEmail()}" />
-            </div>
+        <div class="mb-3">
+            <label for="email" class="form-label">Email:</label>
+            <input type="email" class="form-control" id="email" name="email" th:value="${currentUser.email}" />
         </div>
+        <button type="submit" class="btn btn-primary">Uložit změny</button>
     </form>
 
-    <a class="btn btn-secondary" th:href="@{index}">Zpět na hl. stránku</a>
+    <a class="btn btn-secondary mt-3" th:href="@{index}">Zpět na hl. stránku</a>
 </div>
 </body>
 </html>
