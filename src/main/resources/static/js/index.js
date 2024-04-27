@@ -139,6 +139,7 @@ function populateAudioPlayer(audioslozka, jmeno, umelec) {
     const audioPlayer = document.createElement("audio");
     audioPlayer.classList.add("col-md-9", "audio-player")
     audioPlayer.controls = true;
+    audioPlayer.autoplay = true;
     audioPlayer.id = "music-player";
 
     const audioSource = document.createElement("source");
