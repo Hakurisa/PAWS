@@ -1,11 +1,9 @@
 package com.example.pawsdemo.services;
 
 import com.example.pawsdemo.dotIn.AlbumDtoIn;
-import com.example.pawsdemo.models.AlbumEntity;
-import com.example.pawsdemo.models.PlaylistEntity;
-import com.example.pawsdemo.models.SkladbaEntity;
-import com.example.pawsdemo.models.UmelecEntity;
+import com.example.pawsdemo.models.*;
 import com.example.pawsdemo.repository.AlbumRepository;
+import com.example.pawsdemo.repository.AuARepository;
 import com.example.pawsdemo.repository.SkladbaRepository;
 import com.example.pawsdemo.repository.UmelecRepository;
 import com.example.pawsdemo.utils.B2Services;
@@ -41,6 +39,9 @@ public class AlbumService {
     @Autowired
     private SkladbaRepository skladbaRepo;
 
+    @Autowired
+    private AuARepository auARepo;
+
     //TODO: private RecenzeRepository recenzeRepo; -- When we gonna implemenet it
 
     private static final Logger logger = LoggerFactory.getLogger(AlbumService.class);
@@ -57,7 +58,7 @@ public class AlbumService {
         return albumRepo.findAllByPublikovano(albumStatus);
     }
 
-    public AlbumEntity addNewAlbum(final AlbumDtoIn album, MultipartFile coverImage, Integer umelecId) {
+    public AlbumEntity addNewAlbum(final AlbumDtoIn album, MultipartFile coverImage, Integer umelecId, String copyright) {
 
         logger.info("entering album zone");
         String coverImageFileName = coverImage.getOriginalFilename();
@@ -78,8 +79,13 @@ public class AlbumService {
         }
         logger.info("New album has been created");
         logger.info("Délka: " + newAlbum.getDelka().getTime());
+        AuAEntity auAEntity = new AuAEntity();
+        auAEntity.setAlbumID(newAlbum);
+        auAEntity.setCopyright(copyright);
         UmelecEntity umelec = umelecRepo.findById(umelecId).orElseThrow(() -> new RuntimeException("Artist not found"));
-        newAlbum.getUmelci().add(umelec); // Associate the artist with the album
+        auAEntity.getUmelci().add(umelec);
+        auARepo.save(auAEntity);
+//        newAlbum.getUmelci().add(umelec); // Associate the artist with the album
         if(!coverImageFileName.isBlank()) {
             try {
                 b2Services.uploadToB2("albumCover/" + newAlbum.getAlbumId() + "/" + coverImageFileName, coverImage.getBytes(), false);

@@ -63,7 +63,7 @@ public class AlbumController {
     }
 
     @PostMapping("/album/new")
-    public String createAlbum(@ModelAttribute AlbumDtoIn album, @RequestParam("coverimage") MultipartFile coverImage, Principal principal, RedirectAttributes redirectAttributes) throws IOException {
+    public String createAlbum(@ModelAttribute AlbumDtoIn album, @RequestParam("coverimage") MultipartFile coverImage, Principal principal, RedirectAttributes redirectAttributes, @RequestParam("copyright") String copyright) throws IOException {
         String username = principal.getName();
         logger.info("entering album zone - control");
         Integer umelecId = userRepo.getUmelecIdOfUzivatel(username);
@@ -71,7 +71,7 @@ public class AlbumController {
             redirectAttributes.addFlashAttribute("errorMessage", "You are not associated with any artist.");
             return "redirect:/index";
         }
-        service.addNewAlbum(album, coverImage, umelecId);
+        service.addNewAlbum(album, coverImage, umelecId, copyright);
         return "redirect:/index";
     }
 

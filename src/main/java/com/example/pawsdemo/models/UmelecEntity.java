@@ -28,6 +28,9 @@ public class UmelecEntity {
     @ManyToMany(mappedBy = "umelci")
     private Set<AlbumEntity> albums = new HashSet<>();
 
+    @ManyToMany(mappedBy = "umelciAu")
+    private Set<AuAEntity> auas = new HashSet<>();
+
     public String getJmeno() {
         return jmeno;
     }
