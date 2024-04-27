@@ -15,9 +15,9 @@ public class AuAEntity {
     @Column(name = "Au_aID", nullable = false)
     private Integer id;
 
-    @Size(max = 400)
+    @Size(max = 1100)
     @NotNull
-    @Column(name = "Copyright", nullable = false, length = 400)
+    @Column(name = "Copyright", nullable = false, length = 1100)
     private String copyright;
 
     @NotNull

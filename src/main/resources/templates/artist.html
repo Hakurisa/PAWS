@@ -1,25 +1,14 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
-      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel=”stylesheet” href=”https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css”/>
-    <script type="text/javascript" th:src="@{/js/index.js}"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <script type="text/javascript" th:src="@{/js/rating.js}"></script>
+
     <meta charset="UTF-8">
-    <title>Welcome in PAWS</title>
+    <title>Artist view</title>
 </head>
-<style>
-    .music-player {
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        padding: 10px;
-        box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.1);
-    }
-</style>
 <body>
-<i class="bi bi-music-note-list"></i>
 
 <div class="dropdown">
     <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
@@ -35,9 +24,8 @@
 
 <div class="row">
     <!-- Sidebar -->
-
     <div class="d-flex flex-column flex-shrink-0 p-3 bg-light navigation-bar">
-        <a href="/index" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+        <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
             <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"/></svg>
             <span class="fs-4">PAWS</span>
         </a>
@@ -81,61 +69,21 @@
                     Nová skladba (X)
                 </a>
             </li>
+
         </ul>
     </div>
     <hr>
 
-    <!-- Main content area -->
     <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4 main-content">
-        <div class="floating-list-player">
-        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <h1 class="h2">Next in the row</h1>
-        </div>
-
-        <div class="song-area">
-            <div class="col-sm-2">
-                <div class="card sm-2 shadow-sm">
-                    <img src="https://via.placeholder.com/300" class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <h5 class="card-title">Song name</h5>
-                        <p class="card-text">Artist Name</p>
-                        <button class="btn btn-success">Play</button>
-                    </div>
-                </div>
+        <div class="d-flex flex-column flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom gap-3">
+            <div>
+                <img class="mx-auto d-block" style="border-radius: 6.25rem; width: 12rem;" th:src="${umelecInfo.profilovyobrazek}" alt="...">
             </div>
-        </div>
-        </div>
-
-        <div th:if="${isBu}" class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <h1 class="h2">My Collection</h1>
-        </div>
-
-        <div th:if="${isBu}" class="col-sm-2" th:each=" playlist : ${buplaylists}" style="margin-bottom: 6rem;">
-            <div class="card sm-2 shadow-sm">
-                <img th:src="${playlist.getCoverimage()}" class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title"><a th:href="@{'/playlist/' + ${playlist.playlistId}}"><span th:text="${playlist.nazev}"></span></a></h5>
-                    <p class="card-text"><span th:text="${playlist.tvurce}"></span></p>
-                    <p class="card-text"><span th:text="${playlist.delka}"></span></p>
-                    <button class="btn btn-success" th:onclick="'playPlaylist('+${playlist.playlistId}+')'">Load</button>
-                </div>
+            <div class="mb-3">
+                <h3 th:text="${umelec.jmeno}">Artist name</h3>
             </div>
-        </div>
-
-        <div th:if="${isBu}" class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-            <h1 class="h2">Playlisty</h1>
-        </div>
-
-
-        <div th:if="${isBu}" class="col-sm-2" th:each=" playlist : ${playlists}" style="margin-bottom: 6rem;">
-            <div class="card sm-2 shadow-sm">
-                <img th:src="${playlist.getCoverimage()}" class="card-img-top" alt="...">
-                <div class="card-body">
-                    <h5 class="card-title"><a th:href="@{'/playlist/' + ${playlist.playlistId}}"><span th:text="${playlist.nazev}"></span></a></h5>
-                    <p class="card-text"><span th:text="${playlist.tvurce}"></span></p>
-                    <p class="card-text"><span th:text="${playlist.delka}"></span></p>
-                    <button class="btn btn-success" th:onclick="'playPlaylist('+${playlist.playlistId}+')'">Load</button>
-                </div>
+            <div class="mb-3">
+                <p th:text="${umelec.popis}">Here will be inserted description</p>
             </div>
         </div>
 
@@ -154,33 +102,62 @@
             </div>
         </div>
 
-    </main>
+        <h2><i class="bi bi bi-star-half"></i>  <span>Recenze</span></h2>
+        <div th:each="recenze : ${recenzes}" class="d-flex gap-3">
 
-</div>
-
-<div class="music-player bg-dark-subtle">
-    <div class="container">
-        <div class="audio-zone">
-
-            <div class="col-md-3">
-                <!-- Song Info -->
-                <div class="song-info">
-                    <h6>%Song Title%</h6>
-                    <p>%Artist Name%</p>
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title"><span th:text="${recenze.nadpis}"></span></h5>
+                    <h6 class="card-subtitle mb-2 text-muted"><span th:utext="${'&#9733;'.repeat(recenze.pocethvezd)}"></span></h6>
+                    <p class="card-text"><span th:text="${recenze.komentar}"></span></p>
                 </div>
             </div>
 
-
-            <div class="col-md-9">
-                <audio class="col-md-9 audio-player" id="music-player" controls="">
-                    <source>
-                </audio>
-            </div>
-
         </div>
-    </div>
+
+        <form th:if="${isBu}" th:action="@{'/artist/' + ${umelec.umelecId}}" method="post">
+            <div class="bg-light">
+                <div class="mb-3">
+                    <label for="nadpis" class="form-label">Pojmenujte komentář:</label>
+                    <input class="form-control" type="text" id="nadpis" name="nadpis" placeholder="Název">
+                </div>
+                <div class="mb-3">
+                    <label for="komentar" class="form-label">Popisek:</label>
+                    <input class="form-control" type="text" id="komentar" name="komentar" placeholder="Jaký je váš názor na album?">
+                </div>
+                <div class="mb-3">
+                    <label for="pocethvezd" class="form-label">Vaše hodnocení</label>
+                    <div class="rating">
+                        <span class="star" data-value="1" style="font-size:24px;">&#9733;</span>
+                        <span class="star" data-value="2" style="font-size:24px;">&#9733;</span>
+                        <span class="star" data-value="3" style="font-size:24px;">&#9733;</span>
+                        <span class="star" data-value="4" style="font-size:24px;">&#9733;</span>
+                        <span class="star" data-value="5" style="font-size:24px;">&#9733;</span>
+                    </div>
+                    <input type="hidden" id="pocethvezd" name="pocethvezd">
+                </div>
+
+                <button type="submit" class="btn btn-primary">Vytvořit komentář</button>
+            </div>
+        </form>
+    </main>
 </div>
 <style>
+    .stars {
+        font-size: 24px;
+    }
+
+    .star {
+        cursor: pointer;
+    }
+
+    .star.selected {
+        color: #0048ff;
+    }
+    .add-song-form {
+        display: flex;
+        padding: 0.5rem 1rem;
+    }
     .navigation-bar{
         position: fixed;
         height: 100%;
@@ -221,6 +198,5 @@
         background: #ced4da;
     }
 </style>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </body>
 </html>

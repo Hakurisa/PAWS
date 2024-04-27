@@ -36,6 +36,10 @@ public class RecenzeService {
         return recenzeRepo.getRecenzeEntityByAlbumId(albumId);
     }
 
+    public List<RecenzeEntity> getRecenzeOfUmelec(Integer umelecId) {
+        return recenzeRepo.getRecenzeEntityByUmelecId(umelecId);
+    }
+
     public RecenzeEntity delete(RecenzeEntity recenze){
         return recenzeRepo.deleteRecenzeEntityByRecenzeId(recenze.getRecenzeId());
     }

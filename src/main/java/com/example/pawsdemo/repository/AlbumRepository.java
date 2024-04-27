@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public interface AlbumRepository extends CrudRepository<AlbumEntity, Integer> {
 
-    //AlbumEntity findAlbumEntityByAlbumId(Integer id);
+    AlbumEntity findAlbumEntityByAlbumId(Integer id);
 
     // AlbumEntity save(AlbumDtoIn albumDtoIn);
 

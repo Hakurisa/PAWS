@@ -81,6 +81,7 @@
 
             <div class="card" th:if="${album}">
                 <h2><i class="bi bi-music-note-list"></i>  <span th:text="${album.nazev}"></span></h2>
+                <a th:href="@{'/artist/' + ${umelec.umelecId}}"><p th:text="${umelec.jmeno}"></p></a>
                 <img class="rounded float-left" style="max-width: 100px" th:src="${album.getCoverImage()}" alt="cover image">
                 <p><span th:text="${album.popis}"></span></p>
 
@@ -91,7 +92,7 @@
                 <thead class="table-header">
                 <tr>
                     <th>Název</th>
-                    <th>Umělec</th>
+                    <th th:if="${umelecFound}">Umělec</th>
                     <th>Délka</th>
                     <th>Album</th>
                     <th></th>
@@ -101,7 +102,7 @@
                 <tbody>
                 <tr th:each="skladba : ${skladby}">
                     <td th:text="${skladba.jmeno}">Skladba</td>
-                    <td>Artist name</td>
+                    <td th:if="${umelecFound}"><a th:href="@{'/artist/' + ${umelec.umelecId}}" th:text="${umelec.jmeno}"></a></td>
                     <td th:text="${skladba.delka}">DELKA</td>
                     <td th:text="${album.nazev}">ALBUMNAZEV</td>
                     <td th:if="${isBu}">
@@ -179,6 +180,9 @@
     .add-song-form {
         display: flex;
         padding: 0.5rem 1rem;
+    }
+    .list-artist-link {
+        cursor: pointer;
     }
 </style>
 </body>

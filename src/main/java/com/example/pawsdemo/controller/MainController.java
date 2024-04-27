@@ -1,13 +1,10 @@
 package com.example.pawsdemo.controller;
 
 import com.example.pawsdemo.dotIn.BeznyUzivatelDotIn;
-import com.example.pawsdemo.dotIn.PlaylistDtoIn;
-import com.example.pawsdemo.dotIn.RecenzeDtoIn;
 import com.example.pawsdemo.dotIn.UzivatelDtoIn;
 import com.example.pawsdemo.models.*;
 import com.example.pawsdemo.repository.*;
 import com.example.pawsdemo.services.*;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.Authentication;
@@ -18,7 +15,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
@@ -124,5 +120,31 @@ public class MainController {
 
         uzivatelService.updateProfile(uzivatelDtoIn, userId, beznyUzivatelDotIn, buId, profilePicture);
         return "redirect:/userProfile";
+    }
+
+    @GetMapping("artist/{id}")
+    public String viewArtist(@PathVariable Integer id, Model model, Principal principal){
+        String username = principal.getName();
+        UzivatelEntity umelecInfo = uzivatelRepo.findUzivatelByUsername(username);
+        Integer buId = uzivatelRepo.getBeznyUzivatelIdOfUzivatel(username);
+        Integer umelecId = uzivatelRepo.getUmelecIdOfUzivatel(username);
+
+        if (buId != null) {
+            model.addAttribute("isBu", true);
+        }
+        if (umelecId != null) {
+            model.addAttribute("isUmelec", true);
+        }
+
+        UmelecEntity umelec = umelecRepo.findUmelecEntityByUmelecId(id);
+        List<AlbumEntity> albums = albumService.getAlbumsByUmelecId(id);
+        List<RecenzeEntity> recenzes = recenzeService.getRecenzeOfUmelec(id);
+
+        model.addAttribute("umelecInfo", umelecInfo);
+        model.addAttribute("umelec", umelec);
+        model.addAttribute("albums", albums);
+        model.addAttribute("recenzes", recenzes);
+
+        return "artist";
     }
 }

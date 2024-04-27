@@ -7,6 +7,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.criteria.CriteriaBuilder;
 import java.util.List;
 
 @Repository
@@ -36,6 +37,8 @@ public interface UzivatelRepository extends CrudRepository<UzivatelEntity, Integ
 
     @Query("SELECT u.uzivatelId FROM UzivatelEntity u WHERE u.username = :username")
     public Integer getUzivatelIdOfUzivatel(@Param("username") String username);
+
+    UzivatelEntity findUzivatelEntityByUmelecId(Integer id);
 
     UzivatelEntity findUzivatelByEmail(String email);
     UzivatelEntity save(UzivatelDtoIn uzivatelDtoIn);

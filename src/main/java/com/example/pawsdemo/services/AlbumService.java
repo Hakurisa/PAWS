@@ -2,6 +2,10 @@ package com.example.pawsdemo.services;
 
 import com.example.pawsdemo.dotIn.AlbumDtoIn;
 import com.example.pawsdemo.models.*;
+import com.example.pawsdemo.models.AlbumEntity;
+import com.example.pawsdemo.models.PlaylistEntity;
+import com.example.pawsdemo.models.SkladbaEntity;
+import com.example.pawsdemo.models.UmelecEntity;
 import com.example.pawsdemo.repository.AlbumRepository;
 import com.example.pawsdemo.repository.AuARepository;
 import com.example.pawsdemo.repository.SkladbaRepository;
@@ -20,6 +24,7 @@ import java.sql.Time;
 import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
+import java.util.stream.Collectors;
 
 @Service
 public class AlbumService {
@@ -58,6 +63,16 @@ public class AlbumService {
         return albumRepo.findAllByPublikovano(albumStatus);
     }
 
+    @Transactional
+    public List<AlbumEntity> getAlbumsByUmelecId(Integer umelecId) {
+        UmelecEntity umelec = umelecRepo.findUmelecEntityByUmelecId(umelecId);
+        if (umelec != null) {
+            return umelec.getAlbums().stream().collect(Collectors.toList());
+        } else {
+            return List.of();
+        }
+    }
+
     public AlbumEntity addNewAlbum(final AlbumDtoIn album, MultipartFile coverImage, Integer umelecId, String copyright) {
 
         logger.info("entering album zone");
@@ -85,7 +100,7 @@ public class AlbumService {
         UmelecEntity umelec = umelecRepo.findById(umelecId).orElseThrow(() -> new RuntimeException("Artist not found"));
         auAEntity.getUmelci().add(umelec);
         auARepo.save(auAEntity);
-//        newAlbum.getUmelci().add(umelec); // Associate the artist with the album
+        newAlbum.getUmelci().add(umelec); // Associate the artist with the album
         if(!coverImageFileName.isBlank()) {
             try {
                 b2Services.uploadToB2("albumCover/" + newAlbum.getAlbumId() + "/" + coverImageFileName, coverImage.getBytes(), false);

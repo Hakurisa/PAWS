@@ -5,10 +5,7 @@ import com.example.pawsdemo.dotIn.AlbumDtoIn;
 import com.example.pawsdemo.dotIn.RecenzeDtoIn;
 import com.example.pawsdemo.models.*;
 import com.example.pawsdemo.repository.*;
-import com.example.pawsdemo.services.AlbumService;
-import com.example.pawsdemo.services.PlaylistService;
-import com.example.pawsdemo.services.RecenzeService;
-import com.example.pawsdemo.services.SkladbaService;
+import com.example.pawsdemo.services.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,9 +32,20 @@ public class AlbumController {
     private PlaylistService playlistService;
     private PlaylistRepository playlistRepo;
     private BURepository buRepo;
+    private UzivatelService userService;
+    private UmelecRepository umelecRepo;
 
     @Autowired
-    public AlbumController(AlbumService service, RecenzeService recenzeService, UzivatelRepository userRepo, SkladbaService skladbaService, SkladbaRepository skladbaRepo, PlaylistService playlistService, PlaylistRepository playlistRepo, BURepository buRepo) {
+    public AlbumController(AlbumService service,
+                           RecenzeService recenzeService,
+                           UzivatelRepository userRepo,
+                           SkladbaService skladbaService,
+                           SkladbaRepository skladbaRepo,
+                           PlaylistService playlistService,
+                           PlaylistRepository playlistRepo,
+                           BURepository buRepo,
+                           UzivatelService userService,
+                           UmelecRepository umelecRepo) {
         this.service = service;
         this.recenzeService = recenzeService;
         this.userRepo = userRepo;
@@ -46,6 +54,8 @@ public class AlbumController {
         this.playlistService = playlistService;
         this.playlistRepo = playlistRepo;
         this.buRepo = buRepo;
+        this.userService = userService;
+        this.umelecRepo = umelecRepo;
     }
 
     @GetMapping("/album/new")
@@ -81,6 +91,13 @@ public class AlbumController {
         logger.info("bruh moment in album shows");
         List<RecenzeEntity> recenzes = recenzeService.getAllRecenzeOfAlbum(id);
         List<SkladbaEntity> skladby = skladbaService.getAllSkladbyByAlbumId(id);
+        Integer foundId = userService.getUmelecByAlbumId(id);
+
+        if(foundId != null) {
+            UmelecEntity umelecProfile = umelecRepo.findUmelecEntityByUmelecId(foundId);
+            model.addAttribute("umelecFound", true);
+            model.addAttribute("umelec", umelecProfile);
+        }
 
         String username = principal.getName();
         Integer buId = userRepo.getBeznyUzivatelIdOfUzivatel(username);
@@ -101,29 +118,6 @@ public class AlbumController {
         model.addAttribute("recenzes", recenzes);
         model.addAttribute("skladby", skladby);
         return "album";
-    }
-
-    @PostMapping("album/{albumId}")
-    public String createNewRecenze(@PathVariable Integer albumId,
-                                   RecenzeDtoIn recenzeDtoIn,
-                                   @RequestParam("pocethvezd") int pocetHvezd,
-                                   Principal principal,
-                                   RedirectAttributes redirectAttributes){
-        String username = principal.getName();
-        Integer buId = userRepo.getBeznyUzivatelIdOfUzivatel(username);
-
-        if (buId == null) {
-            redirectAttributes.addFlashAttribute("errorMessage", "User not found");
-            return "redirect:/index";
-        }
-
-        try {
-            recenzeService.createRecenze(recenzeDtoIn, "isAlbum", buId, albumId, pocetHvezd);
-            return "redirect:/album/" + albumId;
-        } catch (Exception e){
-            redirectAttributes.addFlashAttribute("errorMessage", "Unable to create new review");
-            return "redirect:/index";
-        }
     }
 
     @GetMapping("album/{id}/edit")

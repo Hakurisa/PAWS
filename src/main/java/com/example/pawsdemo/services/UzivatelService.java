@@ -30,7 +30,9 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class UzivatelService implements UserDetailsService {
@@ -60,7 +62,7 @@ public class UzivatelService implements UserDetailsService {
     private AdresaRepository adresaRepo;
 
     @Autowired
-    private PlaylistRepository playlistRepo;
+    private AlbumRepository albumRepo;
 
     private static final Logger logger = LoggerFactory.getLogger(UzivatelService.class);
 
@@ -89,6 +91,17 @@ public class UzivatelService implements UserDetailsService {
     public List<PlaylistEntity> getAllPlaylistsByBuId(Integer playlistId){
         BeznyuzivatelEntity beznyuzivatel = buRepo.findById(playlistId).orElseThrow(() -> new RuntimeException("Chyba při načítání"));
         return beznyuzivatel.getPlaylists().stream().collect(Collectors.toList());
+    }
+
+    @Transactional
+    public Integer getUmelecByAlbumId(Integer albumId){
+        AlbumEntity album = albumRepo.findAlbumEntityByAlbumId(albumId);
+        String foundId = album.getUmelci().stream().map(UmelecEntity::getUmelecId).map(Objects::toString).collect(Collectors.joining());
+        if (!foundId.isEmpty()) {
+            return Integer.parseInt(foundId);
+        } else {
+            return 0;
+        }
     }
 
     public UzivatelEntity registerNewUserAccount(final UzivatelDtoIn userDto, String typUctu) {
