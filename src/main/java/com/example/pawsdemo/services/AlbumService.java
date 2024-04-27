@@ -20,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.sql.Time;
 import java.util.List;
+import java.util.Set;
 import java.util.TimeZone;
 
 @Service
@@ -147,5 +148,19 @@ public class AlbumService {
 
     public AlbumEntity getAlbumById(int albumId) {
         return albumRepo.findById(albumId).orElseThrow(() -> new RuntimeException("Album not found"));
+    }
+
+
+    @Transactional
+    public String getUmelecName(int albumId) {
+        AlbumEntity album = albumRepo.findById(albumId).orElseThrow(() -> new RuntimeException("Album not found"));
+        if(album != null) {
+            Set<UmelecEntity> umelci = album.getUmelci();
+            if (!umelci.isEmpty()) {
+                UmelecEntity firstUmelec = umelci.iterator().next();
+                return firstUmelec.getJmeno();
+            }
+        }
+        return null;
     }
 }

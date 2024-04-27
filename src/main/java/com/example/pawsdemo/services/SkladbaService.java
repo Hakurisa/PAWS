@@ -183,4 +183,8 @@ public class SkladbaService {
     public SkladbaEntity getSkladbaById(int skladbaId) {
         return skladbaRepo.findById(skladbaId).orElseThrow(() -> new RuntimeException("Skladba not found"));
     }
+
+    public AlbumEntity getAlbumBySkladbaId(int skladbaId) {
+        return skladbaRepo.findAlbumEntityBySkladbaId(skladbaId);
+    }
 }
