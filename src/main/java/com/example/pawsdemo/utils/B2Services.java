@@ -30,23 +30,23 @@ public class B2Services {
         try{
             //finding this in the documentation made me very sad
             B2ContentSource contentSource = B2ByteArrayContentSource.build(fileBytes);
+            B2UploadFileRequest request;
             if(isMusic) {
-                B2UploadFileRequest request = builder(
+                request = builder(
                         bucketId,
                         fileName,
                         "audio/mpeg",
                         contentSource
                 ).build();
-                storageClient.uploadSmallFile(request);
             } else {
-                B2UploadFileRequest request = builder(
+                request = builder(
                         bucketId,
                         fileName,
                         "image/jpeg",
                         contentSource
                 ).build();
-                storageClient.uploadSmallFile(request);
             }
+            storageClient.uploadSmallFile(request);
 
         } catch (B2Exception e) {
             throw new RuntimeException("Error when saving to B2.");
