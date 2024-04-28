@@ -60,7 +60,7 @@ function displaySongs(album) {
         const playButton = document.createElement("button");
         playButton.classList.add("btn", "btn-success", "play-authority");
         playButton.textContent = "Play";
-        playButton.onclick = populateAudioPlayer.bind(null, song.audioslozka, song.jmeno, album.umelec);
+        playButton.onclick = populateAudioPlayer.bind(null, song.audioslozka, song.jmeno, album.umelec, song.skladbaId);
         cardBody.appendChild(playButton);
         card.appendChild(cardBody);
         container.appendChild(card);
@@ -105,14 +105,14 @@ function displaySongsPlaylist(album) {
         const playButton = document.createElement("button");
         playButton.classList.add("btn", "btn-success", "play-authority");
         playButton.textContent = "Play";
-        playButton.onclick = populateAudioPlayer.bind(null, song.audioslozka, song.jmeno, album.umelci[index]);
+        playButton.onclick = populateAudioPlayer.bind(null, song.audioslozka, song.jmeno, album.umelci[index], song.skladbaId);
         cardBody.appendChild(playButton);
         card.appendChild(cardBody);
         container.appendChild(card);
         songArea.appendChild(container);
     });
 }
-function populateAudioPlayer(audioslozka, jmeno, umelec) {
+function populateAudioPlayer(audioslozka, jmeno, umelec, id) {
     const player = document.querySelector(".audio-zone");
     player.innerHTML = "";
 
@@ -150,4 +150,13 @@ function populateAudioPlayer(audioslozka, jmeno, umelec) {
     audioZone.appendChild(audioPlayer);
     player.appendChild(infoZone);
     player.appendChild(audioZone);
+
+    // Perform POST request
+    fetch(`/skladba/${id}/increment`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({}) // No data to send
+    })
 }

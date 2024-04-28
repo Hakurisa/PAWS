@@ -139,6 +139,14 @@ public class SkladbaService {
         skladbaRepo.delete(skladba);
     }
 
+    public void incrementPlayCount(int id) {
+        SkladbaEntity skladba = skladbaRepo.findById(id).orElseThrow(() -> new RuntimeException("Skladba not found"));
+        int current = skladba.getPocetprehrani();
+        skladba.setPocetprehrani(++current);
+        logger.info("incrementing");
+        skladbaRepo.save(skladba);
+    }
+
     /**
      * Takes a multipart file, assumes it's a song and returns its length in seconds
      * @param song The song file - MultipartFile type

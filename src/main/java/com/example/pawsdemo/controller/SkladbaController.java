@@ -147,4 +147,8 @@ public class SkladbaController {
         service.deleteSkladba(id);
         return "redirect:/index";
     }
+    @PostMapping("skladba/{id}/increment")
+    public void incrementPlayCount(@PathVariable Integer id) {
+        service.incrementPlayCount(id);
+    }
 }
