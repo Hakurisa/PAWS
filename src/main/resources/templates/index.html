@@ -81,6 +81,16 @@
                     Nová skladba (X)
                 </a>
             </li>
+            <li>
+                <form class="form-inline my-2 my-lg-0" id="searchForm" method="get" action="/search">
+                    <input class="form-control mr-sm-2" name="name" type="search" placeholder="Vyhledat" aria-label="Search">
+                    <select name="type" id="searchAction" size="1" onChange="changeAction()">
+                        <option value="album" selected="selected">Album</option>
+                        <option value="song">Skladba</option>
+                    </select>
+                    <button class="btn btn-outline-success my-2 my-sm-0 mt-5" type="submit">Search</button>
+                </form>
+            </li>
         </ul>
     </div>
     <hr>

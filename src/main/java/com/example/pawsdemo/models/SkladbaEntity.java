@@ -43,6 +43,9 @@ public class SkladbaEntity {
     @ManyToMany(mappedBy = "skladbas")
     private Set<PlaylistEntity> playlists = new HashSet<>();
 
+    @Transient
+    private String umelec;
+
     public String getAudioslozka() {
         return audioslozka;
     }
@@ -113,6 +116,14 @@ public class SkladbaEntity {
 
     public void setPlaylists(Set<PlaylistEntity> playlists) {
         this.playlists = playlists;
+    }
+
+    public String getUmelec() {
+        return umelec;
+    }
+
+    public void setUmelec(String umelec) {
+        this.umelec = umelec;
     }
 
     @Override
