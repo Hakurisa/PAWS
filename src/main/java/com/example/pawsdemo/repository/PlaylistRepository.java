@@ -23,4 +23,7 @@ public interface PlaylistRepository extends CrudRepository<PlaylistEntity, Integ
 
     //public List<PlaylistEntity> getAllByNazevOrTvurce(PlaylistDtoIn playlistDtoIn);
     PlaylistEntity save(PlaylistDtoIn playlistDtoIn);
+
+    @Query("SELECT playlist from PlaylistEntity playlist JOIN playlist.skladbas skladba WHERE skladba.skladbaId = :skladbaId")
+    List<PlaylistEntity> findPlaylistEntitiesBySkladbaId(Integer skladbaId);
 }

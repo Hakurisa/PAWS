@@ -6,10 +6,7 @@ import com.example.pawsdemo.models.AlbumEntity;
 import com.example.pawsdemo.models.PlaylistEntity;
 import com.example.pawsdemo.models.SkladbaEntity;
 import com.example.pawsdemo.models.UmelecEntity;
-import com.example.pawsdemo.repository.AlbumRepository;
-import com.example.pawsdemo.repository.AuARepository;
-import com.example.pawsdemo.repository.SkladbaRepository;
-import com.example.pawsdemo.repository.UmelecRepository;
+import com.example.pawsdemo.repository.*;
 import com.example.pawsdemo.utils.B2Services;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,6 +48,8 @@ public class AlbumService {
     //TODO: private RecenzeRepository recenzeRepo; -- When we gonna implemenet it
 
     private static final Logger logger = LoggerFactory.getLogger(AlbumService.class);
+    @Autowired
+    private PlaylistRepository playlistRepository;
 
     public AlbumEntity create(AlbumEntity album){
         return albumRepo.save(album);
@@ -155,6 +154,18 @@ public class AlbumService {
 
         // Delete all skladba entities associated with the album
         List<SkladbaEntity> skladbas = skladbaRepo.findSkladbaEntityByAlbumId(albumId);
+        for(SkladbaEntity skladba : skladbas) {
+            List<PlaylistEntity> playlists = playlistRepository.findPlaylistEntitiesBySkladbaId(skladba.getSkladbaId());
+            for(PlaylistEntity playlist : playlists) {
+                LocalTime playlistLength = playlist.getDelka();
+                long skladbaLength = skladba.getDelka().toSecondOfDay();
+                playlist.setDelka(playlistLength.minusSeconds(skladbaLength));
+                playlist.getSkladbas().remove(skladba);
+                playlistRepository.save(playlist);
+            }
+        }
+        AuAEntity aua = auARepo.findAuAEntityByAlbumID(album);
+        auARepo.delete(aua);
         skladbaRepo.deleteAll(skladbas);
 
         // Delete the album entity

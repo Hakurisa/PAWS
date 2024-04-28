@@ -156,6 +156,7 @@ public class AlbumController {
         Integer umelecId = userRepo.getUmelecIdOfUzivatel(username);
         if (umelecId == null) {
             redirectAttributes.addFlashAttribute("errorMessage", "You are not associated with any artist.");
+            logger.info("redirected without deleting");
             return "redirect:/index";
         }
         //TODO: check if umelec is the owner of this album
