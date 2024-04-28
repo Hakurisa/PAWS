@@ -128,8 +128,7 @@ public class AlbumController {
             redirectAttributes.addFlashAttribute("errorMessage", "You are not associated with any artist.");
             return "redirect:/index";
         }
-        //TODO: check if umelec is the owner of this album
-        String albumAuthor = service.getUmelecName(id);
+        String albumAuthor = service.getUmelecUsername(id);
         if(!username.equals(albumAuthor)) {
             redirectAttributes.addFlashAttribute("errorMessage", "You are not the author.");
             return "redirect:/index";
@@ -151,7 +150,7 @@ public class AlbumController {
             redirectAttributes.addFlashAttribute("errorMessage", "You are not associated with any artist.");
             return "redirect:/index";
         }
-        String albumAuthor = service.getUmelecName(id);
+        String albumAuthor = service.getUmelecUsername(id);
         if(!username.equals(albumAuthor)) {
             redirectAttributes.addFlashAttribute("errorMessage", "You are not the author.");
             return "redirect:/index";
@@ -168,7 +167,7 @@ public class AlbumController {
             logger.info("redirected without deleting");
             return "redirect:/index";
         }
-        String albumAuthor = service.getUmelecName(id);
+        String albumAuthor = service.getUmelecUsername(id);
         if(!username.equals(albumAuthor)) {
             redirectAttributes.addFlashAttribute("errorMessage", "You are not the author.");
             return "redirect:/index";

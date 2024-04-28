@@ -55,6 +55,8 @@ public class AlbumService {
     private PlaylistRepository playlistRepository;
     @Autowired
     private RecenzeRepository recenzeRepository;
+    @Autowired
+    private UzivatelRepository uzivatelRepository;
 
     public AlbumEntity create(AlbumEntity album){
         return albumRepo.save(album);
@@ -204,6 +206,19 @@ public class AlbumService {
             if (!umelci.isEmpty()) {
                 UmelecEntity firstUmelec = umelci.iterator().next();
                 return firstUmelec.getJmeno();
+            }
+        }
+        return null;
+    }
+    @Transactional
+    public String getUmelecUsername(int albumId) {
+        AlbumEntity album = albumRepo.findById(albumId).orElseThrow(() -> new RuntimeException("Album not found"));
+        if(album != null) {
+            Set<UmelecEntity> umelci = album.getUmelci();
+            if (!umelci.isEmpty()) {
+                UmelecEntity firstUmelec = umelci.iterator().next();
+                UzivatelEntity uzivatel = uzivatelRepository.findUzivatelEntityByUmelecId(firstUmelec.getUmelecId());
+                return uzivatel.getUsername();
             }
         }
         return null;
