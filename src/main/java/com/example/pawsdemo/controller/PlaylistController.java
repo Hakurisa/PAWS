@@ -138,7 +138,7 @@ public class PlaylistController {
     }
 
     @DeleteMapping("playlist/{id}")
-    public String deleteAlbum(@PathVariable Integer id, RedirectAttributes redirectAttributes, Principal principal) {
+    public String deletePlaylist(@PathVariable Integer id, RedirectAttributes redirectAttributes, Principal principal) {
         String username = principal.getName();
         Integer buId = uzivatelRepo.getBeznyUzivatelIdOfUzivatel(username);
         if (buId == null) {

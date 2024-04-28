@@ -10,7 +10,7 @@
 <body class="bg-dark-subtle">
 <div class="d-flex flex-column flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom gap-3 bg-dark-subtle">
     <h2>Uprav playlist</h2>
-    <form th:action="@{'/playlist/' + ${playlist.playlistId} + '/edit'}" method="post" enctype="multipart/form-data">
+    <form th:action="@{/playlist/{playlistId}/edit(playlistId=${playlist.playlistId})}" method="post" enctype="multipart/form-data">
         <div class="mb-3">
             <label class="form-label" for="jmeno"><i class="bi bi-journal-album"></i> Název playlistu:</label>
             <input class="form-control" type="text" id="jmeno" name="nazev" placeholder="Název alba" th:value="${playlist.nazev}">
@@ -28,9 +28,31 @@
             <input class="form-control" type="file" id="coverimage" name="coverimage" accept="image/*">
         </div>
         <button type="submit" class="btn btn-success">Uložit úpravy</button>
-        <a class="btn btn-danger" onclick="deleteAlbum()">Smazat</a>
+        <a class="btn btn-danger" onclick="deletePlaylist()">Smazat</a>
     </form>
     <a class="btn btn-secondary" th:href="@{/playlist/{playlistId}}">Zpět na hlavní stránku</a>
 </div>
+<script>
+    /*<![CDATA[*/
+    function deletePlaylist() {
+        let playlistId = null;
+        var confirmation = confirm("Opravdu chcete smazat toto playlist?");
+        if (confirmation) {
+            fetch('/playlist/' + playlistId, {
+                method: 'DELETE'
+            }).then(response => {
+                if (response.ok) {
+                    window.location.href='/index';
+                } else {
+                    console.error("shit broke");
+                    window.location.href='/index';
+                }
+            }).catch(error => {
+                console.error('Chyba při odesílání DELETE požadavku:', error);
+            });
+        }
+    }
+    /*]]>*/
+</script>
 </body>
 </html>

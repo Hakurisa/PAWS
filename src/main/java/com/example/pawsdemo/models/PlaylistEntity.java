@@ -2,7 +2,6 @@ package com.example.pawsdemo.models;
 
 import jakarta.persistence.*;
 
-import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.HashSet;
