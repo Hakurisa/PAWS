@@ -86,6 +86,7 @@ public class UzivatelService implements UserDetailsService {
     public BeznyuzivatelEntity updateBU(BeznyuzivatelEntity beznyuzivatel) {
         return buRepo.save(beznyuzivatel);
     }
+    public UmelecEntity updateUmelec(UmelecEntity umelec){return umelecRepo.save(umelec);}
 
     @Transactional
     public List<PlaylistEntity> getAllPlaylistsByBuId(Integer playlistId){
@@ -158,7 +159,7 @@ public class UzivatelService implements UserDetailsService {
     public void updateProfile(UzivatelDtoIn uzivatel, Integer currentUserId, BeznyUzivatelDotIn buDto, Integer currentBuId, MultipartFile profilePicture) {
         String pfpFileName = profilePicture.getOriginalFilename();
 
-        UzivatelEntity user = uzivatelRepo.findUzivatelEntityByBeznyuzivatelId(currentUserId);
+        UzivatelEntity user = uzivatelRepo.findUzivatelEntityByBeznyuzivatelId(currentBuId);
         BeznyuzivatelEntity bu = buRepo.findBeznyuzivatelEntityByBeznyuzivatelId(currentBuId);
 
         if (user == null) {
@@ -179,6 +180,34 @@ public class UzivatelService implements UserDetailsService {
         }
         update(user);
         updateBU(bu);
+    }
+
+    public void updateProfile(UzivatelDtoIn uzivatel, Integer currentUserId, UmelecDtoIn umelecDto, Integer currentUmelecId, MultipartFile profilePicture, String description) {
+        String pfpFileName = profilePicture.getOriginalFilename();
+
+        UzivatelEntity user = uzivatelRepo.findUzivatelEntityByUmelecId(currentUmelecId);
+        UmelecEntity umelec = umelecRepo.findUmelecEntityByUmelecId(currentUmelecId);
+
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found with username: " + currentUserId);
+        }
+
+        umelec.setJmeno(umelecDto.getJmeno());
+
+        if(!pfpFileName.isBlank()) {
+            try {
+                user.setProfilovyobrazek(fileUrl + "pfp/" + user.getUzivatelId() + "/" +  pfpFileName);
+                b2Services.uploadToB2("pfp/" + user.getUzivatelId() + "/" + pfpFileName, profilePicture.getBytes(), false);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if(!description.isBlank()) {
+            umelec.setPopis(description);
+        }
+        update(user);
+        updateUmelec(umelec);
     }
 
     @Override

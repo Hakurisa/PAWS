@@ -1,6 +1,7 @@
 package com.example.pawsdemo.controller;
 
 import com.example.pawsdemo.dotIn.BeznyUzivatelDotIn;
+import com.example.pawsdemo.dotIn.UmelecDtoIn;
 import com.example.pawsdemo.dotIn.UzivatelDtoIn;
 import com.example.pawsdemo.models.*;
 import com.example.pawsdemo.repository.*;
@@ -102,6 +103,19 @@ public class MainController {
         return "artistProfile";
     }
 
+    @PostMapping("/artistProfile")
+    public String artistProfile(@ModelAttribute("uzivatel") UzivatelDtoIn uzivatelDtoIn, @ModelAttribute("umelec") UmelecDtoIn umelecDtoIn, @RequestParam("profilepicture") MultipartFile profilePicture, @RequestParam("desc") String description ,Principal principal, RedirectAttributes redirectAttributes) {
+        String username = principal.getName();
+        Integer umelecId = uzivatelRepo.getUmelecIdOfUzivatel(username);
+        Integer userId = uzivatelRepo.getUzivatelIdOfUzivatel(username);
+        if(umelecId == null || userId == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "You are not associated with any artist user account.");
+            return "redirect:/index";
+        }
+        uzivatelService.updateProfile(uzivatelDtoIn, userId, umelecDtoIn, umelecId, profilePicture, description);
+        return "redirect:/artistProfile";
+    }
+
     @GetMapping("/userProfile")
     public String userProfile(Model model, Principal principal) {
         String username = principal.getName();
@@ -131,7 +145,7 @@ public class MainController {
     @GetMapping("artist/{id}")
     public String viewArtist(@PathVariable Integer id, Model model, Principal principal){
         String username = principal.getName();
-        UzivatelEntity umelecInfo = uzivatelRepo.findUzivatelByUsername(username);
+        UzivatelEntity umelecInfo = uzivatelRepo.findUzivatelEntityByUmelecId(id);
         Integer buId = uzivatelRepo.getBeznyUzivatelIdOfUzivatel(username);
         Integer umelecId = uzivatelRepo.getUmelecIdOfUzivatel(username);
         List<AlbumEntity> albums = albumService.getAlbumsByUmelecId(id);

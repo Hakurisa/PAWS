@@ -14,7 +14,7 @@
     <form th:action="@{artistProfile}" method="post" class="mt-4" enctype="multipart/form-data">
         <div class="mb-3">
             <img class="mx-auto d-block" style="border-radius: 6.25rem; width: 12.5rem;" th:src="${currentUser.profilovyobrazek}">
-            <input class="form-control" type="file" id="profilovyobrazek" name="profilovyobrazek" value="Upravit obrázek" accept="image/*" />
+            <input class="form-control" type="file" id="profilovyobrazek" name="profilepicture" value="Upravit obrázek" accept="image/*" />
         </div>
         <div class="mb-3">
             <label for="jmeno" class="form-label">Jméno</label>
@@ -23,6 +23,10 @@
         <div class="mb-3">
             <label for="email" class="form-label">Email:</label>
             <input type="email" class="form-control" id="email" name="email" th:value="${currentUser.email}" />
+        </div>
+        <div class="mb-3">
+            <label class="form-label" for="desc"><i class="bi bi-pencil"></i> O vás:</label>
+            <textarea class="form-control" id="desc" name="desc" th:text="${currentUmelec.popis}"></textarea>
         </div>
         <button type="submit" class="btn btn-primary">Uložit změny</button>
         <a class="btn btn-secondary mt-3" th:href="@{index}">Zpět na hl. stránku</a>
