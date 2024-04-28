@@ -5,11 +5,12 @@ import jakarta.validation.constraints.NotNull;
 import org.hibernate.type.descriptor.jdbc.TinyIntJdbcType;
 
 import java.sql.Time;
+import java.time.LocalTime;
 
 public class AlbumDtoIn {
 
     @NotNull
-    private Time delka;
+    private LocalTime delka;
     @NotNull
     private String nazev;
     private String popis;
@@ -22,11 +23,11 @@ public class AlbumDtoIn {
     @NotNull
     private int albumId;
 
-    public Time getDelka() {
+    public LocalTime getDelka() {
         return delka;
     }
 
-    public void setDelka(Time delka) {
+    public void setDelka(LocalTime delka) {
         this.delka = delka;
     }
 

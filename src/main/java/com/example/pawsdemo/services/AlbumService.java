@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.sql.Time;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
@@ -85,7 +86,8 @@ public class AlbumService {
         newAlbum.setPopis(album.getPopis());
         newAlbum.setPublikovano(album.getPublikovano()); //TODO: Před odevzdáním implementovat změnu v updatu
         TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
-        newAlbum.setDelka(new Time(0, 0, 0)); //TODO: Při vytvoření není sice potřeba počítat, jak je album dlouhé ale implementuji později
+//        newAlbum.setDelka(new Time(0, 0, 0)); //TODO: Při vytvoření není sice potřeba počítat, jak je album dlouhé ale implementuji později
+        newAlbum.setDelka(LocalTime.of(0,0,0));
         albumRepo.save(newAlbum);
         if(coverImageFileName.isBlank()) {
             newAlbum.setCoverImage(fileUrl + "default/playlistPlaceholder.png");
@@ -93,7 +95,7 @@ public class AlbumService {
             newAlbum.setCoverImage(fileUrl + "albumCover/" + newAlbum.getAlbumId() + "/" +  coverImageFileName);
         }
         logger.info("New album has been created");
-        logger.info("Délka: " + newAlbum.getDelka().getTime());
+//        logger.info("Délka: " + newAlbum.getDelka().getTime());
         AuAEntity auAEntity = new AuAEntity();
         auAEntity.setAlbumID(newAlbum);
         auAEntity.setCopyright(copyright);

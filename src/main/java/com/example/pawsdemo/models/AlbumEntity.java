@@ -2,6 +2,7 @@ package com.example.pawsdemo.models;
 
 import jakarta.persistence.*;
 
+import java.time.LocalTime;
 import java.sql.Time;
 import java.util.HashSet;
 import java.util.Set;
@@ -11,7 +12,7 @@ import java.util.Set;
 public class AlbumEntity {
     @Basic
     @Column(name = "Delka")
-    private Time delka;
+    private LocalTime delka;
     @Basic
     @Column(name = "Nazev")
     private String nazev;
@@ -40,11 +41,11 @@ public class AlbumEntity {
     )
     private Set<UmelecEntity> umelci = new HashSet<>();
 
-    public Time getDelka() {
+    public LocalTime getDelka() {
         return delka;
     }
 
-    public void setDelka(Time delka) {
+    public void setDelka(LocalTime delka) {
         this.delka = delka;
     }
 

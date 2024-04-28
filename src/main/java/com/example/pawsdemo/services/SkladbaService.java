@@ -24,6 +24,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.sql.Time;
+import java.time.LocalTime;
 import java.util.*;
 
 @Service
@@ -60,11 +61,12 @@ public class SkladbaService {
             int durationInSeconds = getSongDurationInSeconds(song); //result - 158
             logger.info("Duration in seconds: " + durationInSeconds);
 
+            LocalTime songLength = LocalTime.of(0,0,0).plusSeconds(durationInSeconds);
+
             int seconds = durationInSeconds % 60;
             int minutes = (durationInSeconds / 60) % 60;
             int hours = durationInSeconds / 3600;
 
-            Time songLength = new Time(hours, minutes, seconds);
             logger.info("Song length - time format: " + songLength);
 
             //saving the song into database
@@ -85,14 +87,17 @@ public class SkladbaService {
                 skladbaEntity.setCoverimage(album.getCoverImage());
                 int currentPocetSkladeb = album.getPocetskladeb();
 
-                long currentAlbumLength = album.getDelka().getTime();
-                logger.info("Current album length: " + currentAlbumLength);
-                logger.info("Duration of the song (in seconds): " + durationInSeconds);
-                long sumMilis = currentAlbumLength + (durationInSeconds * 1000);
-                int sumSeconds = (int) (sumMilis/1000) % 60;
-                int sumMinutes = (int) ((sumMilis / (1000 * 60)) % 60);;
-                int sumHours = (int) ((sumMilis / (1000 * 60 * 60)) % 24);
-                Time newTime = new Time(sumHours, sumMinutes, sumSeconds);
+//                long currentAlbumLength = album.getDelka().getTime();
+//                logger.info("Current album length: " + currentAlbumLength);
+//                logger.info("Duration of the song (in seconds): " + durationInSeconds);
+//                long sumMilis = currentAlbumLength + (durationInSeconds * 1000);
+//                int sumSeconds = (int) (sumMilis/1000) % 60;
+//                int sumMinutes = (int) ((sumMilis / (1000 * 60)) % 60);;
+//                int sumHours = (int) ((sumMilis / (1000 * 60 * 60)) % 24);
+//                Time newTime = new Time(sumHours, sumMinutes, sumSeconds);
+
+                LocalTime currentAlbumLength = album.getDelka();
+                LocalTime newTime = currentAlbumLength.plusSeconds(durationInSeconds);
                 album.setDelka(newTime);
 
 

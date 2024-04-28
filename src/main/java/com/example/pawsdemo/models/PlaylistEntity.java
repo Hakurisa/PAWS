@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 
 import java.sql.Time;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,7 +19,7 @@ public class PlaylistEntity {
     private LocalDate datumvzniku;
     @Basic
     @Column(name = "Delka")
-    private Time delka;
+    private LocalTime delka;
     @Basic
     @Column(name = "Nazev")
     private String nazev;
@@ -63,11 +64,11 @@ public class PlaylistEntity {
         this.datumvzniku = datumvzniku;
     }
 
-    public Time getDelka() {
+    public LocalTime getDelka() {
         return delka;
     }
 
-    public void setDelka(Time delka) {
+    public void setDelka(LocalTime delka) {
         this.delka = delka;
     }
 

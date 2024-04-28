@@ -4,6 +4,7 @@ import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
 
 import java.sql.Time;
+import java.time.LocalTime;
 
 public class SkladbaDtoIn {
 
@@ -14,7 +15,7 @@ public class SkladbaDtoIn {
     private String coverimage;
 
     @NotNull
-    private Time delka;
+    private LocalTime delka;
 
     @NotNull
     private String jmeno;
@@ -44,11 +45,11 @@ public class SkladbaDtoIn {
         this.coverimage = coverimage;
     }
 
-    public Time getDelka() {
+    public LocalTime getDelka() {
         return delka;
     }
 
-    public void setDelka(Time delka) {
+    public void setDelka(LocalTime delka) {
         this.delka = delka;
     }
 

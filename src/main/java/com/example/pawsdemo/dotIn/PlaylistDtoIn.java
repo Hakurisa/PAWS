@@ -6,6 +6,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.sql.Time;
 import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class PlaylistDtoIn {
 
@@ -16,7 +17,7 @@ public class PlaylistDtoIn {
     private LocalDate datumVzniku = LocalDate.now();
 
     @NotNull
-    private Time delka;
+    private LocalTime delka;
 
     @NotNull
     private String nazev;
@@ -49,11 +50,11 @@ public class PlaylistDtoIn {
         this.datumVzniku = datumVzniku;
     }
 
-    public Time getDelka() {
+    public LocalTime getDelka() {
         return delka;
     }
 
-    public void setDelka(Time delka) {
+    public void setDelka(LocalTime delka) {
         this.delka = delka;
     }
 

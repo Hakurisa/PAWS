@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.sql.Time;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
@@ -81,7 +82,8 @@ public class PlaylistService {
         playlist.setPopis(playlistDto.getPopis());
         TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
         playlist.setDatumvzniku(playlistDto.getDatumVzniku());
-        playlist.setDelka(new Time(0,0,0));
+//        playlist.setDelka(new Time(0,0,0));
+        playlist.setDelka(LocalTime.of(0, 0, 0));
         playlist.setTvurce(jmenoBU);
         playlist.setPocetskladeb(0);
         playlist.setCoverimage("placeholder"); // Set placeholder first to have data
@@ -155,6 +157,9 @@ public class PlaylistService {
         PlaylistEntity playlist = playlistRepo.findById(playlistId).orElseThrow(() -> new RuntimeException("Playlist neexistuje"));
         SkladbaEntity skladba = skladbaRepo.findById(songId).orElseThrow(() -> new RuntimeException("Skladba nebyla nalezena"));
         playlist.getSkladbas().add(skladba);
+        LocalTime currentLength = playlist.getDelka();
+        long songLength = skladba.getDelka().toSecondOfDay();
+        playlist.setDelka(currentLength.plusSeconds(songLength));
         update(playlist);
         updateSkladba(skladba);
     }
