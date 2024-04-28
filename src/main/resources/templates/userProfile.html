@@ -10,10 +10,11 @@
 <body>
 <div class="container min-vh-100 d-flex justify-content-center align-items-center bg-dark-subtle">
 
-    <div class="form-label">Profil uživatele <span th:remove="tag" sec:authentication="name"></span></div>
+
 
     <form th:action="@{userProfile}" method="post" class="mt-4" enctype="multipart/form-data">
         <div class="mb-3">
+            <div class="form-label">Profil uživatele <span th:remove="tag" sec:authentication="name"></span></div>
             <img class="mx-auto d-block"  style="border-radius: 6.25rem; width: 12.5rem;" th:src="${currentUser.profilovyobrazek}">
         </div>
         <div class="mb-3">

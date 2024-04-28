@@ -7,11 +7,12 @@
     <title>PAWS - edit</title>
 </head>
 <body class="bg-dark-subtle">
+<div class="d-flex flex-column flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom gap-3 bg-dark-subtle">
 <h2>Upload Song and Cover Image</h2>
 <form th:action="@{/skladba/{skladbaId}/edit(skladbaId=${skladba.skladbaId})}" method="post" enctype="multipart/form-data">
     <div>
-        <label for="jmeno">Název skladby:</label>
-        <input type="text" id="jmeno" name="jmeno" placeholder="Název skladby" th:value="${skladba.jmeno}">
+        <label class="form-label" for="jmeno">Název skladby:</label>
+        <input class="form-control" type="text" id="jmeno" name="jmeno" placeholder="Název skladby" th:value="${skladba.jmeno}">
     </div>
     <button type="submit">Upravit</button>
     <a class="btn btn-danger" onclick="deleteAlbum()">Smazat</a>
@@ -39,5 +40,6 @@
     }
     /*]]>*/
 </script>
+</div>
 </body>
 </html>

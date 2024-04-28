@@ -5,26 +5,28 @@
     <title>Nové playlist</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
 </head>
-<body>
+<body class="bg-dark-subtle">
+<div class="d-flex flex-column flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom gap-3 bg-dark-subtle">
     <form th:action="@{/playlist/new}" method="post" enctype="multipart/form-data">
-        <div>
-            <label for="coverimage">Vyber Cover Playlistu:</label>
-            <img src="https://i.ibb.co/64q24pP/playlist-Placeholder.png" alt="playlist-Placeholder" style="display: block; width: 15%; margin: 0.5rem 0;">
-            <input type="file" id="coverimage" name="coverimage" accept="image/*">
+        <div class="mb-3">
+            <label  for="nazev" class="form-label"><i class="bi bi-journal-album"></i> Název</label>
+            <input  type="text" class="form-control" id="nazev" name="nazev" placeholder="Název"/>
         </div>
         <div class="mb-3">
-            <label for="nazev" class="form-label">Název</label>
-            <input type="text" class="form-control" id="nazev" name="nazev" placeholder="Název"/>
+            <label  for="popis" class="form-label"><i class="bi bi-pencil"></i> Popis</label>
+            <textarea class="form-control" id="popis" name="popis" placeholder="Popis playlistu..."></textarea>
         </div>
         <div class="mb-3">
-            <label for="popis" class="form-label">Popis</label>
-            <input type="text" class="form-control" id="popis" name="popis" placeholder="Popis playlistu..."/>
+            <label class="form-label" for="coverimage"><i class="bi bi-card-image"></i> Nahraj cover playlistu:</label>
+            <input class="form-control" type="file" id="coverimage" name="coverimage" accept="image/*">
         </div>
         <div class="mb-3">
-            <button type="submit">Vytvořit playlist</button>
+            <button class="btn btn-success" type="submit">Vytvořit playlist</button>
         </div>
     </form>
-
+    <a class="btn btn-secondary" th:href="@{/index}">Zpět na hlavní stránku</a>
+</div>
 </body>
 </html>

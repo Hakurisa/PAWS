@@ -137,17 +137,19 @@
                 </div>
 
             </div>
-            <form th:if="${isBu}" th:action="@{'/album/' + ${album.albumId}}" method="post">
-                <div class="bg-light">
-                <div class="mb-3">
+
+        </div>
+        <form th:if="${isBu}" th:action="@{'/album/' + ${album.albumId}}" method="post">
+            <div class="bg-light">
+                <div class="mb-6">
                     <label for="nadpis" class="form-label">Pojmenujte komentář:</label>
                     <input class="form-control" type="text" id="nadpis" name="nadpis" placeholder="Název">
                 </div>
-                <div class="mb-3">
+                <div class="mb-6">
                     <label for="komentar" class="form-label">Popisek:</label>
                     <input class="form-control" type="text" id="komentar" name="komentar" placeholder="Jaký je váš názor na album?">
                 </div>
-                <div class="mb-3">
+                <div class="mb-6">
                     <label for="pocethvezd" class="form-label">Vaše hodnocení</label>
                     <div class="rating">
                         <span class="star" data-value="1" style="font-size:24px;">&#9733;</span>
@@ -160,9 +162,8 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary">Vytvořit komentář</button>
-                </div>
-            </form>
-        </div>
+            </div>
+        </form>
     </main>
 </div>
 <style>
