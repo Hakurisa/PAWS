@@ -91,16 +91,27 @@
             <h1 class="h2">Alba</h1>
         </div>
 
-        <div class="col-sm-2" th:each=" album : ${albums}">
+        <div th:if="${loggedInUmelec}" class="col-sm-2" th:each=" album : ${albums}">
             <div class="card sm-2 shadow-sm">
                 <img th:src="${album.getCoverImage()}" class="card-img-top" alt="...">
                 <div class="card-body">
                     <a th:href="@{'/album/' + ${album.albumId}}"><h5 class="card-title"><span th:text="${album.nazev}"></span></h5></a>
                     <p class="card-text"><span th:text="${album.delka}"></span></p>
-                    <button class="btn btn-success" th:onclick="'playAlbum('+${album.albumId}+')'">Load</button>
+                    <a class="btn btn-success" th:href="@{'/album/' + ${album.albumId}}">Load</a>
                 </div>
             </div>
         </div>
+        <div th:if="${!loggedInUmelec}" class="col-sm-2" th:each=" album : ${publishedAlbums}">
+            <div class="card sm-2 shadow-sm">
+                <img th:src="${album.getCoverImage()}" class="card-img-top" alt="...">
+                <div class="card-body">
+                    <a th:href="@{'/album/' + ${album.albumId}}"><h5 class="card-title"><span th:text="${album.nazev}"></span></h5></a>
+                    <p class="card-text"><span th:text="${album.delka}"></span></p>
+                    <a class="btn btn-success" th:href="@{'/album/' + ${album.albumId}}">Load</a>
+                </div>
+            </div>
+        </div>
+
 
         <h2><i class="bi bi bi-star-half"></i>  <span>Recenze</span></h2>
         <div th:each="recenze : ${recenzes}" class="d-flex gap-3">

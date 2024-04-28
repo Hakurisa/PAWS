@@ -5,6 +5,8 @@ import com.example.pawsdemo.dotIn.UzivatelDtoIn;
 import com.example.pawsdemo.models.*;
 import com.example.pawsdemo.repository.*;
 import com.example.pawsdemo.services.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.core.Authentication;
@@ -19,9 +21,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Objects;
 
 @Controller
 public class MainController {
+    private static final Logger logger = LoggerFactory.getLogger(MainController.class);
     private UserDetailsService userDetService;
     private UzivatelRepository uzivatelRepo;
     private BURepository buRepo;
@@ -71,9 +75,11 @@ public class MainController {
 
             model.addAttribute("isBu", true);
             model.addAttribute("buplaylists", buplaylists);
+            model.addAttribute("userId", buId);
         }
         if (umelecId != null) {
             model.addAttribute("isUmelec", true);
+            model.addAttribute("userId", umelecId);
         }
 
         List<PlaylistEntity> playlists = playlistService.getAllPlaylists();
@@ -128,7 +134,8 @@ public class MainController {
         UzivatelEntity umelecInfo = uzivatelRepo.findUzivatelByUsername(username);
         Integer buId = uzivatelRepo.getBeznyUzivatelIdOfUzivatel(username);
         Integer umelecId = uzivatelRepo.getUmelecIdOfUzivatel(username);
-
+        List<AlbumEntity> albums = albumService.getAlbumsByUmelecId(id);
+        List<AlbumEntity> publishedAlbums = albumService.getPublishedAlbumsByUmelecId(id);
         if (buId != null) {
             model.addAttribute("isBu", true);
         }
@@ -136,13 +143,19 @@ public class MainController {
             model.addAttribute("isUmelec", true);
         }
 
-        UmelecEntity umelec = umelecRepo.findUmelecEntityByUmelecId(id);
-        List<AlbumEntity> albums = albumService.getAlbumsByUmelecId(id);
-        List<RecenzeEntity> recenzes = recenzeService.getRecenzeOfUmelec(id);
+        if(Objects.equals(umelecId, id)) {
+            model.addAttribute("loggedInUmelec", true);
+        } else {
+            model.addAttribute("loggedInUmelec", false);
+        }
 
+        UmelecEntity umelec = umelecRepo.findUmelecEntityByUmelecId(id);
+
+        List<RecenzeEntity> recenzes = recenzeService.getRecenzeOfUmelec(id);
+        model.addAttribute("albums", albums);
+        model.addAttribute("publishedAlbums", publishedAlbums);
         model.addAttribute("umelecInfo", umelecInfo);
         model.addAttribute("umelec", umelec);
-        model.addAttribute("albums", albums);
         model.addAttribute("recenzes", recenzes);
 
         return "artist";

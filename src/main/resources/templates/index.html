@@ -27,8 +27,8 @@
         <strong th:remove="tag" sec:authentication="name">thymeleaf</strong>
     </a>
     <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
-        <li><a class="dropdown-item" href="/index">Zatim nic</a></li>
-        <li><hr class="dropdown-divider"></li>
+        <li th:if="${isUmelec}"><a class="dropdown-item" th:href="@{'/artist/' + ${userId}}">Vaše alba</a></li>
+        <li th:if="${isUmelec}"><hr class="dropdown-divider"></li>
         <li><a class="dropdown-item" href="/logout">Odhlásit se</a></li>
     </ul>
 </div>
@@ -153,7 +153,7 @@
             <h1 class="h2">Alba</h1>
         </div>
 
-        <div class="col-sm-2" th:each=" album : ${albums}">
+        <div class="col-sm-2" th:each=" album : ${publishedalbum}">
             <div class="card sm-2 shadow-sm">
                 <img th:src="${album.getCoverImage()}" class="card-img-top" alt="...">
                 <div class="card-body">

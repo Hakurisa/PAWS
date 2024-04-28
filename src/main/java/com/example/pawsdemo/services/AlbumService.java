@@ -19,6 +19,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.sql.Time;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.TimeZone;
@@ -75,6 +76,23 @@ public class AlbumService {
         UmelecEntity umelec = umelecRepo.findUmelecEntityByUmelecId(umelecId);
         if (umelec != null) {
             return umelec.getAlbums().stream().collect(Collectors.toList());
+        } else {
+            return List.of();
+        }
+    }
+
+    @Transactional
+    public List<AlbumEntity> getPublishedAlbumsByUmelecId(Integer umelecId) {
+        UmelecEntity umelec = umelecRepo.findUmelecEntityByUmelecId(umelecId);
+        if (umelec != null) {
+            List<AlbumEntity> albums = umelec.getAlbums().stream().collect(Collectors.toList());
+            List<AlbumEntity> publishedAlbums = new ArrayList<>();
+            for (AlbumEntity album : albums) {
+                if (album.getPublikovano() == (byte) 1) {
+                    publishedAlbums.add(album);
+                }
+            }
+            return publishedAlbums;
         } else {
             return List.of();
         }

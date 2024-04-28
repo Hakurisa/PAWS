@@ -9,6 +9,7 @@ import com.example.pawsdemo.models.ZanrEntity;
 import com.example.pawsdemo.repository.RecenzeRepository;
 import com.example.pawsdemo.repository.UzivatelRepository;
 import com.example.pawsdemo.repository.ZanrRepository;
+import com.example.pawsdemo.services.AlbumService;
 import com.example.pawsdemo.services.RecenzeService;
 import com.example.pawsdemo.services.SkladbaService;
 import com.example.pawsdemo.services.UmelecService;
@@ -30,6 +31,7 @@ import java.util.List;
 public class SkladbaController {
 
     private static final Logger logger = LoggerFactory.getLogger(SkladbaController.class);
+    private final AlbumService albumService;
 
     private SkladbaService service;
     private UzivatelRepository userRepo;
@@ -44,13 +46,14 @@ public class SkladbaController {
                              UmelecService umelecService,
                              ZanrRepository zanrRepository,
                              RecenzeService recenzeService,
-                             RecenzeRepository recenzeRepo) {
+                             RecenzeRepository recenzeRepo, AlbumService albumService) {
         this.service = service;
         this.userRepo = userRepo;
         this.umelecService = umelecService;
         this.zanrRepository = zanrRepository;
         this.recenzeService = recenzeService;
         this.recenzeRepo = recenzeRepo;
+        this.albumService = albumService;
     }
 
     @GetMapping("/skladba/new")
@@ -120,7 +123,11 @@ public class SkladbaController {
             redirectAttributes.addFlashAttribute("errorMessage", "You are not associated with any artist.");
             return "redirect:/index";
         }
-        //TODO: check if umelec is the owner of this album
+        String albumAuthor = albumService.getUmelecUsername(id);
+        if(!username.equals(albumAuthor)) {
+            redirectAttributes.addFlashAttribute("errorMessage", "You are not the author.");
+            return "redirect:/index";
+        }
         service.updateSkladba(skladbaDtoIn, id);
         return "redirect:/index";
     }
@@ -132,7 +139,11 @@ public class SkladbaController {
             redirectAttributes.addFlashAttribute("errorMessage", "You are not associated with any artist.");
             return "redirect:/index";
         }
-        //TODO: check if umelec is the owner of this album
+        String albumAuthor = albumService.getUmelecUsername(id);
+        if(!username.equals(albumAuthor)) {
+            redirectAttributes.addFlashAttribute("errorMessage", "You are not the author.");
+            return "redirect:/index";
+        }
         service.deleteSkladba(id);
         return "redirect:/index";
     }
