@@ -39,26 +39,26 @@
             </li>
             <li>
 
-                <a th:if="${isBu}" class="nav-link link-dark" th:href="@{userProfile}">
+                <a th:if="${isBu}" class="nav-link link-dark" th:href="@{/userProfile}">
                     <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"/></svg>
                     Profil uživatele
                 </a>
             </li>
             <li>
 
-                <a th:if="${isBu}" class="nav-link link-dark" th:href="@{playlist/new}">
+                <a th:if="${isBu}" class="nav-link link-dark" th:href="@{/playlist/new}">
                     <svg class="bi me-2" width="16" height="16"><use xlink:href="#speedometer2"/></svg>
                     Nový playlist
                 </a>
             </li>
             <li>
-                <a th:if="${isUmelec}" class="nav-link link-dark" th:href="@{artistProfile}">
+                <a th:if="${isUmelec}" class="nav-link link-dark" th:href="@{/artistProfile}">
                     <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"/></svg>
                     Profil umělce
                 </a>
             </li>
             <li>
-                <a th:if="${isUmelec}" class="nav-link link-dark" th:href="@{album/new}">
+                <a th:if="${isUmelec}" class="nav-link link-dark" th:href="@{/album/new}">
                     <svg class="bi me-2" width="16" height="16"><use xlink:href="#people-circle"/></svg>
                     Vytvořit album
                 </a>
