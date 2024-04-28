@@ -129,6 +129,11 @@ public class AlbumController {
             return "redirect:/index";
         }
         //TODO: check if umelec is the owner of this album
+        String albumAuthor = service.getUmelecName(id);
+        if(!username.equals(albumAuthor)) {
+            redirectAttributes.addFlashAttribute("errorMessage", "You are not the author.");
+            return "redirect:/index";
+        }
         AlbumDtoIn album = service.getAlbumDtoById(id);
         logger.info("bruh moment in album edit render");
         logger.info("Published:" + album.getPublikovano());
@@ -146,7 +151,11 @@ public class AlbumController {
             redirectAttributes.addFlashAttribute("errorMessage", "You are not associated with any artist.");
             return "redirect:/index";
         }
-        //TODO: check if umelec is the owner of this album
+        String albumAuthor = service.getUmelecName(id);
+        if(!username.equals(albumAuthor)) {
+            redirectAttributes.addFlashAttribute("errorMessage", "You are not the author.");
+            return "redirect:/index";
+        }
         service.updateAlbum(albumDtoIn, coverImage, id);
         return "redirect:/index";
     }
@@ -159,7 +168,11 @@ public class AlbumController {
             logger.info("redirected without deleting");
             return "redirect:/index";
         }
-        //TODO: check if umelec is the owner of this album
+        String albumAuthor = service.getUmelecName(id);
+        if(!username.equals(albumAuthor)) {
+            redirectAttributes.addFlashAttribute("errorMessage", "You are not the author.");
+            return "redirect:/index";
+        }
         service.deleteAlbum(id);
         return "redirect:/index";
     }

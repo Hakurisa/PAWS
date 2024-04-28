@@ -46,7 +46,7 @@ public class UzivatelEntity implements UserDetails{
     @Column(name = "UmelecID")
     private Integer umelecId;
     @Basic
-    @Column(name = "Username")
+    @Column(name = "Username", unique = true)
     private String username;
     @Basic
     @Column(name = "Password")

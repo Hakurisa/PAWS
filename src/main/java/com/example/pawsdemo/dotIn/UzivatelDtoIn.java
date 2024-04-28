@@ -38,6 +38,7 @@ public class UzivatelDtoIn {
 
 
     @NotNull
+    @Column(unique = true)
     private String username;
 
     @ValidEmail
