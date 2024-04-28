@@ -192,7 +192,9 @@ public class AlbumService {
         List<RecenzeEntity> recenzeList = recenzeRepository.getRecenzeEntityByAlbumId(albumId);
         recenzeRepository.deleteAll(recenzeList);
         AuAEntity aua = auARepo.findAuAEntityByAlbumID(album);
-        auARepo.delete(aua);
+        if(aua != null) {
+            auARepo.delete(aua);
+        }
         skladbaRepo.deleteAll(skladbas);
 
         // Delete the album entity

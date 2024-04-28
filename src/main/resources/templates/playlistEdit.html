@@ -32,10 +32,10 @@
     </form>
     <a class="btn btn-secondary" th:href="@{/playlist/{playlistId}}">Zpět na hlavní stránku</a>
 </div>
-<script>
+<script th:inline="javascript">
     /*<![CDATA[*/
     function deletePlaylist() {
-        let playlistId = null;
+        let playlistId = /*[[${playlist.playlistId}]]*/  null;
         var confirmation = confirm("Opravdu chcete smazat toto playlist?");
         if (confirmation) {
             fetch('/playlist/' + playlistId, {

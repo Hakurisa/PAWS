@@ -41,7 +41,7 @@
     <script th:inline="javascript">
         /*<![CDATA[*/
         function deleteAlbum() {
-            let albumId = null;
+            let albumId = /*[[${album.albumId}]]*/ null;
             var confirmation = confirm("Opravdu chcete smazat toto album?");
             if (confirmation) {
                 fetch('/album/' + albumId, {
