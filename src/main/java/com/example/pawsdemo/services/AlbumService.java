@@ -45,6 +45,9 @@ public class AlbumService {
     @Autowired
     private AuARepository auARepo;
 
+    @Autowired
+    private PlaylistRepository playlistRepo;
+
     //TODO: private RecenzeRepository recenzeRepo; -- When we gonna implemenet it
 
     private static final Logger logger = LoggerFactory.getLogger(AlbumService.class);
