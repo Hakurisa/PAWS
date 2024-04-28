@@ -96,9 +96,12 @@
         <tbody>
             <tr th:each="skladba : ${skladbas}">
                 <td th:text="${skladba.jmeno}"></td>
-                <td>Artist name</td>
                 <td th:text="${skladba.delka}"></td>
-                <td th:text="${skladba.albumId}"></td>
+                <td>
+                    <span th:each="album : ${albums}" th:if="${album.albumId == skladba.albumId}">
+                        <span th:text="${album.nazev}"></span>
+                    </span>
+                </td>
                 <td><a th:href="${skladba.audioslozka}">▶</a></td>
             </tr>
         </tbody>

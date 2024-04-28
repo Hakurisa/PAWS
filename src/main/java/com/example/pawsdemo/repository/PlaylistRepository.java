@@ -21,6 +21,8 @@ public interface PlaylistRepository extends CrudRepository<PlaylistEntity, Integ
 
     public List<PlaylistEntity> findAllByTvurce(String tvurce);
 
+    public List<PlaylistEntity> findAllBySkladbas(List<SkladbaEntity> skladbas);
+
     //public List<PlaylistEntity> getAllByNazevOrTvurce(PlaylistDtoIn playlistDtoIn);
     PlaylistEntity save(PlaylistDtoIn playlistDtoIn);
 }

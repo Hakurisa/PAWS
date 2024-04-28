@@ -7,10 +7,7 @@ import com.example.pawsdemo.models.AlbumEntity;
 import com.example.pawsdemo.models.BeznyuzivatelEntity;
 import com.example.pawsdemo.models.SkladbaEntity;
 import com.example.pawsdemo.models.UzivatelEntity;
-import com.example.pawsdemo.repository.BURepository;
-import com.example.pawsdemo.repository.PlaylistRepository;
-import com.example.pawsdemo.repository.SkladbaRepository;
-import com.example.pawsdemo.repository.UzivatelRepository;
+import com.example.pawsdemo.repository.*;
 import com.example.pawsdemo.services.PlaylistService;
 import com.example.pawsdemo.services.SkladbaService;
 import org.slf4j.Logger;
@@ -44,15 +41,23 @@ public class PlaylistController {
     private PlaylistService playlistService;
     private SkladbaRepository skladbaRepo;
     private SkladbaService skladbaService;
+    private AlbumRepository albumRepo;
 
     @Autowired
-    public PlaylistController(BURepository buRepo, UzivatelRepository uzivatelRepo, PlaylistRepository playlistRepo, PlaylistService playlistService, SkladbaRepository skladbaRepo, SkladbaService skladbaService) {
+    public PlaylistController(BURepository buRepo,
+                              UzivatelRepository uzivatelRepo,
+                              PlaylistRepository playlistRepo,
+                              PlaylistService playlistService,
+                              SkladbaRepository skladbaRepo,
+                              SkladbaService skladbaService,
+                              AlbumRepository albumRepo) {
         this.buRepo = buRepo;
         this.uzivatelRepo = uzivatelRepo;
         this.playlistRepo = playlistRepo;
         this.playlistService = playlistService;
         this.skladbaRepo = skladbaRepo;
         this.skladbaService = skladbaService;
+        this.albumRepo = albumRepo;
     }
 
     private Integer currentUser(){
@@ -81,7 +86,10 @@ public class PlaylistController {
         List<SkladbaEntity> skladbas = playlistService.getAllSkladbyByPlaylistId(id);
         model.addAttribute("skladbas", skladbas);
 
+        List<AlbumEntity> albums = albumRepo.findAll();
+
         model.addAttribute("beznyuzivatel", currentBu);
+        model.addAttribute("albums", albums);
         model.addAttribute("playlist", selectedPlaylist);
         return "playlist";
     }

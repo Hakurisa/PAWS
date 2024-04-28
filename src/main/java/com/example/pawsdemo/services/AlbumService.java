@@ -6,10 +6,7 @@ import com.example.pawsdemo.models.AlbumEntity;
 import com.example.pawsdemo.models.PlaylistEntity;
 import com.example.pawsdemo.models.SkladbaEntity;
 import com.example.pawsdemo.models.UmelecEntity;
-import com.example.pawsdemo.repository.AlbumRepository;
-import com.example.pawsdemo.repository.AuARepository;
-import com.example.pawsdemo.repository.SkladbaRepository;
-import com.example.pawsdemo.repository.UmelecRepository;
+import com.example.pawsdemo.repository.*;
 import com.example.pawsdemo.utils.B2Services;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,6 +44,9 @@ public class AlbumService {
 
     @Autowired
     private AuARepository auARepo;
+
+    @Autowired
+    private PlaylistRepository playlistRepo;
 
     //TODO: private RecenzeRepository recenzeRepo; -- When we gonna implemenet it
 

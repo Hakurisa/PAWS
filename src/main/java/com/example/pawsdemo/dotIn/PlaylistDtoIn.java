@@ -28,7 +28,7 @@ public class PlaylistDtoIn {
     private int pocetSkladeb;
 
     @NotNull
-    private String tvurce; //id bezneho uzivatele
+    private String tvurce; //jmeno bezného uzivatele
 
     @Id
     @NotNull
