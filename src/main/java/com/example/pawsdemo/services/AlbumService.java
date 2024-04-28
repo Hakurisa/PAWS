@@ -168,7 +168,7 @@ public class AlbumService {
             }
         }
         AuAEntity aua = auARepo.findAuAEntityByAlbumID(album);
-        auARepo.delete(aua);
+        auARepo.delete(aua);    
         skladbaRepo.deleteAll(skladbas);
 
         // Delete the album entity
