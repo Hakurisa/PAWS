@@ -60,6 +60,7 @@ public class SkladbaService {
 
             int durationInSeconds = getSongDurationInSeconds(song); //result - 158
             logger.info("Duration in seconds: " + durationInSeconds);
+            TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
 
             LocalTime songLength = LocalTime.of(0,0,0).plusSeconds(durationInSeconds);
 
