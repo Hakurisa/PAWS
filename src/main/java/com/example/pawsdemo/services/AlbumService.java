@@ -53,6 +53,8 @@ public class AlbumService {
     private static final Logger logger = LoggerFactory.getLogger(AlbumService.class);
     @Autowired
     private PlaylistRepository playlistRepository;
+    @Autowired
+    private RecenzeRepository recenzeRepository;
 
     public AlbumEntity create(AlbumEntity album){
         return albumRepo.save(album);
@@ -167,8 +169,10 @@ public class AlbumService {
                 playlistRepository.save(playlist);
             }
         }
+        List<RecenzeEntity> recenzeList = recenzeRepository.getRecenzeEntityByAlbumId(albumId);
+        recenzeRepository.deleteAll(recenzeList);
         AuAEntity aua = auARepo.findAuAEntityByAlbumID(album);
-        auARepo.delete(aua);    
+        auARepo.delete(aua);
         skladbaRepo.deleteAll(skladbas);
 
         // Delete the album entity
