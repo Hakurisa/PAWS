@@ -87,6 +87,7 @@ public class AlbumController {
 
     @GetMapping("album/{id}")
     public String showAlbum(@PathVariable Integer id, Model model, Principal principal) {
+        String username = principal.getName();
         AlbumDtoIn album = service.getAlbumDtoById(id);
         logger.info("bruh moment in album shows");
         List<RecenzeEntity> recenzes = recenzeService.getAllRecenzeOfAlbum(id);
@@ -99,19 +100,22 @@ public class AlbumController {
             model.addAttribute("umelec", umelecProfile);
         }
 
-        String username = principal.getName();
         Integer buId = userRepo.getBeznyUzivatelIdOfUzivatel(username);
+        Integer umelecId = userRepo.getUmelecIdOfUzivatel(username);
         if(buId != null) {
             BeznyuzivatelEntity beznyuzivatel = buRepo.findBeznyuzivatelEntityByBeznyuzivatelId(buId);
             String tvurce = beznyuzivatel.getJmeno();
             List<PlaylistEntity> playlists = playlistService.getAllUsersPlaylists(tvurce);
             model.addAttribute("playlists", playlists);
             model.addAttribute("isBu", true);
+            model.addAttribute("userId", buId);
+
         }
 
-        Integer umelecId = userRepo.getUmelecIdOfUzivatel(username);
         if(umelecId != null){
             model.addAttribute("isUmelec", true);
+            model.addAttribute("userId", umelecId);
+
         }
 
         model.addAttribute("album", album);

@@ -152,9 +152,13 @@ public class MainController {
         List<AlbumEntity> publishedAlbums = albumService.getPublishedAlbumsByUmelecId(id);
         if (buId != null) {
             model.addAttribute("isBu", true);
+            model.addAttribute("userId", buId);
+
         }
         if (umelecId != null) {
             model.addAttribute("isUmelec", true);
+            model.addAttribute("userId", umelecId);
+
         }
 
         if(Objects.equals(umelecId, id)) {

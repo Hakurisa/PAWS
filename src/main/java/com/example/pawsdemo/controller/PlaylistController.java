@@ -81,6 +81,17 @@ public class PlaylistController {
     public String showPlaylist(Model model, @PathVariable int id, Principal principal){
         String username = principal.getName();
         Integer currentBu = uzivatelRepo.getBeznyUzivatelIdOfUzivatel(username);
+        Integer umelecId = uzivatelRepo.getUmelecIdOfUzivatel(username);
+        if (currentBu != null) {
+            model.addAttribute("isBu", true);
+            model.addAttribute("userId", currentBu);
+
+        }
+        if (umelecId != null) {
+            model.addAttribute("isUmelec", true);
+            model.addAttribute("userId", umelecId);
+
+        }
         PlaylistDtoIn selectedPlaylist = playlistService.getPlaylistDtoById(id);
 
         List<SkladbaEntity> skladbas = playlistService.getAllSkladbyByPlaylistId(id);
