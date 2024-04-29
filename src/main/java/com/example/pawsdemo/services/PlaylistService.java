@@ -84,7 +84,6 @@ public class PlaylistService {
         final PlaylistEntity playlist = new PlaylistEntity();
         playlist.setNazev(playlistDto.getNazev());
         playlist.setPopis(playlistDto.getPopis());
-        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
         playlist.setDatumvzniku(playlistDto.getDatumVzniku());
 //        playlist.setDelka(new Time(0,0,0));
         playlist.setDelka(LocalTime.of(0, 0, 0));

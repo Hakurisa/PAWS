@@ -10,7 +10,7 @@
     <script type="text/javascript" th:src="@{/js/rating.js}"></script>
     <script type="text/javascript" th:src="@{/js/index.js}"></script>
     <style>
-        .dropdown{
+        .dropdownMain{
             position: fixed;
             top: 1rem;
             right: 1rem;
@@ -22,7 +22,7 @@
     </style>
 </head>
 <body>
-<div class="dropdown">
+<div class="dropdownMain">
     <a href="#" class="d-flex align-items-center link-dark text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
         <img src="https://static.thenounproject.com/png/2894393-200.png" alt="" width="32" height="32" class="rounded-circle me-2">
         <strong th:remove="tag" sec:authentication="name">thymeleaf</strong>

@@ -109,7 +109,6 @@ public class AlbumService {
         newAlbum.setNazev(album.getNazev());
         newAlbum.setPopis(album.getPopis());
         newAlbum.setPublikovano(album.getPublikovano()); //TODO: Před odevzdáním implementovat změnu v updatu
-        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
 //        newAlbum.setDelka(new Time(0, 0, 0)); //TODO: Při vytvoření není sice potřeba počítat, jak je album dlouhé ale implementuji později
         newAlbum.setDelka(LocalTime.of(0,0,0));
         albumRepo.save(newAlbum);
