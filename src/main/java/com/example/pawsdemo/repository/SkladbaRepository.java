@@ -27,6 +27,9 @@ public interface SkladbaRepository extends CrudRepository<SkladbaEntity, Integer
     @Query("SELECT album FROM AlbumEntity album JOIN SkladbaEntity skladba ON album.albumId = skladba.albumId WHERE skladba.skladbaId = :skladbaId")
     AlbumEntity findAlbumEntityBySkladbaId(@Param("skladbaId") Integer skladbaId);
 
+    @Query("SELECT skladba FROM SkladbaEntity skladba WHERE LOWER(skladba.jmeno) LIKE (LOWER(CONCAT('%', :name, '%')))")
+    List<SkladbaEntity> findSkladbaEntitiesByPartialJmeno(String name);
+
     List<SkladbaEntity> findSkladbaEntitiesByJmeno(String name);
 }
 

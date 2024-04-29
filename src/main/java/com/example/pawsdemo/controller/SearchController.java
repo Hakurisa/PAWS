@@ -55,12 +55,12 @@ public class SearchController {
         }
 
         if(type.equals("album")) {
-            List<AlbumEntity> albums = albumRepository.findAlbumEntitiesByNazev(name);
+            List<AlbumEntity> albums = albumRepository.findAlbumEntitiesByPartialNazev(name);
             model.addAttribute("isAlbum", true);
             model.addAttribute("albums", albums);
             return "search";
         } else if(type.equals("song")) {
-            List<SkladbaEntity> skladbaEntities = skladbaRepository.findSkladbaEntitiesByJmeno(name);
+            List<SkladbaEntity> skladbaEntities = skladbaRepository.findSkladbaEntitiesByPartialJmeno(name);
             //for every skladba in skladba entities:
             for(SkladbaEntity skladba : skladbaEntities) {
                 AlbumEntity album = skladbaService.getAlbumBySkladbaId(skladba.getSkladbaId());
