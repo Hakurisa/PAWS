@@ -102,7 +102,12 @@ public class PlaylistController {
             redirectAttributes.addFlashAttribute("errorMessage", "You are not associated with any artist.");
             return "redirect:/playlist/" + id;
         }
+        String playlistAuthor = playlistService.getCreatorUsername(id);
 
+        if(!username.equals(playlistAuthor)){
+            redirectAttributes.addFlashAttribute("errorMessage", "You are not the author.");
+            return "redirect:/index";
+        }
         PlaylistDtoIn playlist = playlistService.getPlaylistDtoById(id);
         model.addAttribute("playlist", playlist);
         return "playlistEdit";
@@ -118,6 +123,12 @@ public class PlaylistController {
             return "redirect:/index";
         }
 
+        String playlistAuthor = playlistService.getCreatorUsername(id);
+
+        if(!username.equals(playlistAuthor)){
+            redirectAttributes.addFlashAttribute("errorMessage", "You are not the author.");
+            return "redirect:/index";
+        }
         playlistService.update(playlistDtoIn, coverImage, id);
         return "redirect:/playlist/" + id;
     }
@@ -143,6 +154,12 @@ public class PlaylistController {
         Integer buId = uzivatelRepo.getBeznyUzivatelIdOfUzivatel(username);
         if (buId == null) {
             redirectAttributes.addFlashAttribute("errorMessage", "No outsiders");
+            return "redirect:/index";
+        }
+        String playlistAuthor = playlistService.getCreatorUsername(id);
+
+        if(!username.equals(playlistAuthor)){
+            redirectAttributes.addFlashAttribute("errorMessage", "You are not the author.");
             return "redirect:/index";
         }
 

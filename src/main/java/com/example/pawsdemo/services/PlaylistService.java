@@ -5,9 +5,11 @@ import com.example.pawsdemo.dotIn.PlaylistDtoIn;
 import com.example.pawsdemo.models.BeznyuzivatelEntity;
 import com.example.pawsdemo.models.PlaylistEntity;
 import com.example.pawsdemo.models.SkladbaEntity;
+import com.example.pawsdemo.models.UzivatelEntity;
 import com.example.pawsdemo.repository.BURepository;
 import com.example.pawsdemo.repository.PlaylistRepository;
 import com.example.pawsdemo.repository.SkladbaRepository;
+import com.example.pawsdemo.repository.UzivatelRepository;
 import com.example.pawsdemo.utils.B2Services;
 import jakarta.transaction.Transactional;
 import org.slf4j.Logger;
@@ -47,6 +49,8 @@ public class PlaylistService {
     private SkladbaRepository skladbaRepo;
 
     private static final Logger logger = LoggerFactory.getLogger(PlaylistService.class);
+    @Autowired
+    private UzivatelRepository uzivatelRepository;
 
     public PlaylistEntity create(PlaylistEntity playlist){
         return playlistRepo.save(playlist);
@@ -160,7 +164,23 @@ public class PlaylistService {
         LocalTime currentLength = playlist.getDelka();
         long songLength = skladba.getDelka().toSecondOfDay();
         playlist.setDelka(currentLength.plusSeconds(songLength));
+        int pocet = playlist.getPocetskladeb();
+        playlist.setPocetskladeb(++pocet);
         update(playlist);
         updateSkladba(skladba);
+    }
+
+    @Transactional
+    public String getCreatorUsername(int playlistId) {
+        PlaylistEntity playlist = playlistRepo.findById(playlistId).orElseThrow(() -> new RuntimeException("Playlist neexistuje"));
+        if(playlist != null) {
+            Set<BeznyuzivatelEntity> bus = playlist.getBeznyuzivatels();
+            if(bus != null) {
+                BeznyuzivatelEntity firstBu = bus.iterator().next();
+                UzivatelEntity uzivatel = uzivatelRepository.findUzivatelEntityByBeznyuzivatelId(firstBu.getBeznyuzivatelId());
+                return uzivatel.getUsername();
+            }
+        }
+        return null;
     }
 }
