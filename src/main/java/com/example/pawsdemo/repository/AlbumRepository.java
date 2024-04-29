@@ -26,6 +26,6 @@ public interface AlbumRepository extends CrudRepository<AlbumEntity, Integer> {
 
     public List<AlbumEntity> findAllByPublikovano(Byte status);
 
-    @Query("SELECT a from AlbumEntity a WHERE LOWER(a.nazev) LIKE LOWER(CONCAT('%', :nazev, '%'))")
+    @Query("SELECT a from AlbumEntity a WHERE LOWER(a.nazev) LIKE LOWER(CONCAT('%', :nazev, '%')) AND a.publikovano = 1")
     List<AlbumEntity> findAlbumEntitiesByPartialNazev(String nazev);
 }

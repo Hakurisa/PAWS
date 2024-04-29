@@ -82,6 +82,7 @@ public class PlaylistController {
         String username = principal.getName();
         Integer currentBu = uzivatelRepo.getBeznyUzivatelIdOfUzivatel(username);
         Integer umelecId = uzivatelRepo.getUmelecIdOfUzivatel(username);
+        String author = playlistService.getCreatorUsername(id);
         if (currentBu != null) {
             model.addAttribute("isBu", true);
             model.addAttribute("userId", currentBu);
@@ -91,6 +92,9 @@ public class PlaylistController {
             model.addAttribute("isUmelec", true);
             model.addAttribute("userId", umelecId);
 
+        }
+        if (username.equals(author)) {
+            model.addAttribute("isAuthor", true);
         }
         PlaylistDtoIn selectedPlaylist = playlistService.getPlaylistDtoById(id);
 

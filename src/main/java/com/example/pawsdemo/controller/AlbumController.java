@@ -93,7 +93,7 @@ public class AlbumController {
         List<RecenzeEntity> recenzes = recenzeService.getAllRecenzeOfAlbum(id);
         List<SkladbaEntity> skladby = skladbaService.getAllSkladbyByAlbumId(id);
         Integer foundId = userService.getUmelecByAlbumId(id);
-
+        String author = service.getUmelecUsername(id);
         if(foundId != null) {
             UmelecEntity umelecProfile = umelecRepo.findUmelecEntityByUmelecId(foundId);
             model.addAttribute("umelecFound", true);
@@ -115,7 +115,9 @@ public class AlbumController {
         if(umelecId != null){
             model.addAttribute("isUmelec", true);
             model.addAttribute("userId", umelecId);
-
+        }
+        if(username.equals(author)) {
+            model.addAttribute("isAuthor", true);
         }
 
         model.addAttribute("album", album);

@@ -9,6 +9,17 @@
     <title th:text="${album.nazev}"></title>
     <script type="text/javascript" th:src="@{/js/rating.js}"></script>
     <script type="text/javascript" th:src="@{/js/index.js}"></script>
+    <style>
+        .dropdown{
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 1;
+            background: #0d6efd;
+            padding: 0.4rem 0.7rem;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body>
 <div class="dropdown">
@@ -98,6 +109,7 @@
                 <p><span th:text="${album.popis}"></span></p>
 
                 <p>Délka: <span th:text="${album.delka}"></span></p>
+                <a th:if="${isAuthor}" type="button" class="btn btn-secondary" th:href="@{'/album/' + ${album.albumId} + '/edit'}">Upravit</a>
             </div>
 
             <table class="table">

@@ -8,6 +8,17 @@
     <meta charset="UTF-8">
     <script type="text/javascript" th:src="@{/js/index.js}"></script>
     <title th:text="${playlist.getNazev()}"></title>
+    <style>
+        .dropdown{
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 1;
+            background: #0d6efd;
+            padding: 0.4rem 0.7rem;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body>
 <div class="dropdown">
@@ -92,16 +103,16 @@
     <img class="rounded float-left" style="max-width: 100px" th:src="${playlist.getCoverImage()}" alt="cover image">
     <p><span th:text="${playlist.popis}"></span></p>
     <p>Délka: <span th:text="${playlist.delka}"></span></p>
-    <a type="button" class="btn btn-secondary" th:href="@{'/playlist/' + ${playlist.playlistId} + '/edit'}">Upravit</a>
+    <a th:if="${isAuthor}" type="button" class="btn btn-secondary" th:href="@{'/playlist/' + ${playlist.playlistId} + '/edit'}">Upravit</a>
 
     <h4>Songlist</h4>
     <table class="table">
         <thead class="table-header">
         <tr>
             <th>Název</th>
-            <th>Umělec</th>
             <th>Délka</th>
-            <th>Album</th>
+            <th>Umělec</th>
+            <th>Přehrát</th>
             <th></th>
         </tr>
         </thead>
