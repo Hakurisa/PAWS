@@ -12,8 +12,6 @@ import java.util.Set;
 
 public interface PlaylistRepository extends CrudRepository<PlaylistEntity, Integer> {
 
-    PlaylistEntity getAllByNazev(String nazev);
-
     @Query("SELECT LAST_INSERT_ID() FROM PlaylistEntity")
     public int getNewPlaylistId();
 

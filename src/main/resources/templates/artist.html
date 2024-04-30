@@ -86,7 +86,7 @@
     <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4 main-content">
         <div class="d-flex flex-column flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom gap-3">
             <div>
-                <img class="mx-auto d-block" style="border-radius: 6.25rem; width: 12rem;" th:src="${umelecInfo.profilovyobrazek}" alt="...">
+                <img class="mx-auto d-block" style="border-radius: 6.25rem; width: 12rem; height: 12rem; object-fit: cover;" th:src="${umelecInfo.profilovyobrazek}" alt="...">
             </div>
             <div class="mb-3">
                 <h3 th:text="${umelec.jmeno}">Artist name</h3>
@@ -122,7 +122,10 @@
         </div>
 
 
-        <h2><i class="bi bi bi-star-half"></i>  <span>Recenze</span></h2>
+        <h2><i class="bi bi bi-star-half"></i>
+            <span>Recenze</span>
+        </h2>
+        <hr>
         <div th:each="recenze : ${recenzes}" class="d-flex gap-3">
 
             <div class="card" style="width: 18rem;">
@@ -135,7 +138,7 @@
 
         </div>
 
-        <form th:if="${isBu}" th:action="@{'/artist/' + ${umelec.umelecId}}" method="post">
+        <form class="form-for-reviews" th:if="${isBu}" th:action="@{'/artist/' + ${umelec.umelecId}}" method="post">
             <div class="bg-light">
                 <div class="mb-3">
                     <label for="nadpis" class="form-label">Pojmenujte komentář:</label>
@@ -213,6 +216,14 @@
         background: #0d6efd;
         padding: 0.4rem 0.7rem;
         border-radius: 5px;
+    }
+    .form-for-reviews .bg-light{
+        margin-top: 1rem;
+        border-radius: 0.625rem;
+        padding: 1.25rem;
+    }
+    .gap-3{
+        margin-bottom: 1rem;
     }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

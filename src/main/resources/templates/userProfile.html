@@ -15,7 +15,7 @@
     <form th:action="@{userProfile}" method="post" class="mt-4" enctype="multipart/form-data">
         <div class="mb-3">
             <div class="form-label">Profil uživatele <span th:remove="tag" sec:authentication="name"></span></div>
-            <img class="mx-auto d-block"  style="border-radius: 6.25rem; width: 12.5rem;" th:src="${currentUser.profilovyobrazek}">
+            <img class="mx-auto d-block"  style="border-radius: 6.25rem; width: 12.5rem; height: 12.5rem; object-fit: cover;" th:src="${currentUser.profilovyobrazek}">
         </div>
         <div class="mb-3">
             <input class="form-control" type="file" id="profilepicture" name="profilepicture" value="Upravit obrázek" accept="image/*" />

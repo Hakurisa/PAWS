@@ -10,11 +10,6 @@ import java.util.List;
 @Repository
 public interface RecenzeRepository extends CrudRepository<RecenzeEntity, Integer> {
 
-    public int findRecenzeEntityByAlbumId(Integer id);
-    public int findRecenzeEntityBySkladbaId(Integer id);
-    public int findRecenzeEntityByKapelaId(Integer id);
-    public int findRecenzeEntityByUmelecId(Integer id);
-
     List<RecenzeEntity> getRecenzeEntityByAlbumId(Integer id);
 
     List<RecenzeEntity> getRecenzeEntityByUmelecId(Integer id);

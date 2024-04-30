@@ -11,16 +11,7 @@ import java.util.List;
 
 @Repository
 public interface UmelecRepository extends CrudRepository<UmelecEntity, Integer> {
-//TODO    @Query("SELECT u FROM Umelec u WHERE u.Jmeno LIKE %searchInput%")
-//    public List<UmelecEntity> getAllresults();
-
     UmelecEntity findUmelecEntityByUmelecId(Integer id);
 
     UmelecEntity save(UmelecDtoIn umelecDtoIn);
-
-    @Query("SELECT LAST_INSERT_ID() FROM UzivatelEntity")
-    public int getUzivatelIdOfNewUmelec();
-
-    List<AlbumEntity> findAlbumsByUmelecId(int umelecId);
-
 }

@@ -13,15 +13,6 @@ public interface AlbumRepository extends CrudRepository<AlbumEntity, Integer> {
 
     AlbumEntity findAlbumEntityByAlbumId(Integer id);
 
-    // AlbumEntity save(AlbumDtoIn albumDtoIn);
-
-    //AlbumEntity updateAlbumEntityByAlbumId(AlbumDtoIn albumDto);
-
-    //@Query("SELECT s FROM SkladbaEntity s WHERE SkladbaEntity.albumId = AlbumEntity.albumId")
-    //public int findAllSkladbyByAlbumId();
-
-    List<AlbumEntity> findAlbumEntitiesByNazev(String name);
-
     public List<AlbumEntity> findAll();
 
     public List<AlbumEntity> findAllByPublikovano(Byte status);
